@@ -3,7 +3,13 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-content: space-between;
-  position: static;
+  width: 100%;
+  position: fixed;
+  z-index: 999;
+  background-color: white;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
   border-bottom: 1px solid rgb(155, 155, 155);
   &__heading-link {
     font-family: 'Lora', serif;
