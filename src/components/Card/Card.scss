@@ -1,0 +1,84 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  &__container {
+    height: 385px;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+    border-radius: 4px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  &__button {
+    position: absolute;
+    transition: all 0.5s;
+    padding: 5px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    &:hover {
+      background-color: black;
+      color: white;
+    }
+    z-index: 3;
+    &_buy {
+      font-size: 20px;
+      width: calc(100% - 40px);
+      margin: 20px;
+      bottom: -100px;
+      &_hovered {
+        bottom: 0;
+      }
+    }
+    &_like {
+      top: 20px;
+      bottom: auto;
+      right: -100px;
+      &_hovered {
+        right: 20px;
+      }
+    }
+  }
+  &__image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-position: center;
+    background-size: cover;
+    opacity: 1;
+    transition: opacity 0.5s;
+    &_hovered {
+      opacity: 0;
+    }
+  }
+  &__brand {
+    color: #9b9b9b;
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 20px;
+    text-transform: uppercase;
+    text-decoration: none;
+    &:hover {
+      color: black;
+    }
+  }
+  &__name {
+    text-decoration: none;
+    font-size: 16px;
+    margin-top: 10px;
+    &:hover {
+      color: #9b9b9b;
+    }
+    & a {
+      text-decoration: none;
+    }
+  }
+  &__price {
+    margin-top: 10px;
+  }
+}
