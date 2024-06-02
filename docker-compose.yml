@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  frontend:
+    container_name: "frontend"
+    env_file: .env
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - net
+    volumes:
+      - ./ssl:/etc/ssl
+      - nginx_volume:/usr/share/nginx/html
+
+networks:
+  net:
+    driver: bridge
+
+volumes:
+  nginx_volume:
+    driver: local
