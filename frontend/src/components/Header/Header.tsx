@@ -1,5 +1,13 @@
+import { openAuthPopup } from '../../services/slices/authPopupSlice';
+import { useDispatch } from '../../services/store';
 import './Header.scss';
 export default function Header() {
+  const dipatch = useDispatch();
+
+  function handleOpenAuthPopup() {
+    dipatch(openAuthPopup());
+  }
+
   return (
     <header className="header">
       <div className="header__container">
@@ -17,10 +25,10 @@ export default function Header() {
         <button className="header__button">Для неё</button>
       </div>
       <a href="#" className="header__heading-link">
-        МАГАЗИН
+        {import.meta.env.VITE_SHOP_NAME || 'название магазина'}
       </a>
       <nav className="header__navigation">
-        <a className="header__nav-link" href="#">
+        <a className="header__nav-link" href="#" onClick={handleOpenAuthPopup}>
           <svg fill="none" viewBox="0 0 24 24" height="1em" width="1em">
             <path
               fill="currentColor"

@@ -1,0 +1,19 @@
+.SnackBar {
+  z-index: 9999;
+  height: 50px;
+  min-width: 200px;
+  position: fixed;
+  bottom: 0;
+  right: 10px;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: rgba(0, 0, 0, 0.137);
+  color: green;
+  cursor: pointer;
+  &_error {
+    color: red;
+  }
+}

@@ -94,7 +94,7 @@ export default function Footer() {
           }
         />
       </div>
-      <p className="footer__copyright">{`© ${date} blinkresale. ALL RIGHTS RESERVED.`}</p>
+      <p className="footer__copyright">{`© ${date} ${import.meta.env.VITE_SHOP_NAME || 'название магазина'}. ALL RIGHTS RESERVED.`}</p>
     </footer>
   );
 }
