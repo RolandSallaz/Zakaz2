@@ -1,29 +1,30 @@
-import { CreateOrFindUserDto } from '@/users/dto/createOrFind-user.dto';
 import {
   Body,
   Controller,
   Get,
   HttpCode,
+  HttpException,
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { AuthUserDto } from 'src/users/dto/auth-user.dto';
+import { sendEmailCode } from 'src/common/helpers/emailService';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { UserAuthDto } from 'src/users/dto/user-auth-dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
+  @Post('code')
   @HttpCode(200)
-  findUserAndSendCode(@Body() authDto: CreateOrFindUserDto) {
-    return this.authService.findUserAndSendCode(authDto);
+  sendEmailCode(@Body() dto: { email: string }) {
+    return this.authService.getUserAndSendAuthCode(dto);
   }
 
-  @Post('login')
+  @Post()
   @HttpCode(200)
-  login(@Body() authDto: AuthUserDto) {
+  login(@Body() authDto: UserAuthDto) {
     return this.authService.login(authDto);
   }
 

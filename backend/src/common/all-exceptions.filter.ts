@@ -4,9 +4,11 @@ import {
   ExceptionFilter,
   HttpException,
   InternalServerErrorException,
+  NotFoundException,
   PayloadTooLargeException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { EntityNotFoundError } from 'typeorm';
 
 interface IErrorEx extends Error {
   code: number;
@@ -25,6 +27,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
       ex = new HttpException(exception.detail, 409);
     } else if (exception instanceof PayloadTooLargeException) {
       ex = new HttpException('Размер файла превышает допустимый', 413);
+    } else if (exception instanceof EntityNotFoundError) {
+      ex = new NotFoundException('Ресурс не найден');
     } else if (exception instanceof HttpException) {
       ex = exception;
     } else {

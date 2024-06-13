@@ -1,11 +1,9 @@
-import { generateSixDigitCode } from '@/common/filters/helpers/codeGenerator';
-import { AuthenticatedRequest, IAuthData } from '@/types';
-import { AuthUserDto } from '@/users/dto/auth-user.dto';
-import { CreateOrFindUserDto } from '@/users/dto/createOrFind-user.dto';
 import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { EmailService } from 'src/email/email.service';
+import { sendEmailCode } from 'src/common/helpers/emailService';
+import { AuthenticatedRequest, IAuthData } from 'src/types';
+import { UserAuthDto } from 'src/users/dto/user-auth-dto';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 
@@ -13,35 +11,37 @@ import { UsersService } from 'src/users/users.service';
 export class AuthService {
   constructor(
     private readonly userService: UsersService,
-    private readonly emailService: EmailService,
     private jwtService: JwtService,
     @Inject(REQUEST) private request: AuthenticatedRequest,
   ) {}
-  async findUserAndSendCode({
+  async getUserAndSendAuthCode({
     email,
-  }: CreateOrFindUserDto): Promise<{ message: string }> {
-    const authCode = generateSixDigitCode(); //генерируем код
-    const authDto: AuthUserDto = { email, authCode };
-
-    const user = await this.userService.findUserOrCreate({ email }); //ищем пользователя
-    await this.userService.updateAuthCode(authDto);
-    await this.emailService.sendEmailAuthCode(authDto); //отправляем код на емейл
-    return { message: `Код отправлен на емейл ${email}, проверьте папку СПАМ` };
+  }: {
+    email: string;
+  }): Promise<{ message: string }> {
+    const user = await this.userService.findUserOrCreate({ email });
+    const code = await this.userService.updateUserAuth(user);
+    return sendEmailCode({ email, code })
+      .then(() => ({
+        message: 'Сообщение отправлено успешно',
+      }))
+      .catch(() => {
+        throw new HttpException('Ошибка почтового сервиса', 500);
+      });
   }
 
-  async login({ email, authCode }: AuthUserDto): Promise<IAuthData> {
-    const user = await this.userService.findUserOrCreate({ email });
+  async login(dto: UserAuthDto): Promise<IAuthData> {
+    const user = await this.userService.findUserByEmail(dto.email);
     const authData = { user, token: null };
-    if (user.authCode == authCode) {
-      const token = await this.jwtService.signAsync(authData);
-      authData.token = token;
-      return authData;
-    } else {
-      throw new HttpException('Неверный код', 401);
+    if (user.authCode != dto.code) {
+      throw new HttpException('Введен неверный код', 401);
     }
+    const token = await this.jwtService.signAsync(authData);
+    authData.token = token;
+    return authData;
   }
 
   async checkAuth(): Promise<User> {
-    return this.request.user;
+    return await this.userService.findUserByEmail(this.request.user.email);
   }
 }

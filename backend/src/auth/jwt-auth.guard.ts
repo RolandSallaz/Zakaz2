@@ -1,4 +1,3 @@
-import { UsersService } from '@/users/users.service';
 import {
   CanActivate,
   ExecutionContext,
@@ -7,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -29,9 +29,7 @@ export class JwtAuthGuard implements CanActivate {
       }
       const token = req.headers.authorization.replace('Bearer ', '');
       const { user } = this.jwtService.verify(token);
-      const findUser = await this.userService.findUserByEmail({
-        email: user.email,
-      });
+      const findUser = await this.userService.findUserByEmail(user.email);
       if (!findUser) {
         throw new UnauthorizedException({ message: 'Авторизация не прошла' });
       }

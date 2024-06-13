@@ -7,4 +7,10 @@ export class User {
 
   @Column({ default: 'user' })
   role: 'user' | 'admin';
+
+  @Column()
+  email: string;
+
+  @Column({ default: 0 })
+  authCode: number;
 }
