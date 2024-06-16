@@ -9,7 +9,7 @@ export async function sendEmailCode({
   email: string;
   code: number;
 }): Promise<boolean> {
-  return await fetch('http:/localhost:3001/auth-email', {
+  return await fetch('http://emailservice/auth-email', {
     method: 'POST',
     body: JSON.stringify({ email, code }),
     headers: {
