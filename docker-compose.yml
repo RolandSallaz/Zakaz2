@@ -49,6 +49,7 @@ services:
 
   emailservice:
     container_name: "emailservice"
+    restart: always
     build:
       context: emailService
       dockerfile: Dockerfile
