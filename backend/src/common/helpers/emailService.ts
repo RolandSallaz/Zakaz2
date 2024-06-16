@@ -9,7 +9,9 @@ export async function sendEmailCode({
   email: string;
   code: number;
 }): Promise<boolean> {
-  return await fetch('http://emailservice/auth-email', {
+  const link = 'http://emailservice:3001/auth-email';
+  console.log(link);
+  return await fetch(link, {
     method: 'POST',
     body: JSON.stringify({ email, code }),
     headers: {
