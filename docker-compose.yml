@@ -60,6 +60,7 @@ services:
       - net
     depends_on:
       - backend
+
 networks:
   net:
     driver: bridge
