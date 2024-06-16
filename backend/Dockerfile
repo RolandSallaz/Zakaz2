@@ -14,6 +14,6 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm i --omit=dev && npm i -g pm2
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/dist/src ./dist
 COPY ./ecosystem.config.js  .
 CMD ["pm2-runtime","start","ecosystem.config.js"]
