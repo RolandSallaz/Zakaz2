@@ -16,7 +16,6 @@ services:
       - postgres
     volumes:
       - ./backend/public/uploads:/app/public/uploads
-      - nginx_volume:/app/nginx
 
   postgres:
     container_name: "database"
@@ -27,7 +26,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - nginx_volume:/app/nginx
     networks:
       - net
 
@@ -45,7 +43,6 @@ services:
       - backend
     volumes:
       - ./ssl:/etc/ssl
-      - nginx_volume:/usr/share/nginx/html
 
   emailservice:
     container_name: "emailservice"
@@ -68,5 +65,3 @@ networks:
 
 volumes:
   postgres_data:
-  nginx_volume:
-    driver: local
