@@ -47,10 +47,11 @@ services:
       - ./ssl:/etc/ssl
       - nginx_volume:/usr/share/nginx/html
 
-  mailService:
-    container_name: "emailService"
-    build: emailService
-    dockerfile: Dockerfile
+  emailservice:
+    container_name: "emailservice"
+    build:
+      context: emailService
+      dockerfile: Dockerfile
     env_file:
       - .env
     ports:
@@ -64,5 +65,6 @@ networks:
     driver: bridge
 
 volumes:
+  postgres_data:
   nginx_volume:
     driver: local
