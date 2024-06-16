@@ -1,0 +1,3 @@
+[submodule "emailService"]
+	path = emailService
+	url = https://github.com/RolandSallaz/emailService

@@ -1,6 +1,36 @@
 version: "3"
 
 services:
+  backend:
+    container_name: "backend"
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    env_file: .env
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - net
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend/public/uploads:/app/public/uploads
+      - nginx_volume:/app/nginx
+
+  postgres:
+    container_name: "database"
+    image: postgres:16
+    restart: always
+    env_file: .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - nginx_volume:/app/nginx
+    networks:
+      - net
+
   frontend:
     container_name: "frontend"
     build:
@@ -11,10 +41,24 @@ services:
       - "443:443"
     networks:
       - net
+    depends_on:
+      - backend
     volumes:
       - ./ssl:/etc/ssl
       - nginx_volume:/usr/share/nginx/html
 
+  mailService:
+    container_name: "emailService"
+    build: emailService
+    dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "3001:3000"
+    networks:
+      - net
+    depends_on:
+      - backend
 networks:
   net:
     driver: bridge
