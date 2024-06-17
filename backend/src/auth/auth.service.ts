@@ -1,4 +1,5 @@
 import { HttpException, Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { REQUEST } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { sendEmailCode } from 'src/common/helpers/emailService';
@@ -13,6 +14,7 @@ export class AuthService {
     private readonly userService: UsersService,
     private jwtService: JwtService,
     @Inject(REQUEST) private request: AuthenticatedRequest,
+    private configService: ConfigService,
   ) {}
   async getUserAndSendAuthCode({
     email,
@@ -21,12 +23,12 @@ export class AuthService {
   }): Promise<{ message: string }> {
     const user = await this.userService.findUserOrCreate({ email });
     const code = await this.userService.updateUserAuth(user);
-    return sendEmailCode({ email, code })
+    return sendEmailCode({ email, code }, this.configService)
       .then(() => ({
         message: 'Сообщение отправлено успешно',
       }))
-      .catch((err) => {
-        throw new HttpException(`Ошибка почтового сервиса ${err}`, 500);
+      .catch(() => {
+        throw new HttpException(`Ошибка почтового сервиса`, 500);
       });
   }
 

@@ -4,7 +4,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 
@@ -15,7 +14,6 @@ export class JwtAuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private usersService: UsersService,
-    private configService: ConfigService,
   ) {
     this.userService = usersService;
   }
@@ -36,6 +34,7 @@ export class JwtAuthGuard implements CanActivate {
       req.user = findUser;
       return true;
     } catch (e) {
+      console.log(e);
       throw new UnauthorizedException({ message: 'Авторизация не прошла' });
     }
   }

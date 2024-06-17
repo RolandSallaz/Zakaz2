@@ -3,14 +3,12 @@ import {
   Controller,
   Get,
   HttpCode,
-  HttpException,
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { sendEmailCode } from 'src/common/helpers/emailService';
-import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './jwt-auth.guard';
 import { UserAuthDto } from 'src/users/dto/user-auth-dto';
+import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {

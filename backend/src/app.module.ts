@@ -1,16 +1,17 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { join } from 'path';
-import { ThrottlerModule } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import configuration from 'config/configuration';
-import { JwtModule } from '@nestjs/jwt';
+import { join } from 'path';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { JwtConfigModule } from './auth/config/jwt-config.module';
+import { ItemModule } from './item/item.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -20,14 +21,21 @@ import { AuthModule } from './auth/auth.module';
         limit: 100,
       },
     ]),
+    JwtConfigModule,
     ScheduleModule.forRoot(),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..'),
-      serveRoot: process.env.DEV ? '' : '/api',
-    }),
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true,
+    }),
+    ServeStaticModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => [
+        {
+          rootPath: join(__dirname, '..'),
+          serveRoot: configService.get('isDev') ? '' : '/api',
+        },
+      ],
+      inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -45,6 +53,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UsersModule,
     AuthModule,
+    ItemModule,
   ],
   controllers: [AppController],
   providers: [AppService],
