@@ -8,6 +8,10 @@ import SnackBar from '../SnackBar/SnackBar';
 import './App.scss';
 import { ApiCheckAuth } from '../../utils/api';
 import { login } from '../../services/slices/userSlice';
+import { Route, Routes } from 'react-router-dom';
+import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
+import Admin from '../Admin/Admin';
+import { ROLES } from '../../utils/types';
 
 function App() {
   const { isAuthPopupOpened } = useSelector((state) => state.authPopupSlice);
@@ -24,7 +28,17 @@ function App() {
   return (
     <>
       <Header />
-      <Main />
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute requiredLevel={ROLES.MANAGER}>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
       <Footer />
       {isAuthPopupOpened && <AuthPopup />}
       {isSnackBarOpened && <SnackBar />}

@@ -1,3 +1,9 @@
+export enum ROLES {
+  USER = 0,
+  MANAGER = 1,
+  ADMIN = 2,
+}
+
 export interface IRequest {
   message: string;
 }
@@ -16,7 +22,7 @@ export interface IFetch {
 export interface IUser {
   email: string;
   id: number;
-  role: string;
+  auth_level: ROLES;
 }
 
 export interface IAuthData extends IUser {

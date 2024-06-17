@@ -71,3 +71,7 @@ export function ApiLogin({
 export function ApiCheckAuth(): Promise<IUser> {
   return _fetch<IUser>({ url: 'auth' });
 }
+
+export function ApiGetAllUsers(): Promise<IUser[]> {
+  return _fetch<IUser[]>({ url: 'users' });
+}

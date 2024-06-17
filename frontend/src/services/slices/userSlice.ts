@@ -11,7 +11,7 @@ const initialState: IAppState = {
   userData: {
     email: 'null',
     id: 0,
-    role: 'null',
+    auth_level: 0,
   },
 };
 
