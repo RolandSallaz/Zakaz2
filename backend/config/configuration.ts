@@ -1,7 +1,7 @@
 export default () => ({
   port: Number(process.env.PORT) || 3000,
   isDev: Boolean(process.env.NODE_ENV == 'dev'),
-  JWT_SECRET: 'jwt_secret',
+  JWT_SECRET: process.env.JWT_SECRET || 'jwt_secret',
   database: {
     type: 'postgres',
     port: Number(process.env.POSTGRES_PORT) || 5432,

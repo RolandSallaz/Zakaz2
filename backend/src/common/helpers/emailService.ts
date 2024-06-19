@@ -18,7 +18,6 @@ export async function sendEmailCode(
 ): Promise<Response> {
   const isDev = configService.get<boolean>('isDev');
   const link = `http://${isDev ? 'localhost' : 'emailservice'}:3000/auth-email`;
-  console.log(link);
   return await fetch(link, {
     method: 'POST',
     body: JSON.stringify({ email, code }),
