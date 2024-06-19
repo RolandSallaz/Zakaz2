@@ -12,6 +12,6 @@ export class User {
   @Column()
   email: string;
 
-  @Column({ default: 0, select: false })
+  @Column({ default: 0 })
   authCode: number;
 }
