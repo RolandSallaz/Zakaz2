@@ -17,7 +17,7 @@ export async function sendEmailCode(
   configService: ConfigService,
 ): Promise<Response> {
   const isDev = configService.get<boolean>('isDev');
-  const link = `http://${isDev ? 'localhost' : 'emailservice'}:3001/auth-email`;
+  const link = `http://${isDev ? 'localhost' : 'emailservice'}:3000/auth-email`;
   console.log(link);
   return await fetch(link, {
     method: 'POST',
