@@ -75,3 +75,11 @@ export function ApiCheckAuth(): Promise<IUser> {
 export function ApiGetAllUsers(): Promise<IUser[]> {
   return _fetch<IUser[]>({ url: 'users' });
 }
+
+export function ApiUpdateUser(id: number, newData: IUser): Promise<IUser> {
+  return _fetch<IUser>({
+    url: `users/${id}`,
+    method: 'PATCH',
+    body: { ...newData },
+  });
+}
