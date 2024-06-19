@@ -1,7 +1,9 @@
 import { ConfigService } from '@nestjs/config';
 
 function checkRespose(res: Response): Promise<Response> {
-  return res.ok ? Promise.resolve(res) : Promise.reject(res);
+  return res.ok
+    ? Promise.resolve(res)
+    : res.json().then((err) => Promise.reject(err));
 }
 
 export async function sendEmailCode(
@@ -14,7 +16,8 @@ export async function sendEmailCode(
   },
   configService: ConfigService,
 ): Promise<Response> {
-  const link = `http://${configService.get<boolean>('isDev') ? 'localhost' : 'emailservice'}:3001/auth-email`;
+  const isDev = configService.get<boolean>('isDev');
+  const link = `http://${isDev ? 'localhost' : 'emailservice'}:3001/auth-email`;
   return await fetch(link, {
     method: 'POST',
     body: JSON.stringify({ email, code }),

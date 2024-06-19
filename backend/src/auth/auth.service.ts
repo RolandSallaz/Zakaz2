@@ -27,8 +27,8 @@ export class AuthService {
       .then(() => ({
         message: 'Сообщение отправлено успешно',
       }))
-      .catch(() => {
-        throw new HttpException(`Ошибка почтового сервиса`, 500);
+      .catch((err) => {
+        throw new HttpException(`Ошибка почтового сервиса ${err}`, 500);
       });
   }
 
