@@ -11,6 +11,9 @@ export class Item {
   @Column()
   description: string;
 
+  @Column()
+  price: number;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   start_sell_date: Date;
 

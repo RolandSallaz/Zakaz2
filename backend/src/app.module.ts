@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtConfigModule } from './auth/config/jwt-config.module';
 import { ItemModule } from './item/item.module';
 import { UsersModule } from './users/users.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     AuthModule,
     ItemModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
