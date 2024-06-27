@@ -1,5 +1,13 @@
 import { apiUrl } from './config';
-import { IAuthData, IFetch, IRequest, IUser } from './types';
+import {
+  IAuthData,
+  IFIle,
+  IFetch,
+  IItem,
+  IItemDto,
+  IRequest,
+  IUser,
+} from './types';
 
 function checkResponse<T>(res: Response): Promise<T> {
   return res.ok ? res.json() : res.json().then((data) => Promise.reject(data));
@@ -82,4 +90,20 @@ export function ApiUpdateUser(id: number, newData: IUser): Promise<IUser> {
     method: 'PATCH',
     body: { ...newData },
   });
+}
+
+export function ApiPostImage(file: FormData): Promise<IFIle> {
+  return _fetch<IFIle>({ url: 'files', method: 'POST', body: file });
+}
+
+export function ApiPostItem(item: IItemDto): Promise<IItem> {
+  return _fetch<IItem>({ url: 'items', method: 'POST', body: { ...item } });
+}
+
+export function ApiGetItems(): Promise<IItem[]> {
+  return _fetch<IItem[]>({ url: 'items' });
+}
+
+export function ApiDeleteItem(id: number): Promise<IItem> {
+  return _fetch<IItem>({ url: `items/${id}`, method: 'DELETE' });
 }

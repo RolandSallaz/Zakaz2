@@ -1,6 +1,8 @@
 import { Link, Route, Routes } from 'react-router-dom';
 import './Admin.scss';
 import AdminUsers from '../AdminUsers/AdminUsers';
+import AdminItems from '../AdminItems/AdminItems';
+import AdminItemsPage from '../AdminItemsPage/AdminItemsPage';
 
 export default function Admin() {
   return (
@@ -40,6 +42,8 @@ export default function Admin() {
       </div>
       <Routes>
         <Route path="users" element={<AdminUsers />} />
+        <Route path="items" element={<AdminItemsPage />} />
+        <Route path="items/add" element={<AdminItems />} />
       </Routes>
     </main>
   );

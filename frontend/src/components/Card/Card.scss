@@ -19,11 +19,11 @@
     align-items: center;
     justify-content: center;
     border-radius: 4px;
+    z-index: 3;
     &:hover {
       background-color: black;
       color: white;
     }
-    z-index: 3;
     &_buy {
       font-size: 20px;
       width: calc(100% - 40px);

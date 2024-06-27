@@ -1,27 +1,42 @@
+import { Link } from 'react-router-dom';
 import useHover from '../../hooks/useHover';
+import { IItem } from '../../utils/types';
 import './Card.scss';
+import { MouseEvent } from 'react';
 
 interface props {
-  image: string;
-  secondImage: string;
+  item: IItem;
 }
 
-export default function Card({ image, secondImage }: props) {
+export default function Card({ item }: props) {
   const { isHovered, handleHovered } = useHover();
+  const link = `items/${item.id}`;
+
+  function handleLikeClick(e: MouseEvent) {
+    e.preventDefault();
+  }
+
+  function handleAddToCartClick(e: MouseEvent) {
+    e.preventDefault();
+  }
+
   return (
     <div className="card">
-      <div
+      <Link
+        to={link}
         className="card__container"
-        style={{ backgroundImage: `url(${secondImage})` }}
+        style={{ backgroundImage: `url(${item.images[0]})` }}
         onMouseEnter={handleHovered}
         onMouseLeave={handleHovered}
       >
         <button
+          onClick={handleAddToCartClick}
           className={`card__button card__button_buy ${isHovered && 'card__button_buy_hovered'}`}
         >
           В корзину
         </button>
         <button
+          onClick={handleLikeClick}
           className={`card__button card__button_like ${isHovered && 'card__button_like_hovered'}`}
         >
           <svg
@@ -36,18 +51,13 @@ export default function Card({ image, secondImage }: props) {
 
         <div
           className={`card__image ${isHovered && 'card__image_hovered'}`}
-          style={{ backgroundImage: `url(${image})` }}
+          style={{ backgroundImage: `url(${item.main_image})` }}
         />
-      </div>
-      <a className="card__brand" href="#">
-        CHANEL
-      </a>
+      </Link>
       <h2 className="card__name">
-        <a href="#">
-          Кроссовки Balenciaga 3XL Extreme Lace Sneaker Light Beige
-        </a>
+        <Link to={link}>{item.name}</Link>
       </h2>
-      <p className="card__price">19,999₽</p>
+      <p className="card__price">{item.price}₽</p>
     </div>
   );
 }

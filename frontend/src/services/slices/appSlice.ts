@@ -1,12 +1,14 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ISnackBar } from '../../utils/types';
+import { IConfirmPopup, ISnackBar } from '../../utils/types';
 
 interface IAppState {
   snackBar: ISnackBar;
+  confirmPopup: IConfirmPopup;
 }
 
 const initialState: IAppState = {
   snackBar: { isOpen: false, text: '', hasError: false },
+  confirmPopup: { isOpen: false, cb: () => null },
 };
 
 export const slice = createSlice({
@@ -19,8 +21,19 @@ export const slice = createSlice({
     closeSnackBar(state) {
       state.snackBar = initialState.snackBar;
     },
+    openConfirmPopup(state, action: PayloadAction<IConfirmPopup['cb']>) {
+      state.confirmPopup = { cb: action.payload, isOpen: true };
+    },
+    closeConfirmPopup(state) {
+      state.confirmPopup = initialState.confirmPopup;
+    },
   },
 });
-export const { openSnackBar, closeSnackBar } = slice.actions;
+export const {
+  openSnackBar,
+  closeSnackBar,
+  openConfirmPopup,
+  closeConfirmPopup,
+} = slice.actions;
 
 export default slice.reducer;

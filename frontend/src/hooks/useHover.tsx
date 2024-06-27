@@ -8,7 +8,7 @@ enum hoverType {
 export default function useHover() {
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
-  function handleHovered(e: MouseEvent<HTMLDivElement>) {
+  function handleHovered(e: MouseEvent<HTMLAnchorElement>) {
     e.type === hoverType.MouseEnter ? setIsHovered(true) : setIsHovered(false);
   }
 
