@@ -15,12 +15,9 @@ interface IInputData extends Omit<IItemDto, 'main_image' | 'images'> {}
 
 export default function AdminItems() {
   const { handleError } = useErrorHandler();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid, isDirty, isLoading },
-    getValues,
-  } = useForm<IInputData>({ mode: 'onSubmit' });
+  const { register, handleSubmit } = useForm<IInputData>({
+    mode: 'onSubmit',
+  });
   const dispatch = useDispatch();
   const [images, setImages] = useState<string[]>([]);
   const [mainImage, setMainImage] = useState<string>('');
