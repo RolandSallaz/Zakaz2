@@ -32,8 +32,9 @@ import { FilesModule } from './files/files.module';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => [
         {
-          rootPath: join(__dirname, '..'),
+          rootPath: join(__dirname, '../../'),
           serveRoot: configService.get('isDev') ? '' : '/api',
+          exclude: ['/api*', '*'], // Исключаем маршруты API
         },
       ],
       inject: [ConfigService],

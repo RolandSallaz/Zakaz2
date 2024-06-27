@@ -10,7 +10,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const port = configService.get<number>('port');
-  app.use(helmet());
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: false,
+    }),
+  );
   app.setGlobalPrefix(configService.get('isDev') ? '' : 'api');
   app.enableCors({
     origin: true,

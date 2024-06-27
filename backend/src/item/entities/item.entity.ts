@@ -1,3 +1,4 @@
+import { TGender } from '@/types';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -27,8 +28,17 @@ export class Item {
   is_active: boolean;
 
   @Column({ default: 'unisex' })
-  gender: 'male' | 'female' | 'unisex';
+  gender: TGender;
 
   @Column()
   type: string;
+
+  @Column({
+    type: 'text',
+    array: true,
+  })
+  images: string[];
+
+  @Column()
+  main_image: string;
 }
