@@ -47,7 +47,7 @@ export interface IFIle {
 }
 
 export type TGender = 'male' | 'female' | 'unisex';
-export type TActiveTime = '15d' | '30d' | '90d';
+export type TActiveTime = '90d' | '180d' | 'Infinity';
 
 export interface IItemDto
   extends Omit<IItem, 'id' | 'start_sell_date' | 'end_sell_date'> {
@@ -60,7 +60,7 @@ export interface IItem {
   description: string;
   price: number;
   start_sell_date: Date;
-  end_sell_date: Date;
+  end_sell_date: Date | null;
   is_active: boolean;
   gender: TGender;
   type: string;

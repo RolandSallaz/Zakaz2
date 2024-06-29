@@ -8,6 +8,7 @@ import { ApiDeleteItem } from '../../utils/api';
 import useErrorHandler from '../../hooks/useErrorHandler';
 import { openConfirmPopup, openSnackBar } from '../../services/slices/appSlice';
 import { setItems } from '../../services/slices/itemSlice';
+import { ru } from 'date-fns/locale/ru';
 
 export default function AdminItemsPage() {
   const { data: items } = useSelector((state) => state.itemSlice);
@@ -71,7 +72,11 @@ export default function AdminItemsPage() {
                 <td>{item.name}</td>
                 <td>{item.price}₽</td>
                 <td>
-                  {formatDistance(item.end_sell_date, item.start_sell_date)}
+                  {item.end_sell_date
+                    ? formatDistance(item.end_sell_date, item.start_sell_date, {
+                        locale: ru,
+                      })
+                    : 'Бессрочно'}
                 </td>
                 <td>{item.is_active ? 'Да' : 'Нет'}</td>
                 <td>

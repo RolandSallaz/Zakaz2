@@ -131,12 +131,12 @@ export default function AdminItems() {
                 Активное время
                 <select
                   className="form__input"
-                  defaultValue={'15d'}
+                  defaultValue={'90d'}
                   {...register('active_time', { required: true })}
                 >
-                  <option value={'15d'}>15 дней</option>
-                  <option value={'30d'}>30 дней</option>
                   <option value={'90d'}>90 дней</option>
+                  <option value={'180d'}>180 дней</option>
+                  <option value={'Infinity'}>Бессрочно</option>
                 </select>
               </label>
               <input
