@@ -4,38 +4,41 @@ import { AuthLevelGuard } from '@/auth/guards/auth-level.guard';
 import {
   Controller,
   Post,
-  UploadedFile,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage, Multer } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 
 @Controller('files')
 export class FilesController {
   constructor() {}
-  // upload single file
   @Post()
   @UseGuards(AuthLevelGuard)
   @AuthLevel(ROLES.MANAGER)
   @UseInterceptors(
-    FileInterceptor('file', {
+    FilesInterceptor('files', 10, {
       storage: diskStorage({
         destination: 'public/uploads',
         filename: (req, file, cb) => {
-          const extension = file.originalname.split('.').pop(); // Получаем расширение файла
-          const randomName = uuidv4(); // Генерируем случайное имя файла
-          const randomFileName = `${randomName}.${extension}`; // Соединяем случайное имя и расширение
+          const extension = file.originalname.split('.').pop();
+          const randomName = uuidv4();
+          const randomFileName = `${randomName}.${extension}`;
           cb(null, randomFileName);
         },
       }),
       limits: {
-        fileSize: 1024 * 1024 * 10, // Установите максимальный размер файла (10MB в данном случае)
+        fileSize: 1024 * 1024 * 10, // Максимальный размер файла (10MB)
       },
     }),
   )
-  public async uploadFile(@UploadedFile() file) {
-    return file;
+  public async uploadFiles(@UploadedFiles() files: Multer.File[]) {
+    return files.map((file) => ({
+      originalName: file.originalname,
+      fileName: file.filename,
+      filePath: `public/uploads/${file.filename}`,
+    }));
   }
 }
