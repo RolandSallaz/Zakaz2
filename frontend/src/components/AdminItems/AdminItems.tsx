@@ -155,7 +155,7 @@ export default function AdminItems() {
               </label>
             </div>
             <label
-              className="form__label form__label_image_main"
+              className="form__label form__label_images form__label_image_main"
               style={{ backgroundImage: `url(${mainImage})` }}
             >
               <FileUploader
@@ -164,8 +164,12 @@ export default function AdminItems() {
                 hoverTitle="Перетащите основное фото"
                 children={
                   <>
-                    {mainImage && (
+                    {mainImage ? (
                       <img className="form__image" src={mainImage} />
+                    ) : (
+                      <p className="form__centralized-text">
+                        Перетащите основное фото
+                      </p>
                     )}
                   </>
                 }
@@ -188,7 +192,15 @@ export default function AdminItems() {
                   types={fileTypes}
                   multiple
                   hoverTitle="Перетащите фото"
-                  children={<></>}
+                  children={
+                    <>
+                      {!images.length && (
+                        <p className="form__centralized-text">
+                          Перетащите дополнительные фото
+                        </p>
+                      )}
+                    </>
+                  }
                 />
               </div>
             </div>

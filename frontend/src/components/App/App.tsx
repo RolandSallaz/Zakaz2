@@ -1,30 +1,28 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from '../../services/store';
-import AuthPopup from '../AuthPopup/AuthPopup';
-import Footer from '../Footer/Footer';
-import Header from '../Header/Header';
-import Main from '../Main/Main';
-import SnackBar from '../SnackBar/SnackBar';
-import './App.scss';
-import { ApiCheckAuth, ApiGetItems } from '../../utils/api';
-import { login } from '../../services/slices/userSlice';
 import { Route, Routes } from 'react-router-dom';
-import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
-import Admin from '../Admin/Admin';
-import { ROLES } from '../../utils/types';
+import { ConfirmPopupProvider } from '../../context/ConfirmPopupContext';
 import useErrorHandler from '../../hooks/useErrorHandler';
 import { setItems } from '../../services/slices/itemSlice';
-import ItemPage from '../ItemPage/ItemPage';
+import { login } from '../../services/slices/userSlice';
+import { useDispatch, useSelector } from '../../services/store';
+import { ApiCheckAuth, ApiGetItems } from '../../utils/api';
+import { ROLES } from '../../utils/types';
+import Admin from '../Admin/Admin';
+import AuthPopup from '../AuthPopup/AuthPopup';
 import ConfirmPopup from '../ConfirmPopup/ConfirmPopup';
+import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
+import ItemPage from '../ItemPage/ItemPage';
+import Main from '../Main/Main';
+import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
+import SnackBar from '../SnackBar/SnackBar';
+import './App.scss';
 
 function App() {
   const { isAuthPopupOpened } = useSelector((state) => state.authPopupSlice);
   const { handleError } = useErrorHandler();
   const { isOpen: isSnackBarOpened } = useSelector(
     (state) => state.appSlice.snackBar,
-  );
-  const { isOpen: isConfirmPopupOpened } = useSelector(
-    (state) => state.appSlice.confirmPopup,
   );
 
   const dispatch = useDispatch();
@@ -37,7 +35,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <ConfirmPopupProvider>
       <Header />
       <Routes>
         <Route path="/" element={<Main />} />
@@ -49,13 +47,13 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/items/*" element={<ItemPage />} />
+        <Route path="/items/:id" element={<ItemPage />} />
       </Routes>
       <Footer />
       {isAuthPopupOpened && <AuthPopup />}
       {isSnackBarOpened && <SnackBar />}
-      {isConfirmPopupOpened && <ConfirmPopup />}
-    </>
+      <ConfirmPopup />
+    </ConfirmPopupProvider>
   );
 }
 

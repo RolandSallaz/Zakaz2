@@ -1,28 +1,26 @@
-import { closeConfirmPopup } from '../../services/slices/appSlice';
-import { useDispatch, useSelector } from '../../services/store';
+import { MouseEvent } from 'react';
+import { useConfirmPopup } from '../../context/ConfirmPopupContext';
 import './ConfirmPopup.scss';
 export default function ConfirmPopup() {
-  const dispatch = useDispatch();
-  const { cb } = useSelector((state) => state.appSlice.confirmPopup);
+  const { confirmPopup, confirm, closeConfirmPopup } = useConfirmPopup();
 
-  function handleClose() {
-    dispatch(closeConfirmPopup());
-  }
+  if (!confirmPopup.isOpen) return null;
 
-  function handleConfirm() {
-    cb();
-    dispatch(closeConfirmPopup());
+  function handleBackgroundClick(e: MouseEvent<HTMLDivElement>) {
+    if (e.target == e.currentTarget) {
+      closeConfirmPopup();
+    }
   }
 
   return (
-    <div className="ConfirmPopup">
+    <div className="ConfirmPopup" onClick={handleBackgroundClick}>
       <div className="ConfirmPopup__container">
         <h2 className="ConfirmPopup__heading">Вы уверены?</h2>
         <div className="ConfirmPopup__sub-container">
-          <button className="ConfirmPopup__button" onClick={handleConfirm}>
+          <button className="ConfirmPopup__button" onClick={confirm}>
             Да
           </button>
-          <button className="ConfirmPopup__button" onClick={handleClose}>
+          <button className="ConfirmPopup__button" onClick={closeConfirmPopup}>
             Нет
           </button>
         </div>

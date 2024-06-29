@@ -1,20 +1,22 @@
-import { Link } from 'react-router-dom';
-import './AdminItems.scss';
-import { useDispatch, useSelector } from '../../services/store';
-import { IItem } from '../../utils/types';
-import { ChangeEvent, useEffect, useState } from 'react';
 import { formatDistance } from 'date-fns';
-import { ApiDeleteItem } from '../../utils/api';
-import useErrorHandler from '../../hooks/useErrorHandler';
-import { openConfirmPopup, openSnackBar } from '../../services/slices/appSlice';
-import { setItems } from '../../services/slices/itemSlice';
 import { ru } from 'date-fns/locale/ru';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import useErrorHandler from '../../hooks/useErrorHandler';
+import { openSnackBar } from '../../services/slices/appSlice';
+import { setItems } from '../../services/slices/itemSlice';
+import { useDispatch, useSelector } from '../../services/store';
+import { ApiDeleteItem } from '../../utils/api';
+import { IItem } from '../../utils/types';
+import './AdminItems.scss';
+import { useConfirmPopup } from '../../context/ConfirmPopupContext';
 
 export default function AdminItemsPage() {
   const { data: items } = useSelector((state) => state.itemSlice);
   const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
   const { handleError } = useErrorHandler();
   const dispatch = useDispatch();
+  const { openConfirmPopup } = useConfirmPopup();
 
   function handleItemInputChange(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value.trim();
@@ -85,9 +87,7 @@ export default function AdminItemsPage() {
                 <td>
                   <button
                     onClick={() => {
-                      dispatch(
-                        openConfirmPopup(() => handleDeleteItem(item.id)),
-                      );
+                      openConfirmPopup(() => handleDeleteItem(item.id));
                     }}
                   >
                     Удалить

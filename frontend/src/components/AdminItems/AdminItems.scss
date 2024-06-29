@@ -3,6 +3,13 @@
   flex-direction: column;
   gap: 10px;
   width: 100%;
+
+  &__centralized-text {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+  }
   &__input {
     border: 1px solid rgb(161, 161, 161);
     padding: 10px 5px;
@@ -57,6 +64,7 @@
     }
     &_image_main {
       min-width: 315px;
+      width: 315px;
       height: 415px;
       background-size: cover;
       background-position: center;
