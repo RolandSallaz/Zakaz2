@@ -18,10 +18,7 @@ export class Item {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   start_sell_date: Date;
 
-  @Column({
-    type: 'timestamp',
-    default: () => `CURRENT_TIMESTAMP + INTERVAL '30 days'`,
-  })
+  @Column({ type: 'timestamp', nullable: true })
   end_sell_date: Date;
 
   @Column({ default: true })

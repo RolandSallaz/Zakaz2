@@ -9,6 +9,6 @@ export interface AuthenticatedRequest extends Request {
   user: User;
 }
 
-export type TActiveTime = '15d' | '30d' | '90d';
+export type TActiveTime = '90d' | '180d' | 'Infinity';
 
 export type TGender = 'male' | 'female' | 'unisex';

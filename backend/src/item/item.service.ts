@@ -14,11 +14,18 @@ export class ItemService {
   ) {}
   async create(createItemDto: CreateItemDto): Promise<Item> {
     const { active_time, ...dto } = createItemDto;
-    const daysToAdd = parseInt(active_time, 10);
 
-    const currentDate = new Date();
+    let end_sell_date: Date | null = null;
 
-    const end_sell_date = addDays(currentDate, daysToAdd);
+    if (active_time.toLowerCase() !== 'infinity') {
+      const daysToAdd = parseInt(active_time, 10);
+      if (isNaN(daysToAdd)) {
+        throw new Error('Invalid active_time value');
+      }
+      const currentDate = new Date();
+      end_sell_date = addDays(currentDate, daysToAdd);
+    }
+
     const item = await this.itemRepository.create({ ...dto, end_sell_date });
     return await this.itemRepository.save(item);
   }
