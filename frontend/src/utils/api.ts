@@ -92,8 +92,8 @@ export function ApiUpdateUser(id: number, newData: IUser): Promise<IUser> {
   });
 }
 
-export function ApiPostImage(file: FormData): Promise<IFIle> {
-  return _fetch<IFIle>({ url: 'files', method: 'POST', body: file });
+export function ApiPostImages(file: FormData): Promise<IFIle[]> {
+  return _fetch<IFIle[]>({ url: 'files', method: 'POST', body: file });
 }
 
 export function ApiPostItem(item: IItemDto): Promise<IItem> {

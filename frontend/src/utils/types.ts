@@ -41,13 +41,9 @@ export interface IConfirmPopup {
 }
 
 export interface IFIle {
-  destination: string;
-  encoding: string;
-  fildName: string;
-  mimetype: string;
-  originalname: string;
-  path: string;
-  size: number;
+  originalName: string;
+  fileName: string;
+  filePath: string;
 }
 
 export type TGender = 'male' | 'female' | 'unisex';

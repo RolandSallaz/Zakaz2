@@ -19,7 +19,7 @@ export default function AdminImage({ image, editCb, deleteCb }: props) {
       const file = files[0];
 
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('files', file);
       editCb(formData);
     }
   }
