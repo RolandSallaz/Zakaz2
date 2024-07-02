@@ -35,9 +35,6 @@ export class CreateItemDto extends PartialType(Item) {
   @IsString()
   type: string;
 
-  @IsString()
-  main_image: string;
-
   @IsArray()
   @IsString({ each: true })
   images?: string[];

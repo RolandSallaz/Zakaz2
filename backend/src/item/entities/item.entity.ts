@@ -35,7 +35,4 @@ export class Item {
     array: true,
   })
   images: string[];
-
-  @Column()
-  main_image: string;
 }

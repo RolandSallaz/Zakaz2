@@ -5,9 +5,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { Item } from './entities/item.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from '@/users/users.module';
+import { ItemSelectorsModule } from '@/item-selectors/item-selectors.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Item]), JwtModule, UsersModule],
+  imports: [
+    TypeOrmModule.forFeature([Item]),
+    JwtModule,
+    UsersModule,
+    ItemSelectorsModule,
+  ],
   controllers: [ItemController],
   providers: [ItemService],
 })

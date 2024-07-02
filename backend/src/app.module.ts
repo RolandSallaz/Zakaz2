@@ -13,6 +13,7 @@ import { JwtConfigModule } from './auth/config/jwt-config.module';
 import { ItemModule } from './item/item.module';
 import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
+import { ItemSelectorsModule } from './item-selectors/item-selectors.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { FilesModule } from './files/files.module';
     AuthModule,
     ItemModule,
     FilesModule,
+    ItemSelectorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

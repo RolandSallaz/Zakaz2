@@ -5,12 +5,14 @@ import { Item } from './entities/item.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { addDays } from 'date-fns';
+import { ItemSelectorsService } from '@/item-selectors/item-selectors.service';
 
 @Injectable()
 export class ItemService {
   constructor(
     @InjectRepository(Item)
     private itemRepository: Repository<Item>,
+    private itemsSelectorService: ItemSelectorsService,
   ) {}
   async create(createItemDto: CreateItemDto): Promise<Item> {
     const { active_time, ...dto } = createItemDto;
@@ -25,7 +27,7 @@ export class ItemService {
       const currentDate = new Date();
       end_sell_date = addDays(currentDate, daysToAdd);
     }
-
+    await this.itemsSelectorService.findOrCreate({ name: dto.type });
     const item = await this.itemRepository.create({ ...dto, end_sell_date });
     return await this.itemRepository.save(item);
   }
