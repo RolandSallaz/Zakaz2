@@ -6,6 +6,7 @@ import {
   IItem,
   IItemDto,
   IRequest,
+  ITypeSelect,
   IUser,
 } from './types';
 
@@ -106,4 +107,8 @@ export function ApiGetItems(): Promise<IItem[]> {
 
 export function ApiDeleteItem(id: number): Promise<IItem> {
   return _fetch<IItem>({ url: `items/${id}`, method: 'DELETE' });
+}
+
+export function ApiGetTypeSelectors(): Promise<ITypeSelect[]> {
+  return _fetch<ITypeSelect[]>({ url: 'item-selectors' });
 }

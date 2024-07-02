@@ -51,7 +51,7 @@ export default function Card({ item }: props) {
 
         <div
           className={`card__image ${isHovered && 'card__image_hovered'}`}
-          style={{ backgroundImage: `url(${item.main_image})` }}
+          style={{ backgroundImage: `url(${item.images[1]})` }}
         />
       </Link>
       <h2 className="card__name">

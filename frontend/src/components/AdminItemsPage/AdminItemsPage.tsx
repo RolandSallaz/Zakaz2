@@ -48,7 +48,7 @@ export default function AdminItemsPage() {
   }
   return (
     <main className="main">
-      <Link className="link" to={'./add'}>
+      <Link className="link AdminItemsPage__link" to={'./add'}>
         Добавить новый
       </Link>
       <section className="AdminItemsPage">
@@ -75,7 +75,7 @@ export default function AdminItemsPage() {
                 <td>{item.price}₽</td>
                 <td>
                   {item.end_sell_date
-                    ? formatDistance(item.end_sell_date, item.start_sell_date, {
+                    ? formatDistance(new Date(), new Date(item.end_sell_date), {
                         locale: ru,
                       })
                     : 'Бессрочно'}

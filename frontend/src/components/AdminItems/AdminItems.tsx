@@ -1,47 +1,51 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import Select, {
+  MenuProps,
+  MultiValue,
+  SingleValue,
+  components,
+} from 'react-select';
 import useErrorHandler from '../../hooks/useErrorHandler';
 import { openSnackBar } from '../../services/slices/appSlice';
 import { addItem } from '../../services/slices/itemSlice';
 import { useDispatch } from '../../services/store';
-import { ApiPostImages, ApiPostItem } from '../../utils/api';
+import {
+  ApiGetTypeSelectors,
+  ApiPostImages,
+  ApiPostItem,
+} from '../../utils/api';
 import { apiUrl } from '../../utils/config';
-import { IItemDto } from '../../utils/types';
+import { IItemDto, ISelect } from '../../utils/types';
 import AdminImage from '../AdminImage/AdminImage';
 import './AdminItems.scss';
 
-interface IInputData extends Omit<IItemDto, 'main_image' | 'images'> {}
+interface IInputData extends Omit<IItemDto, 'images'> {}
 
 const fileTypes = ['JPG', 'PNG', 'GIF'];
 
 export default function AdminItems() {
   const { handleError } = useErrorHandler();
-  const { register, handleSubmit } = useForm<IInputData>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isValid, errors },
+  } = useForm<IInputData>({
     mode: 'onSubmit',
   });
   const dispatch = useDispatch();
   const [images, setImages] = useState<string[]>([]);
-  const [mainImage, setMainImage] = useState<string>('');
-
-  function handleUploadImage(formData: FormData, cb: (image: string) => void) {
-    ApiPostImages(formData)
-      .then((files) => {
-        const image = `${apiUrl}/${files[0].filePath}`;
-        return cb(image);
-      })
-      .catch(handleError);
-  }
-  function handleEditMainImage(file: File) {
-    const formData = new FormData();
-    formData.append('files', file);
-    handleUploadImage(formData, setMainImage);
-  }
 
   function handleDeleteImage(image: string) {
     setImages((prev) => prev.filter((item) => item != image));
   }
+  const [typeOptions, setTypeOptions] = useState<ISelect[]>([]);
+  const [selectedType, setSelectedType] = useState<ISelect | null>(null);
+  const [typeInputValue, setTypeInputValue] = useState<string>('');
+  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
 
   function handleEditImage(formData: FormData) {
     ApiPostImages(formData)
@@ -54,14 +58,20 @@ export default function AdminItems() {
       .catch(handleError);
   }
 
+  const toggleMenu = () => {
+    setMenuIsOpen(!menuIsOpen);
+  };
+
   const onSubmit: SubmitHandler<IInputData> = (data) => {
     ApiPostItem({
       ...data,
       price: Number(data.price),
       images,
-      main_image: mainImage,
+      type: selectedType!.value,
     })
       .then((item) => {
+        reset();
+        setImages([]);
         dispatch(openSnackBar({ text: 'Успешно' }));
         dispatch(addItem(item));
       })
@@ -86,6 +96,55 @@ export default function AdminItems() {
       .catch(handleError);
   };
 
+  useEffect(() => {
+    ApiGetTypeSelectors()
+      .then((selectors) =>
+        setTypeOptions(() =>
+          selectors?.map(({ name }) => ({ label: name, value: name })),
+        ),
+      )
+      .catch(handleError);
+  }, []);
+
+  const handleTypeInputChange = (input: string) => {
+    setTypeInputValue(input);
+  };
+
+  const handleCreateOption = () => {
+    const newOption = { label: typeInputValue, value: typeInputValue };
+    setTypeOptions((prevOptions) => [...prevOptions, newOption]);
+    setSelectedType(newOption);
+    setTypeInputValue('');
+    toggleMenu();
+  };
+
+  const CustomMenu = (props: MenuProps<ISelect>) => {
+    const { children, selectProps } = props;
+
+    return (
+      <components.Menu {...props}>
+        {children}
+        {selectProps.inputValue &&
+          !selectProps.options.some(
+            (opt: unknown) => (opt as ISelect).label === selectProps.inputValue,
+          ) && (
+            <div
+              style={{ padding: '10px', cursor: 'pointer', color: 'blue' }}
+              onClick={handleCreateOption}
+            >
+              Добавить "{selectProps.inputValue}"
+            </div>
+          )}
+      </components.Menu>
+    );
+  };
+
+  const handleChangeSelect = (
+    newValue: SingleValue<ISelect> | MultiValue<ISelect>,
+  ) => {
+    setSelectedType(newValue as SingleValue<ISelect>);
+  };
+
   return (
     <>
       <Link to={'/admin/items'} className="link admin__section-link">
@@ -95,26 +154,41 @@ export default function AdminItems() {
         <form className="form">
           <div className="form__container-parrent">
             <div className="form__container">
-              <input
-                className="form__input"
-                placeholder="название"
-                {...register('name', {
-                  required: true,
-                  minLength: 2,
-                  max: 128,
-                })}
-              />
-              <textarea
-                className="form__textarea"
-                placeholder="описание"
-                {...register('description', { required: true })}
-              />
-              <input
-                className="form__input"
-                placeholder="цена"
-                type="number"
-                {...register('price', { required: true })}
-              />
+              <label className="form__label">
+                {errors.name && (
+                  <p className="form__error">{errors.name.message}</p>
+                )}
+                <input
+                  className="form__input"
+                  placeholder="название"
+                  {...register('name', {
+                    required: true,
+                    minLength: 2,
+                    max: 128,
+                  })}
+                />
+              </label>
+              <label className="form__label">
+                {errors.description && (
+                  <p className="form__error">{errors.description.message}</p>
+                )}
+                <textarea
+                  className="form__input form__input_textarea"
+                  placeholder="описание"
+                  {...register('description', { required: true })}
+                />
+              </label>
+              <label>
+                {errors.price && (
+                  <p className="form__error">{errors.price.message}</p>
+                )}
+                <input
+                  className="form__input"
+                  placeholder="цена"
+                  type="number"
+                  {...register('price', { required: true })}
+                />
+              </label>
               <label className="form__label">
                 Пол
                 <select
@@ -139,42 +213,29 @@ export default function AdminItems() {
                   <option value={'Infinity'}>Бессрочно</option>
                 </select>
               </label>
-              <input
-                className="form__input"
-                placeholder="тип"
-                {...register('type', { required: true })}
-              />
+              <label>
+                <Select
+                  components={{ Menu: CustomMenu }}
+                  options={typeOptions}
+                  onChange={handleChangeSelect}
+                  onInputChange={handleTypeInputChange}
+                  inputValue={typeInputValue}
+                  value={selectedType}
+                  onMenuClose={() => setMenuIsOpen(false)}
+                  menuIsOpen={menuIsOpen}
+                  onFocus={() => setMenuIsOpen(true)}
+                />
+              </label>
               <label className="form__label">
                 Активно
                 <input
                   className="form__input"
                   type="checkbox"
                   defaultChecked
-                  {...register('is_active', { required: true })}
+                  {...register('is_active')}
                 />
               </label>
             </div>
-            <label
-              className="form__label form__label_images form__label_image_main"
-              style={{ backgroundImage: `url(${mainImage})` }}
-            >
-              <FileUploader
-                handleChange={handleEditMainImage}
-                types={fileTypes}
-                hoverTitle="Перетащите основное фото"
-                children={
-                  <>
-                    {mainImage ? (
-                      <img className="form__image" src={mainImage} />
-                    ) : (
-                      <p className="form__centralized-text">
-                        Перетащите основное фото
-                      </p>
-                    )}
-                  </>
-                }
-              />
-            </label>
             <div className="form__label form__label_images">
               <div className="form__grid-container">
                 {images?.map((image, index) => (
@@ -196,7 +257,7 @@ export default function AdminItems() {
                     <>
                       {!images.length && (
                         <p className="form__centralized-text">
-                          Перетащите дополнительные фото
+                          Перетащите фото (мин количество 2)
                         </p>
                       )}
                     </>
@@ -205,7 +266,13 @@ export default function AdminItems() {
               </div>
             </div>
           </div>
-          <button type="submit">Сохранить</button>
+          <button
+            type="submit"
+            className="form__button form__button_submit"
+            disabled={images.length <= 2 || !isValid || !selectedType}
+          >
+            Сохранить
+          </button>
         </form>
       </section>
     </>

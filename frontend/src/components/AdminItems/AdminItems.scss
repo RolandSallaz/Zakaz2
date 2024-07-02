@@ -3,7 +3,6 @@
   flex-direction: column;
   gap: 10px;
   width: 100%;
-
   &__centralized-text {
     position: absolute;
     top: 50%;
@@ -14,13 +13,18 @@
     border: 1px solid rgb(161, 161, 161);
     padding: 10px 5px;
     border-radius: 4px;
+    width: 100%;
+    &_textarea {
+      resize: vertical;
+      min-height: 150px;
+      border-radius: 4px;
+      border: 1px solid rgb(161, 161, 161);
+    }
+    &[type='checkbox'] {
+      width: auto;
+    }
   }
-  &__textarea {
-    resize: vertical;
-    min-height: 150px;
-    border-radius: 4px;
-    border: 1px solid rgb(161, 161, 161);
-  }
+
   &__label {
     position: relative;
     border-radius: 4px;
@@ -105,5 +109,35 @@
     background-repeat: no-repeat;
     border-radius: 4px;
     cursor: pointer;
+  }
+  &__button {
+    border: 1px solid black;
+    &_submit {
+      width: 320px;
+      align-self: center;
+      padding: 5px;
+      border-radius: 4px;
+      &:disabled {
+        border-color: rgb(143, 143, 143);
+      }
+    }
+  }
+  &__errors {
+    text-align: center;
+    color: red;
+  }
+}
+
+@media screen and (max-width: 1279px) {
+  .form {
+    &__container-parrent {
+      display: flex;
+      flex-direction: column;
+    }
+    &__grid-container {
+      grid-template-columns: repeat(3, 77px);
+      grid-template-rows: repeat(4, 77px);
+      gap: 5px;
+    }
   }
 }

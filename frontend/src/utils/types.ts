@@ -64,6 +64,15 @@ export interface IItem {
   is_active: boolean;
   gender: TGender;
   type: string;
-  main_image: string;
   images: string[];
+}
+
+export interface ISelect {
+  label: string;
+  value: string;
+}
+
+export interface ITypeSelect {
+  id: number;
+  name: string;
 }

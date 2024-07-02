@@ -21,7 +21,7 @@ export default function ItemPage() {
 
   useEffect(() => {
     if (item) {
-      setActiveImage(item.main_image);
+      setActiveImage(item.images[0]);
     }
   }, [item]);
 
@@ -48,6 +48,7 @@ export default function ItemPage() {
             <div className="ItemPage__grid-container ItemPage__grid-container_images">
               {item?.images.map((image) => (
                 <img
+                  loading="lazy"
                   className="ItemPage__image"
                   id={image}
                   src={image}
