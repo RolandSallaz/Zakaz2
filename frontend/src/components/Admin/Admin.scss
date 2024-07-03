@@ -46,3 +46,15 @@
     margin-bottom: 20px;
   }
 }
+
+@media screen and (max-width: 1279px) {
+  .admin {
+    &__link {
+      padding: 5px;
+    }
+    &__grid {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}

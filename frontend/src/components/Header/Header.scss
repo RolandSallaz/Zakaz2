@@ -79,3 +79,15 @@
     padding: 10px;
   }
 }
+
+@media screen and (max-width: 1279px) {
+  .header {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    justify-items: center;
+    &__heading-link {
+      font-size: 22px;
+      letter-spacing: normal;
+    }
+  }
+}

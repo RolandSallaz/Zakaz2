@@ -25,7 +25,7 @@ export default function Card({ item }: props) {
       <Link
         to={link}
         className="card__container"
-        style={{ backgroundImage: `url(${item.images[0]})` }}
+        style={{ backgroundImage: `url(${item.images[1]})` }}
         onMouseEnter={handleHovered}
         onMouseLeave={handleHovered}
       >
@@ -51,7 +51,7 @@ export default function Card({ item }: props) {
 
         <div
           className={`card__image ${isHovered && 'card__image_hovered'}`}
-          style={{ backgroundImage: `url(${item.images[1]})` }}
+          style={{ backgroundImage: `url(${item.images[0]})` }}
         />
       </Link>
       <h2 className="card__name">

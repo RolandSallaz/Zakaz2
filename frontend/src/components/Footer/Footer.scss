@@ -18,3 +18,13 @@
     color: #6f6969;
   }
 }
+
+@media screen and (max-width: 1279px) {
+  .footer {
+    &__columns {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      justify-items: center;
+    }
+  }
+}

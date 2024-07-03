@@ -269,7 +269,7 @@ export default function AdminItems() {
           <button
             type="submit"
             className="form__button form__button_submit"
-            disabled={images.length <= 2 || !isValid || !selectedType}
+            disabled={images.length < 2 || !isValid || !selectedType}
           >
             Сохранить
           </button>
