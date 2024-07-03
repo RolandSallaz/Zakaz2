@@ -65,6 +65,7 @@ export interface IItem {
   gender: TGender;
   type: string;
   images: string[];
+  creator_email?: string;
 }
 
 export interface ISelect {

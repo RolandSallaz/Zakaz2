@@ -57,6 +57,9 @@ export default function Card({ item }: props) {
       <h2 className="card__name">
         <Link to={link}>{item.name}</Link>
       </h2>
+      <Link className="card__type" to={'#'}>
+        {item.type}
+      </Link>
       <p className="card__price">{item.price}₽</p>
     </div>
   );

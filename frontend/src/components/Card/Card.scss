@@ -81,4 +81,11 @@
   &__price {
     margin-top: 10px;
   }
+  &__type {
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    color: #9b9b9b;
+    text-transform: capitalize;
+  }
 }
