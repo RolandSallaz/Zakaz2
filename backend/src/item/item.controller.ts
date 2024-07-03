@@ -1,19 +1,22 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
-import { ItemService } from './item.service';
-import { CreateItemDto } from './dto/create-item.dto';
-import { UpdateItemDto } from './dto/update-item.dto';
 import { AuthLevel } from '@/auth/decorators/AuthLevel';
+import { CurrentUser } from '@/auth/decorators/CurrentUser';
 import { ROLES } from '@/auth/enums';
 import { AuthLevelGuard } from '@/auth/guards/auth-level.guard';
+import { User } from '@/users/entities/user.entity';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { CreateItemDto } from './dto/create-item.dto';
+import { UpdateItemDto } from './dto/update-item.dto';
+import { ItemService } from './item.service';
 
 @Controller('items')
 export class ItemController {
@@ -22,13 +25,14 @@ export class ItemController {
   @Post()
   @UseGuards(AuthLevelGuard)
   @AuthLevel(ROLES.MANAGER)
-  create(@Body() createItemDto: CreateItemDto) {
-    return this.itemService.create(createItemDto);
+  create(@Body() createItemDto: CreateItemDto, @Req() req: { user: User }) {
+    const creatorEmail = req.user.email;
+    return this.itemService.create(createItemDto, creatorEmail);
   }
 
   @Get()
-  findAll() {
-    return this.itemService.findAll();
+  findAll(@CurrentUser() user: User) {
+    return this.itemService.findAll(user);
   }
 
   @Get(':id')

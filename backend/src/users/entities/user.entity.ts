@@ -9,7 +9,7 @@ export class User {
   @Column({ default: ROLES.USER })
   auth_level: ROLES;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column({ default: 0 })

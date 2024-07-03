@@ -21,21 +21,9 @@ export class JwtAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // Используем тип Promise<boolean> для асинхронной логики
     const req = context.switchToHttp().getRequest();
-    try {
-      if (!req.headers.authorization.startsWith('Bearer ')) {
-        throw new UnauthorizedException({ message: 'Авторизация не прошла' });
-      }
-      const token = req.headers.authorization.replace('Bearer ', '');
-      const { user } = this.jwtService.verify(token);
-      const findUser = await this.userService.findUserByEmail(user.email);
-      if (!findUser) {
-        throw new UnauthorizedException({ message: 'Авторизация не прошла' });
-      }
-      req.user = findUser;
-      return true;
-    } catch (e) {
-      console.log(e);
+    if (!req.user) {
       throw new UnauthorizedException({ message: 'Авторизация не прошла' });
     }
+    return true;
   }
 }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -14,6 +14,7 @@ import { ItemModule } from './item/item.module';
 import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
 import { ItemSelectorsModule } from './item-selectors/item-selectors.module';
+import { AttachUserMiddleware } from './auth/middlewares/AttachUserMiddleware';
 
 @Module({
   imports: [
@@ -63,4 +64,10 @@ import { ItemSelectorsModule } from './item-selectors/item-selectors.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AttachUserMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

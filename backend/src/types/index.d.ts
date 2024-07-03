@@ -12,3 +12,11 @@ export interface AuthenticatedRequest extends Request {
 export type TActiveTime = '90d' | '180d' | 'Infinity';
 
 export type TGender = 'male' | 'female' | 'unisex';
+
+declare global {
+  namespace Express {
+    interface Request {
+      user: User;
+    }
+  }
+}

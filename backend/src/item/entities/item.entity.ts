@@ -1,5 +1,14 @@
 import { TGender } from '@/types';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '@/users/entities/user.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Item {
@@ -15,7 +24,7 @@ export class Item {
   @Column()
   price: number;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   start_sell_date: Date;
 
   @Column({ type: 'timestamp', nullable: true })
@@ -35,4 +44,7 @@ export class Item {
     array: true,
   })
   images: string[];
+
+  @Column({ nullable: true, select: false })
+  creator_email: string;
 }

@@ -6,6 +6,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { addDays } from 'date-fns';
 import { ItemSelectorsService } from '@/item-selectors/item-selectors.service';
+import { CurrentUser } from '@/auth/decorators/CurrentUser';
+import { User } from '@/users/entities/user.entity';
+import { ROLES } from '@/auth/enums';
 
 @Injectable()
 export class ItemService {
@@ -14,7 +17,10 @@ export class ItemService {
     private itemRepository: Repository<Item>,
     private itemsSelectorService: ItemSelectorsService,
   ) {}
-  async create(createItemDto: CreateItemDto): Promise<Item> {
+  async create(
+    createItemDto: CreateItemDto,
+    creatorEmail: string,
+  ): Promise<Item> {
     const { active_time, ...dto } = createItemDto;
 
     let end_sell_date: Date | null = null;
@@ -28,12 +34,23 @@ export class ItemService {
       end_sell_date = addDays(currentDate, daysToAdd);
     }
     await this.itemsSelectorService.findOrCreate({ name: dto.type });
-    const item = await this.itemRepository.create({ ...dto, end_sell_date });
+    const item = await this.itemRepository.create({
+      ...dto,
+      end_sell_date,
+      creator_email: creatorEmail,
+    });
     return await this.itemRepository.save(item);
   }
 
-  async findAll() {
-    return await this.itemRepository.find({});
+  async findAll(user: User) {
+    if (user?.auth_level >= ROLES.MANAGER) {
+      return await this.itemRepository
+        .createQueryBuilder('item')
+        .addSelect('item.creator_email')
+        .getMany();
+    } else {
+      return await this.itemRepository.find({});
+    }
   }
 
   findOne(id: number) {
