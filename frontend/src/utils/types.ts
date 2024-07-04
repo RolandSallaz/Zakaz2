@@ -23,6 +23,7 @@ export interface IUser {
   email: string;
   id: number;
   auth_level: ROLES;
+  register_date: Date;
 }
 
 export interface IAuthData extends IUser {
