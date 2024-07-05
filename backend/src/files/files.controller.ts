@@ -10,7 +10,9 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage, Multer } from 'multer';
+import * as sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
+import { promises as fs } from 'fs';
 
 @Controller('files')
 export class FilesController {
@@ -35,10 +37,31 @@ export class FilesController {
     }),
   )
   public async uploadFiles(@UploadedFiles() files: Multer.File[]) {
-    return files.map((file) => ({
-      originalName: file.originalname,
-      fileName: file.filename,
-      filePath: `public/uploads/${file.filename}`,
-    }));
+    const compressedFiles = await Promise.all(
+      files.map(async (file) => {
+        const tempFilePath = `public/uploads/temp-${file.filename}`;
+        const originalFilePath = file.path;
+
+        // Сжимаем изображение и временно сохраняем его
+        await sharp(file.path)
+          .resize(800) // Пример изменения размера, если нужно
+          .toFormat('jpeg', { quality: 100 })
+          .toFile(tempFilePath);
+
+        // Удаляем оригинальный файл
+        await fs.unlink(originalFilePath);
+
+        // Переименовываем сжатый файл в оригинальное имя файла
+        await fs.rename(tempFilePath, originalFilePath);
+
+        return {
+          originalName: file.originalname,
+          fileName: file.filename,
+          filePath: `public/uploads/${file.filename}`,
+        };
+      }),
+    );
+
+    return compressedFiles;
   }
 }

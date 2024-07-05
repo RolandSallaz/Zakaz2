@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/all-exceptions.filter';
 import { TypeOrmErrorMapperInterceptor } from './common/typeormerrormapper.interceptor';
+import * as compression from 'compression';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,7 @@ async function bootstrap() {
       crossOriginResourcePolicy: false,
     }),
   );
+  app.use(compression());
   app.setGlobalPrefix(configService.get('isDev') ? '' : 'api');
   app.enableCors({
     origin: true,
