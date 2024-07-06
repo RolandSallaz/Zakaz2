@@ -1,16 +1,14 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import './ItemPage.scss';
-import { IItem, ROLES } from '../../utils/types';
 import { useEffect, useState } from 'react';
-import { useSelector } from '../../services/store';
-import { Hearts } from 'react-loader-spinner';
-import useHover from '../../hooks/useHover';
 import GlitchSquiggly from 'react-glitch-effect/core/GlitchSquiggly';
-import { Carousel } from 'react-responsive-carousel';
-import ImageSlider from '../ImageSlider/ImageSlider';
-import { SwiperSlide, Swiper } from 'swiper/react';
+import { Hearts } from 'react-loader-spinner';
+import { useNavigate, useParams } from 'react-router-dom';
 import 'swiper/css';
 import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { useSelector } from '../../services/store';
+import { IItem, ROLES } from '../../utils/types';
+import ImageSlider from '../ImageSlider/ImageSlider';
+import './ItemPage.scss';
 export default function ItemPage() {
   const { id } = useParams();
   const { data: allItems } = useSelector((state) => state.itemSlice);
