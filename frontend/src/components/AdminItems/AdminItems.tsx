@@ -130,7 +130,10 @@ export default function AdminItems() {
           ) && (
             <div
               style={{ padding: '10px', cursor: 'pointer', color: 'blue' }}
-              onClick={handleCreateOption}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCreateOption();
+              }}
             >
               Добавить "{selectProps.inputValue}"
             </div>
