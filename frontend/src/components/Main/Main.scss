@@ -43,15 +43,6 @@
   }
 }
 
-.cards {
-  margin-top: 20px;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(4, 285px);
-  justify-content: space-between;
-  gap: 60px 0;
-}
-
 @media screen and (max-width: 1279px) {
   .main {
     width: calc(100% - 20px);

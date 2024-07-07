@@ -57,7 +57,10 @@ export default function Card({ item }: props) {
       <h2 className="card__name">
         <Link to={link}>{item.name}</Link>
       </h2>
-      <Link className="card__type" to={'#'}>
+      <Link
+        className="card__type"
+        to={`/find?${new URLSearchParams({ search: item.type }).toString()}`}
+      >
         {item.type}
       </Link>
       <p className="card__price">{item.price}₽</p>

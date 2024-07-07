@@ -17,6 +17,9 @@ import Main from '../Main/Main';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import SnackBar from '../SnackBar/SnackBar';
 import './App.scss';
+import Profile from '../Profile/Profile';
+import BurgerMenu from '../BurgerMenu/BurgerMenu';
+import FindPage from '../FindPage/FindPage';
 
 function App() {
   const { isAuthPopupOpened } = useSelector((state) => state.authPopupSlice);
@@ -48,10 +51,20 @@ function App() {
           }
         />
         <Route path="/items/:id" element={<ItemPage />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/find" element={<FindPage />} />
       </Routes>
       <Footer />
       {isAuthPopupOpened && <AuthPopup />}
       {isSnackBarOpened && <SnackBar />}
+      <BurgerMenu />
       <ConfirmPopup />
     </ConfirmPopupProvider>
   );

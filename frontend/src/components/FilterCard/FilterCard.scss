@@ -5,7 +5,6 @@
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 4px;
-
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -38,6 +37,7 @@
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.301);
     border-radius: 10px;
+    cursor: default;
   }
   &__heading {
     color: white;
@@ -59,7 +59,8 @@
     color: white;
     display: flex;
     flex-direction: column;
-
+    text-decoration: none;
+    cursor: pointer;
     &::after {
       content: '';
       width: 100%;

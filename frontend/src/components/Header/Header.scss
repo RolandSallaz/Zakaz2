@@ -32,6 +32,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    text-decoration: none;
+    &_gender-select {
+      border: 1px solid rgb(155, 155, 155) !important;
+    }
+    &_heart:hover {
+      color: red;
+    }
   }
 
   &__burger-menu {

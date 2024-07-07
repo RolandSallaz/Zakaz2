@@ -8,7 +8,7 @@ import { setItems } from '../../services/slices/itemSlice';
 import { useDispatch, useSelector } from '../../services/store';
 import { ApiDeleteItem } from '../../utils/api';
 import { IItem } from '../../utils/types';
-import './AdminItems.scss';
+import './AdminItemsPage.scss';
 import { useConfirmPopup } from '../../context/ConfirmPopupContext';
 
 export default function AdminItemsPage() {

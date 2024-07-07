@@ -3,10 +3,12 @@ import { ISnackBar } from '../../utils/types';
 
 interface IAppState {
   snackBar: ISnackBar;
+  isBurgerMenuOpened: boolean;
 }
 
 const initialState: IAppState = {
   snackBar: { isOpen: false, text: '', hasError: false },
+  isBurgerMenuOpened: false,
 };
 
 export const slice = createSlice({
@@ -19,8 +21,12 @@ export const slice = createSlice({
     closeSnackBar(state) {
       state.snackBar = initialState.snackBar;
     },
+    setIsBurgerMenuOpened(state, action: PayloadAction<boolean>) {
+      state.isBurgerMenuOpened = action.payload;
+    },
   },
 });
-export const { openSnackBar, closeSnackBar } = slice.actions;
+export const { openSnackBar, closeSnackBar, setIsBurgerMenuOpened } =
+  slice.actions;
 
 export default slice.reducer;
