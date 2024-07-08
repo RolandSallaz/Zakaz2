@@ -2,13 +2,16 @@
   display: flex;
   flex-direction: column;
   &__container {
-    height: 385px;
+    min-height: 385px;
     background-position: center;
     background-size: cover;
     position: relative;
     border-radius: 4px;
     cursor: pointer;
     overflow: hidden;
+    &_big {
+      height: 600px;
+    }
   }
   &__button {
     position: absolute;

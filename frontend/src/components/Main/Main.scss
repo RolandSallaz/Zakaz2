@@ -38,7 +38,12 @@
     font-size: 16px;
     padding: 4px 10px;
     &:hover {
-      border: 1px solid rgb(37, 37, 37);
+      border: 1px solid rgb(116, 118, 255);
+      color: rgb(116, 118, 255);
+    }
+    &_active {
+      border-color: rgb(151, 41, 255);
+      color: rgb(151, 41, 255);
     }
   }
 }

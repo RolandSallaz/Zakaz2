@@ -6,11 +6,12 @@ import { MouseEvent } from 'react';
 
 interface props {
   item: IItem;
+  isBig?: boolean;
 }
 
-export default function Card({ item }: props) {
+export default function Card({ item, isBig = false }: props) {
   const { isHovered, handleHovered } = useHover();
-  const link = `items/${item.id}`;
+  const link = `/items/${item.id}`;
 
   function handleLikeClick(e: MouseEvent) {
     e.preventDefault();
@@ -24,7 +25,7 @@ export default function Card({ item }: props) {
     <div className="card">
       <Link
         to={link}
-        className="card__container"
+        className={`card__container ${isBig && 'card__container_big'}`}
         style={{ backgroundImage: `url(${item.images[1]})` }}
         onMouseEnter={handleHovered}
         onMouseLeave={handleHovered}

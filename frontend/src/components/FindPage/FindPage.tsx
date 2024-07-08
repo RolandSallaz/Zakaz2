@@ -46,7 +46,10 @@ export default function FindPage() {
     const value = String(inputValue).toLowerCase();
     const filteredByGender: IItem[] =
       selectedGender !== selectOptions[0]
-        ? items.filter((item) => item.gender == selectedGender.value)
+        ? items.filter(
+            (item) =>
+              item.gender == selectedGender.value || item.gender == 'unisex',
+          )
         : items;
     setFilteredItems(
       filteredByGender.filter(
