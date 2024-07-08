@@ -1,9 +1,7 @@
-FROM node:21-alpine
+FROM python:3.6
 WORKDIR /app
-COPY package*.json ./
-RUN npm i
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
 COPY . .
-RUN npm run build
-CMD npm run migration:generate -n initMigration
-CMD npm run migration:run
-CMD [ "node", "dist/src/main.js" ]
+EXPOSE 8080
+CMD [ "python", "main.py" ]

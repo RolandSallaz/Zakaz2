@@ -32,13 +32,20 @@ export class FilesController {
         },
       }),
       limits: {
-        fileSize: 1024 * 1024 * 10, // Максимальный размер файла (10MB)
+        fileSize: 1024 * 1024 * 30, // Максимальный размер файла (30MB)
       },
     }),
   )
   public async uploadFiles(@UploadedFiles() files: Multer.File[]) {
     const compressedFiles = await Promise.all(
       files.map(async (file) => {
+        return {
+          originalName: file.originalname,
+          fileName: file.filename,
+          filePath: `public/uploads/${file.filename}`,
+        };
+
+        // компрессия
         const tempFilePath = `public/uploads/temp-${file.filename}`;
         const originalFilePath = file.path;
 
