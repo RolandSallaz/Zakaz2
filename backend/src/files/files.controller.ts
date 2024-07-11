@@ -9,10 +9,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { diskStorage, Multer } from 'multer';
-import * as sharp from 'sharp';
-import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
+import * as heicConvert from 'heic-convert';
+import { diskStorage, Multer } from 'multer';
+import { v4 as uuidv4 } from 'uuid';
 
 @Controller('files')
 export class FilesController {
@@ -39,32 +39,26 @@ export class FilesController {
   public async uploadFiles(@UploadedFiles() files: Multer.File[]) {
     const compressedFiles = await Promise.all(
       files.map(async (file) => {
+        let fileName = file.filename;
+        let filePath = `public/uploads/${file.filename}`;
+
+        if (file.originalname.endsWith('.heic')) {
+          const inputBuffer = await fs.readFile(file.path);
+          const outputBuffer = await heicConvert({
+            buffer: inputBuffer,
+            format: 'JPEG',
+            quality: 1,
+          });
+
+          fileName = file.filename.replace('.heic', '.jpg');
+          filePath = `public/uploads/${fileName}`;
+          await fs.writeFile(filePath, outputBuffer);
+          await fs.unlink(file.path);
+        }
         return {
           originalName: file.originalname,
-          fileName: file.filename,
-          filePath: `public/uploads/${file.filename}`,
-        };
-
-        // компрессия
-        const tempFilePath = `public/uploads/temp-${file.filename}`;
-        const originalFilePath = file.path;
-
-        // Сжимаем изображение и временно сохраняем его
-        await sharp(file.path)
-          .resize(800) // Пример изменения размера, если нужно
-          .toFormat('jpeg', { quality: 100 })
-          .toFile(tempFilePath);
-
-        // Удаляем оригинальный файл
-        await fs.unlink(originalFilePath);
-
-        // Переименовываем сжатый файл в оригинальное имя файла
-        await fs.rename(tempFilePath, originalFilePath);
-
-        return {
-          originalName: file.originalname,
-          fileName: file.filename,
-          filePath: `public/uploads/${file.filename}`,
+          fileName,
+          filePath,
         };
       }),
     );
