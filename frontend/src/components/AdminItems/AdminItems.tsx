@@ -24,7 +24,7 @@ import './AdminItems.scss';
 
 interface IInputData extends Omit<IItemDto, 'images'> {}
 
-const fileTypes = ['JPG', 'PNG', 'GIF'];
+const fileTypes = ['JPG', 'PNG', 'GIF', 'HEIC'];
 
 export default function AdminItems() {
   const { handleError } = useErrorHandler();
