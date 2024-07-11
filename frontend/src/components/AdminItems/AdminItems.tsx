@@ -24,7 +24,7 @@ import './AdminItems.scss';
 
 interface IInputData extends Omit<IItemDto, 'images'> {}
 
-const fileTypes = ['JPG', 'PNG', 'GIF', 'HEIC'];
+// const fileTypes = ['JPG', 'PNG', 'GIF', 'HEIC'];
 
 export default function AdminItems() {
   const { handleError } = useErrorHandler();
@@ -253,7 +253,7 @@ export default function AdminItems() {
               <div className="form__label_absolute">
                 <FileUploader
                   handleChange={handleDropImages}
-                  types={fileTypes}
+                  // types={fileTypes}
                   multiple
                   hoverTitle="Перетащите фото"
                   children={
