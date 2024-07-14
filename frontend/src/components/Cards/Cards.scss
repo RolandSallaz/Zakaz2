@@ -1,8 +1,22 @@
 .cards {
   margin-top: 20px;
   width: 100%;
-  display: grid;
-
-  justify-content: center;
-  gap: 60px 20px;
+  &_type {
+    &_default {
+      display: grid;
+      justify-content: center;
+      gap: 60px 20px;
+    }
+    &_big {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    &_cart {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: stretch;
+    }
+  }
 }

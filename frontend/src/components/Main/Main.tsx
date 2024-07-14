@@ -14,7 +14,6 @@ export default function Main() {
   const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
 
   useEffect(() => {
-    console.log(selectedFilter);
     changeMainFilter(selectedFilter);
   }, [items, selectedFilter]);
 
@@ -100,7 +99,11 @@ export default function Main() {
           </button>
         </div>
       </section>
-      <Cards items={filteredItems} columnsCount={columnsCount} />
+      <Cards
+        items={filteredItems}
+        columnsCount={columnsCount}
+        type={columnsCount < 4 ? 'big' : 'default'}
+      />
     </main>
   );
 }

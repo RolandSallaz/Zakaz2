@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .header {
   padding: 23px;
   display: grid;
@@ -11,6 +13,11 @@
   left: 50%;
   transform: translateX(-50%);
   border-bottom: 1px solid rgb(155, 155, 155);
+  &__item-count {
+    position: absolute;
+    right: -8px;
+    top: -8px;
+  }
   &__heading-link {
     font-family: 'Lora', serif;
     font-weight: 400;
@@ -29,6 +36,7 @@
   }
 
   &__nav-link {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -38,6 +46,9 @@
     }
     &_heart:hover {
       color: red;
+    }
+    &_cart:hover {
+      color: $secondColor;
     }
   }
 

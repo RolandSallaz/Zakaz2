@@ -12,7 +12,7 @@ const initialState: IAppState = {
     email: 'null',
     id: 0,
     auth_level: 0,
-    register_date: new Date(),
+    register_date: new Date().toISOString(),
   },
 };
 

@@ -23,7 +23,7 @@ export interface IUser {
   email: string;
   id: number;
   auth_level: ROLES;
-  register_date: Date;
+  register_date: string;
 }
 
 export interface IAuthData extends IUser {
@@ -49,6 +49,7 @@ export interface IFIle {
 
 export type TGender = 'male' | 'female' | 'unisex';
 export type TActiveTime = '90d' | '180d' | 'Infinity';
+export type TCardType = 'default' | 'cart' | 'big';
 
 export interface IItemDto
   extends Omit<IItem, 'id' | 'start_sell_date' | 'end_sell_date'> {
@@ -67,6 +68,7 @@ export interface IItem {
   type: string;
   images: string[];
   creator_email?: string;
+  selected?: boolean;
 }
 
 export interface ISelect {

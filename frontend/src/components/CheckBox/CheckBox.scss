@@ -1,0 +1,33 @@
+@import '../../variables.scss';
+
+.CheckBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border: 2px solid $blurColor;
+  border-radius: 2px;
+  cursor: pointer;
+  & input {
+    display: none;
+  }
+  &:hover {
+    &::after {
+      content: '✔';
+      color: $blurColor;
+      font-size: 14px;
+    }
+  }
+  &_checked {
+    color: $secondColor;
+    border-color: $secondColor;
+    &::after {
+      content: '✔';
+      color: $secondColor;
+      font-size: 14px;
+    }
+  }
+}
