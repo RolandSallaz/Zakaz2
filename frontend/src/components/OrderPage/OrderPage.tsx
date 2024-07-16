@@ -43,7 +43,7 @@ export default function OrderPage() {
     const itemsIds = items.map((item) => item.id);
     const dto: IOrderDto = { ...data, itemsIds };
     ApiSendOrder(dto)
-      .then((order) => {
+      .then(() => {
         navigate('/');
         items.forEach((item) => dispatch(removeFromCart(item.id)));
       })
