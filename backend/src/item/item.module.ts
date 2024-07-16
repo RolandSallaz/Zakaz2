@@ -16,5 +16,6 @@ import { ItemSelectorsModule } from '@/item-selectors/item-selectors.module';
   ],
   controllers: [ItemController],
   providers: [ItemService],
+  exports: [ItemService],
 })
 export class ItemModule {}

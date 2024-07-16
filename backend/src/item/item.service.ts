@@ -42,6 +42,13 @@ export class ItemService {
     return await this.itemRepository.save(item);
   }
 
+  async findManyById(ids: number[]): Promise<Item[]> {
+    return this.itemRepository
+      .createQueryBuilder('item')
+      .where('item.id IN (:...ids)', { ids })
+      .getMany();
+  }
+
   async findAll(user: User) {
     if (user?.auth_level >= ROLES.MANAGER) {
       return await this.itemRepository

@@ -42,6 +42,12 @@ export class ItemController {
     return this.itemService.findOne(+id);
   }
 
+  @Get('/actual/:itemsIdArray')
+  getActualItems(@Param('itemsIdArray') itemsIdArray: string) {
+    const ids = JSON.parse(itemsIdArray);
+    return this.itemService.findManyById(ids);
+  }
+
   @Patch(':id')
   @UseGuards(AuthLevelGuard)
   @AuthLevel(ROLES.MANAGER)

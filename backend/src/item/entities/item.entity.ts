@@ -1,12 +1,10 @@
+import { Order } from '@/order/entities/order.entity';
 import { TGender } from '@/types';
-import { User } from '@/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
+  ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -47,4 +45,7 @@ export class Item {
 
   @Column({ nullable: true, select: false })
   creator_email: string;
+
+  @ManyToMany(() => Order, (order) => order.items)
+  orders: Order[];
 }

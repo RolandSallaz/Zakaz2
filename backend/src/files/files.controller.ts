@@ -39,7 +39,6 @@ export class FilesController {
   public async uploadFiles(@UploadedFiles() files: Multer.File[]) {
     const compressedFiles = await Promise.all(
       files.map(async (file) => {
-        console.log(file);
         let fileName = file.filename;
         let filePath = `public/uploads/${file.filename}`;
 

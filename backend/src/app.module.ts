@@ -15,6 +15,7 @@ import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
 import { ItemSelectorsModule } from './item-selectors/item-selectors.module';
 import { AttachUserMiddleware } from './auth/middlewares/AttachUserMiddleware';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { AttachUserMiddleware } from './auth/middlewares/AttachUserMiddleware';
     ItemModule,
     FilesModule,
     ItemSelectorsModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
