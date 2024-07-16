@@ -80,3 +80,16 @@ export interface ITypeSelect {
   id: number;
   name: string;
 }
+
+export interface IOrder {
+  id: number;
+  telegram: string;
+  phone: string;
+  items: IItem[];
+  customer_email: string;
+  create_date: Date;
+}
+
+export interface IOrderDto extends Pick<IOrder, 'telegram' | 'phone'> {
+  itemsIds: number[];
+}

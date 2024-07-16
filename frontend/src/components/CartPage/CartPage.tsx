@@ -4,6 +4,7 @@ import './CartPage.scss';
 import { useSelector } from '../../services/store';
 import Cards from '../Cards/Cards';
 import CheckBox from '../CheckBox/CheckBox';
+import { useNavigate } from 'react-router-dom';
 
 export default function CartPage() {
   const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
@@ -11,7 +12,7 @@ export default function CartPage() {
   const [selectedItems, setSelectedItems] = useState<IItem[]>([]);
   const { data: items } = useSelector((state) => state.itemSlice);
   const { cart } = useSelector((state) => state.appSlice);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const itemsFromCart: IItem[] = items.filter((item) =>
       cart.some((cartItem) => cartItem.id === item.id),
@@ -49,8 +50,18 @@ export default function CartPage() {
   }
 
   function handleToOrderPage() {
-    console.log(selectedItems);
+    navigate(`/order?items=[${selectedItems.map((item) => item.id)}]`);
   }
+
+  const getProductText = (count: number) => {
+    if (count === 1) {
+      return 'товар';
+    } else if (count > 1 && count < 5) {
+      return 'товара';
+    } else {
+      return 'товаров';
+    }
+  };
 
   return (
     <main className="main CartPage">
@@ -79,11 +90,18 @@ export default function CartPage() {
         </button>
         <div className="CartPage__contaner CartPage__container_flex">
           <h3>Ваша корзина</h3>
-          <p>1 товар</p>
+          <p>
+            {filteredItems.length} {getProductText(filteredItems.length)}
+          </p>
         </div>
         <div className="CartPage__contaner CartPage__container_flex">
-          <p>Товары (1)</p>
-          <p>2 500 р</p>
+          <p>Выбрано товаров ({selectedItems.length})</p>
+          <p>
+            {selectedItems
+              .reduce((total, item) => total + item.price, 0)
+              .toLocaleString()}
+            руб
+          </p>
         </div>
       </div>
     </main>

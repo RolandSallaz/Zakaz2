@@ -5,6 +5,8 @@ import {
   IFetch,
   IItem,
   IItemDto,
+  IOrder,
+  IOrderDto,
   IRequest,
   ITypeSelect,
   IUser,
@@ -111,4 +113,12 @@ export function ApiDeleteItem(id: number): Promise<IItem> {
 
 export function ApiGetTypeSelectors(): Promise<ITypeSelect[]> {
   return _fetch<ITypeSelect[]>({ url: 'item-selectors' });
+}
+
+export function ApiGetActualItemsInfo(data: string): Promise<IItem[]> {
+  return _fetch<IItem[]>({ url: `items/actual/${data}` });
+}
+
+export function ApiSendOrder(data: IOrderDto): Promise<IOrder> {
+  return _fetch<IOrder>({ url: 'order', method: 'POST', body: { ...data } });
 }

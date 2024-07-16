@@ -23,6 +23,7 @@ import Profile from '../Profile/Profile';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import SnackBar from '../SnackBar/SnackBar';
 import './App.scss';
+import OrderPage from '../OrderPage/OrderPage';
 
 function App() {
   const { isAuthPopupOpened } = useSelector((state) => state.authPopupSlice);
@@ -74,6 +75,7 @@ function App() {
         <Route path="/find" element={<FindPage />} />
         <Route path="/likes" element={<LikesPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/order" element={<OrderPage />} />
       </Routes>
       <Footer />
       {isAuthPopupOpened && <AuthPopup />}

@@ -11,39 +11,19 @@
     cursor: pointer;
   }
   &__column {
-    margin-top: 50px;
-    flex-grow: 1;
-    background-color: rgba(184, 184, 184, 0.123);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-self: flex-start;
-    padding: 20px;
+    @include order-column;
     &_right {
-      width: 365px;
-      padding: 24px;
-      gap: 10px;
-      flex-grow: 0;
+      @include order-column_right;
     }
   }
   &__button {
     &_order {
-      background-color: $secondColor;
-      color: white;
-      padding: 15px 0;
-      font-size: 16px;
-      font-weight: 500;
-      border-radius: 10px;
-      &:disabled {
-        background-color: $blurColor;
-        cursor: default;
-      }
+      @include order-button;
     }
   }
   &__container {
     &_flex {
-      display: flex;
-      justify-content: space-between;
+      @include space-between;
     }
   }
 }
