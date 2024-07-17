@@ -9,7 +9,9 @@ dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
-const apiKey = process.env.TG_API_KEY || "";
+const apiKey = process.env.IS_DEV
+  ? process.env.DEV_TG_API_KEY || ""
+  : process.env.TG_API_KEY || "";
 export const tgAdminId = process.env.TG_CHAT_ID || "";
 export const bot = new Telegraf(apiKey);
 
