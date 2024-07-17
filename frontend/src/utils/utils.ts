@@ -9,3 +9,13 @@ export function ejectFile(e: ChangeEvent<HTMLInputElement>) {
   }
   return formData;
 }
+
+export const getProductText = (count: number) => {
+  if (count === 1) {
+    return 'товар';
+  } else if (count > 1 && count < 5) {
+    return 'товара';
+  } else {
+    return 'товаров';
+  }
+};

@@ -5,6 +5,7 @@ import { useSelector } from '../../services/store';
 import Cards from '../Cards/Cards';
 import CheckBox from '../CheckBox/CheckBox';
 import { useNavigate } from 'react-router-dom';
+import { getProductText } from '../../utils/utils';
 
 export default function CartPage() {
   const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
@@ -52,16 +53,6 @@ export default function CartPage() {
   function handleToOrderPage() {
     navigate(`/order?items=[${selectedItems.map((item) => item.id)}]`);
   }
-
-  const getProductText = (count: number) => {
-    if (count === 1) {
-      return 'товар';
-    } else if (count > 1 && count < 5) {
-      return 'товара';
-    } else {
-      return 'товаров';
-    }
-  };
 
   return (
     <main className="main CartPage">

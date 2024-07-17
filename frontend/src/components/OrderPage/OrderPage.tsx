@@ -8,6 +8,7 @@ import useErrorHandler from '../../hooks/useErrorHandler';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch } from '../../services/store';
 import { removeFromCart } from '../../services/slices/appSlice';
+import { getProductText } from '../../utils/utils';
 
 interface IFormValues {
   telegram: string;
@@ -126,11 +127,20 @@ export default function OrderPage() {
             </button>
             <div className="OrderPage__space-between">
               <h2>Ваш заказ</h2>
-              <p>1 товар</p>
+              <p>
+                {' '}
+                {items.length} {getProductText(items.length)}
+              </p>
             </div>
             <div className="OrderPage__space-between">
               <h3>Итого</h3>
-              <p>337 ₽</p>
+              <p>
+                {' '}
+                {items
+                  .reduce((total, item) => total + item.price, 0)
+                  .toLocaleString()}{' '}
+                ₽
+              </p>
             </div>
           </div>
         </form>
