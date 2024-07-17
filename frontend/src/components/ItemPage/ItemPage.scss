@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .ItemPage {
   margin-top: 160px !important;
   flex-direction: row !important;
@@ -10,6 +12,13 @@
     color: white;
     background-color: black;
     border-radius: 4px;
+    transition: all 0.3s linear;
+    &_purple {
+      background-color: $secondColor;
+    }
+    &_green {
+      background-color: #00aaff;
+    }
     &:hover {
       opacity: 0.8;
     }
@@ -20,8 +29,12 @@
       align-items: center;
       justify-content: center;
       padding: 10px;
-      &:hover {
+      &_active {
         color: red;
+      }
+
+      &:hover {
+        color: rgb(170, 51, 51);
       }
     }
   }
@@ -77,6 +90,7 @@
     &_left {
       max-width: 80%;
       align-self: flex-start;
+      flex-grow: 1;
     }
     &_name {
       width: 100%;

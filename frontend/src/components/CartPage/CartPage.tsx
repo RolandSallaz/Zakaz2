@@ -56,45 +56,51 @@ export default function CartPage() {
 
   return (
     <main className="main CartPage">
-      <div className="CartPage__column">
-        <label className="CartPage__select" htmlFor="checkBoxCartPage">
-          <CheckBox
-            labelId="checkBoxCartPage"
-            checked={isAllSelected}
-            onChange={handleSelectAllChange}
-          />
-          Выбрать все
-        </label>
-        <Cards
-          items={filteredItems}
-          type="cart"
-          onCheckBoxChange={handleItemSelectChange}
-        />
-      </div>
-      <div className="CartPage__column CartPage__column_right">
-        <button
-          className="CartPage__button_order"
-          onClick={handleToOrderPage}
-          disabled={selectedItems.length == 0}
-        >
-          Перейти к оформлению
-        </button>
-        <div className="CartPage__contaner CartPage__container_flex">
-          <h3>Ваша корзина</h3>
-          <p>
-            {filteredItems.length} {getProductText(filteredItems.length)}
-          </p>
-        </div>
-        <div className="CartPage__contaner CartPage__container_flex">
-          <p>Выбрано товаров ({selectedItems.length})</p>
-          <p>
-            {selectedItems
-              .reduce((total, item) => total + item.price, 0)
-              .toLocaleString()}
-            руб
-          </p>
-        </div>
-      </div>
+      {filteredItems.length == 0 ? (
+        <h2>Корзина пуста</h2>
+      ) : (
+        <>
+          <div className="CartPage__column">
+            <label className="CartPage__select" htmlFor="checkBoxCartPage">
+              <CheckBox
+                labelId="checkBoxCartPage"
+                checked={isAllSelected}
+                onChange={handleSelectAllChange}
+              />
+              Выбрать все
+            </label>
+            <Cards
+              items={filteredItems}
+              type="cart"
+              onCheckBoxChange={handleItemSelectChange}
+            />
+          </div>
+          <div className="CartPage__column CartPage__column_right">
+            <button
+              className="CartPage__button_order"
+              onClick={handleToOrderPage}
+              disabled={selectedItems.length == 0}
+            >
+              Перейти к оформлению
+            </button>
+            <div className="CartPage__contaner CartPage__container_flex">
+              <h3>Ваша корзина</h3>
+              <p>
+                {filteredItems.length} {getProductText(filteredItems.length)}
+              </p>
+            </div>
+            <div className="CartPage__contaner CartPage__container_flex">
+              <p>Выбрано товаров ({selectedItems.length})</p>
+              <p>
+                {selectedItems
+                  .reduce((total, item) => total + item.price, 0)
+                  .toLocaleString()}
+                руб
+              </p>
+            </div>
+          </div>
+        </>
+      )}
     </main>
   );
 }

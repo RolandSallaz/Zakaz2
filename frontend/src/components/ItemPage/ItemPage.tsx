@@ -5,10 +5,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import 'swiper/css';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useSelector } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 import { IItem, ROLES } from '../../utils/types';
 import ImageSlider from '../ImageSlider/ImageSlider';
 import './ItemPage.scss';
+import {
+  addLikes,
+  addToCart,
+  removeFromCart,
+  removeFromLikes,
+} from '../../services/slices/appSlice';
 export default function ItemPage() {
   const { id } = useParams();
   const { data: allItems } = useSelector((state) => state.itemSlice);
@@ -16,13 +22,15 @@ export default function ItemPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [activeImage, setActiveImage] = useState<string>('');
   const isMobile: boolean = window.innerWidth < 1280;
+  const dispatch = useDispatch();
+  const { cart, likes } = useSelector((state) => state.appSlice);
   const {
     userData: { auth_level },
   } = useSelector((state) => state.userSlice);
-
+  const itemId = Number(id);
   const navigate = useNavigate();
   useEffect(() => {
-    const foundedItem = allItems.find((item) => item.id == Number(id));
+    const foundedItem = allItems.find((item) => item.id == itemId);
     if (foundedItem) {
       setItem(foundedItem);
       setLoading(false);
@@ -34,6 +42,39 @@ export default function ItemPage() {
       setActiveImage(item.images[0]);
     }
   }, [item]);
+
+  const isItemInCart: boolean = Boolean(
+    cart.find((cartItem) => (item && item.id) == cartItem.id),
+  );
+
+  const isItemLiked: boolean = Boolean(
+    likes.find((likeItem) => (item && item.id) == likeItem.id),
+  );
+
+  function handleCartClick() {
+    if (isItemInCart) {
+      dispatch(removeFromCart(itemId));
+    } else {
+      dispatch(addToCart(itemId));
+    }
+  }
+
+  function handleFavoriteClick() {
+    if (isItemLiked) {
+      dispatch(removeFromLikes(itemId));
+    } else {
+      dispatch(addLikes(itemId));
+    }
+  }
+
+  function handleBuyClick() {
+    navigate(`/order?items=[${id}]`);
+  }
+
+  function handleEditClick() {
+    navigate(`/admin/items/edit/${id}`);
+  }
+
   return (
     <main className="main ItemPage">
       {loading ? (
@@ -51,7 +92,10 @@ export default function ItemPage() {
             <div className="ItemPage__container ItemPage__container_name">
               <h1 className="ItemPage__name">{item?.name}</h1>
               {!isMobile && (
-                <button className="ItemPage__button ItemPage__button_favorite">
+                <button
+                  className={`ItemPage__button ItemPage__button_favorite ${isItemLiked && 'ItemPage__button_favorite_active'}`}
+                  onClick={handleFavoriteClick}
+                >
                   <svg
                     viewBox="0 0 1024 1024"
                     fill="currentColor"
@@ -127,7 +171,10 @@ export default function ItemPage() {
                 <p className="ItemPage__price">
                   {item?.price.toLocaleString('ru-RU')}
                 </p>
-                <button className="ItemPage__button ItemPage__button_favorite">
+                <button
+                  className={`ItemPage__button ItemPage__button_favorite ${isItemLiked && 'ItemPage__button_favorite_active'}`}
+                  onClick={handleFavoriteClick}
+                >
                   <svg
                     viewBox="0 0 1024 1024"
                     fill="currentColor"
@@ -142,20 +189,26 @@ export default function ItemPage() {
 
             <div className="ItemPage__button-container">
               <button
-                className="ItemPage__button"
-                style={{ backgroundColor: '#00aaff' }}
+                className={`ItemPage__button ${isItemInCart ? 'ItemPage__button_purple' : 'ItemPage__button_green'}`}
+                onClick={handleCartClick}
               >
-                В корзину
+                {isItemInCart ? 'В корзине' : 'В корзину'}
               </button>
               <button
                 className="ItemPage__button"
                 style={{ backgroundColor: '#02d15c' }}
+                onClick={handleBuyClick}
               >
                 Купить
               </button>
               {auth_level >= ROLES.MANAGER && (
                 <GlitchSquiggly>
-                  <button className="ItemPage__button">Редактировать</button>
+                  <button
+                    onClick={handleEditClick}
+                    className="ItemPage__button"
+                  >
+                    Редактировать
+                  </button>
                 </GlitchSquiggly>
               )}
             </div>

@@ -93,3 +93,8 @@ export interface IOrder {
 export interface IOrderDto extends Pick<IOrder, 'telegram' | 'phone'> {
   itemsIds: number[];
 }
+
+export interface IInfoPopup {
+  text: string;
+  isOpened: boolean;
+}

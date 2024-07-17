@@ -16,14 +16,15 @@ import ConfirmPopup from '../ConfirmPopup/ConfirmPopup';
 import FindPage from '../FindPage/FindPage';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
+import InfoPopup from '../InfoPopup/InfoPopup';
 import ItemPage from '../ItemPage/ItemPage';
 import LikesPage from '../LikesPage/LikesPage';
 import Main from '../Main/Main';
+import OrderPage from '../OrderPage/OrderPage';
 import Profile from '../Profile/Profile';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import SnackBar from '../SnackBar/SnackBar';
 import './App.scss';
-import OrderPage from '../OrderPage/OrderPage';
 
 function App() {
   const { isAuthPopupOpened } = useSelector((state) => state.authPopupSlice);
@@ -31,6 +32,9 @@ function App() {
   const { isOpen: isSnackBarOpened } = useSelector(
     (state) => state.appSlice.snackBar,
   );
+  const {
+    infoPopup: { isOpened: isInfoPopupOpened },
+  } = useSelector((state) => state.appSlice);
 
   const dispatch = useDispatch();
 
@@ -80,6 +84,7 @@ function App() {
       <Footer />
       {isAuthPopupOpened && <AuthPopup />}
       {isSnackBarOpened && <SnackBar />}
+      {isInfoPopupOpened && <InfoPopup />}
       <BurgerMenu />
       <ConfirmPopup />
     </ConfirmPopupProvider>

@@ -7,7 +7,7 @@ import { IItem, IOrderDto } from '../../utils/types';
 import useErrorHandler from '../../hooks/useErrorHandler';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch } from '../../services/store';
-import { removeFromCart } from '../../services/slices/appSlice';
+import { openInfoPopup, removeFromCart } from '../../services/slices/appSlice';
 import { getProductText } from '../../utils/utils';
 
 interface IFormValues {
@@ -47,6 +47,11 @@ export default function OrderPage() {
       .then(() => {
         navigate('/');
         items.forEach((item) => dispatch(removeFromCart(item.id)));
+        dispatch(
+          openInfoPopup(
+            'Вы оформили заказ. Менеджер свяжется с вами в скором времени!',
+          ),
+        );
       })
       .catch(handleError)
       .finally(() => setSendingLoading(false));

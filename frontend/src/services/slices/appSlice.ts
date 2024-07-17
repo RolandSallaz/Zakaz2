@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ISnackBar } from '../../utils/types';
+import { IInfoPopup, ISnackBar } from '../../utils/types';
 
 interface ILikeOrCart {
   id: number;
@@ -11,6 +11,7 @@ interface IAppState {
   isBurgerMenuOpened: boolean;
   cart: ILikeOrCart[];
   likes: ILikeOrCart[];
+  infoPopup: IInfoPopup;
 }
 
 const initialState: IAppState = {
@@ -18,6 +19,7 @@ const initialState: IAppState = {
   isBurgerMenuOpened: false,
   cart: [],
   likes: [],
+  infoPopup: { isOpened: false, text: '' },
 };
 
 export const slice = createSlice({
@@ -65,6 +67,12 @@ export const slice = createSlice({
     loadCart(state, action: PayloadAction<ILikeOrCart[]>) {
       state.cart = action.payload;
     },
+    openInfoPopup(state, action: PayloadAction<string>) {
+      state.infoPopup = { isOpened: true, text: action.payload };
+    },
+    closeInfoPopup(state) {
+      state.infoPopup = initialState.infoPopup;
+    },
   },
 });
 export const {
@@ -77,6 +85,8 @@ export const {
   loadLikes,
   removeFromCart,
   removeFromLikes,
+  openInfoPopup,
+  closeInfoPopup,
 } = slice.actions;
 
 export default slice.reducer;
