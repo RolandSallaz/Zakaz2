@@ -25,10 +25,11 @@ export class OrderService {
     const createdOrder = await this.orderRepository.save(order);
     const message = `
     Пользователь ${order.customer_email}\n
-    Телеграм ник: ${order.telegram}\n
-    Оформил заказ на сумму: ${order.items.reduce((total, item) => total + item.price, 0)} руб\n
-    Товары: \n
-    ${order.items.map((item) => `Имя: ${item.name} Цена: ${item.price}руб id: ${item.id}\n`)}`;
+Телеграм ник: ${order.telegram}\n
+Номер телефона: ${order.phone}\n
+Оформил заказ на сумму: ${order.items.reduce((total, item) => total + item.price, 0)} руб\n
+Товары: \n
+${order.items.map((item) => `Имя: ${item.name} Цена: ${item.price} руб id: ${item.id} \n`)}`;
     await sendMessageToAdmin(message, this.configService);
     return createdOrder;
   }
