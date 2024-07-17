@@ -30,7 +30,12 @@ export class OrderService {
 Оформил заказ на сумму: ${order.items.reduce((total, item) => total + item.price, 0)} руб\n
 Товары: \n
 ${order.items.map((item) => `Имя: ${item.name} Цена: ${item.price} руб id: ${item.id} \n`)}`;
-    await sendMessageToAdmin(message, this.configService);
+    try {
+      await sendMessageToAdmin(message, this.configService);
+    } catch (err) {
+      //todo обработать ошибку тг
+    }
+
     return createdOrder;
   }
 
