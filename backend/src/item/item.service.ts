@@ -64,8 +64,10 @@ export class ItemService {
     return `This action returns a #${id} item`;
   }
 
-  update(id: number, updateItemDto: UpdateItemDto) {
-    return `This action updates a #${id} item`;
+  async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
+    const item = await this.itemRepository.findOneOrFail({ where: { id } });
+    Object.assign(item, updateItemDto);
+    return await this.itemRepository.save(item);
   }
 
   async remove(id: number): Promise<Item> {
