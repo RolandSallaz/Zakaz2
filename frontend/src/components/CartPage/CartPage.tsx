@@ -57,7 +57,7 @@ export default function CartPage() {
   return (
     <main className="main CartPage">
       {filteredItems.length == 0 ? (
-        <h2>Корзина пуста</h2>
+        <h2 className="CartPage__heading">Корзина пуста</h2>
       ) : (
         <>
           <div className="CartPage__column">

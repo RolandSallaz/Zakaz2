@@ -3,7 +3,7 @@ import './AdminImage.scss';
 
 interface props {
   image: string;
-  editCb: (file: FormData) => void;
+  editCb: (file: FormData, image: string) => void;
   deleteCb: (image: string) => void;
 }
 
@@ -20,7 +20,7 @@ export default function AdminImage({ image, editCb, deleteCb }: props) {
 
       const formData = new FormData();
       formData.append('files', file);
-      editCb(formData);
+      editCb(formData, image);
     }
   }
 

@@ -103,6 +103,14 @@ export function ApiPostItem(item: IItemDto): Promise<IItem> {
   return _fetch<IItem>({ url: 'items', method: 'POST', body: { ...item } });
 }
 
+export function ApiUpdateItem(id: number, item: IItemDto): Promise<IItem> {
+  return _fetch<IItem>({
+    url: `items/${id}`,
+    method: 'PATCH',
+    body: { ...item },
+  });
+}
+
 export function ApiGetItems(): Promise<IItem[]> {
   return _fetch<IItem[]>({ url: 'items' });
 }

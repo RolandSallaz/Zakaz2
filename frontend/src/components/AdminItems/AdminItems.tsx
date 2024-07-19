@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Select, {
   MenuProps,
   MultiValue,
@@ -10,12 +10,13 @@ import Select, {
 } from 'react-select';
 import useErrorHandler from '../../hooks/useErrorHandler';
 import { openSnackBar } from '../../services/slices/appSlice';
-import { addItem } from '../../services/slices/itemSlice';
-import { useDispatch } from '../../services/store';
+import { addItem, setItems } from '../../services/slices/itemSlice';
+import { useDispatch, useSelector } from '../../services/store';
 import {
   ApiGetTypeSelectors,
   ApiPostImages,
   ApiPostItem,
+  ApiUpdateItem,
 } from '../../utils/api';
 import { apiUrl } from '../../utils/config';
 import { IItemDto, ISelect } from '../../utils/types';
@@ -24,17 +25,22 @@ import './AdminItems.scss';
 
 interface IInputData extends Omit<IItemDto, 'images'> {}
 
-export default function AdminItems() {
+interface props {
+  type?: 'add' | 'edit';
+}
+
+export default function AdminItems({ type = 'add' }: props) {
   const { handleError } = useErrorHandler();
   const {
     register,
     handleSubmit,
     reset,
     formState: { isValid, errors },
-  } = useForm<IInputData>({
-    mode: 'onSubmit',
-  });
+    setValue,
+    trigger,
+  } = useForm<IInputData>({});
   const dispatch = useDispatch();
+  const { data: items } = useSelector((state) => state.itemSlice);
   const [images, setImages] = useState<string[]>([]);
 
   function handleDeleteImage(image: string) {
@@ -45,14 +51,15 @@ export default function AdminItems() {
   const [typeInputValue, setTypeInputValue] = useState<string>('');
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
 
-  function handleEditImage(formData: FormData) {
+  const { id } = useParams();
+  function handleEditImage(formData: FormData, oldImage: string) {
     ApiPostImages(formData)
-      .then((images) =>
-        setImages((prev) => {
-          const newFile = `${apiUrl}/${images[0].filePath}`;
-          return prev.map((item) => (item !== newFile ? newFile : item));
-        }),
-      )
+      .then((newImages) => {
+        const newFile = `${apiUrl}/${newImages[0].filePath}`;
+        setImages((prev) =>
+          prev.map((item) => (item === oldImage ? newFile : item)),
+        );
+      })
       .catch(handleError);
   }
 
@@ -61,19 +68,36 @@ export default function AdminItems() {
   };
 
   const onSubmit: SubmitHandler<IInputData> = (data) => {
-    ApiPostItem({
-      ...data,
-      price: Number(data.price),
-      images,
-      type: selectedType!.value,
-    })
-      .then((item) => {
-        reset();
-        setImages([]);
-        dispatch(openSnackBar({ text: 'Успешно' }));
-        dispatch(addItem(item));
+    if (type == 'add') {
+      ApiPostItem({
+        ...data,
+        price: Number(data.price),
+        images,
+        type: selectedType!.value,
       })
-      .catch(handleError);
+        .then((item) => {
+          reset();
+          setImages([]);
+          dispatch(openSnackBar({ text: 'Успешно' }));
+          dispatch(addItem(item));
+        })
+        .catch(handleError);
+    } else {
+      ApiUpdateItem(Number(id), {
+        ...data,
+        price: Number(data.price),
+        images,
+        type: selectedType!.value,
+      })
+        .then((item) => {
+          const updatedArr = items.map((oldItem) =>
+            oldItem.id == item.id ? item : oldItem,
+          );
+          dispatch(setItems(updatedArr));
+          dispatch(openSnackBar({ text: 'Успешно' }));
+        })
+        .catch(handleError);
+    }
   };
 
   const handleDropImages = (files: FileList | File) => {
@@ -103,6 +127,22 @@ export default function AdminItems() {
       )
       .catch(handleError);
   }, []);
+
+  useEffect(() => {
+    if (type == 'edit') {
+      const item = items.find((item) => item.id == Number(id));
+      if (item) {
+        setImages(item.images);
+        setValue('name', item.name);
+        setValue('description', item.description);
+        setValue('price', item.price);
+        setValue('gender', item.gender);
+        setSelectedType({ label: item.type, value: item.type });
+        setValue('is_active', item.is_active);
+        trigger();
+      }
+    }
+  }, [items]);
 
   const handleTypeInputChange = (input: string) => {
     setTypeInputValue(input);
@@ -151,8 +191,8 @@ export default function AdminItems() {
       <Link to={'/admin/items'} className="link admin__section-link">
         Назад
       </Link>
-      <section className="admin__section" onSubmit={handleSubmit(onSubmit)}>
-        <form className="form">
+      <section className="admin__section">
+        <form className="form" onSubmit={handleSubmit(onSubmit)}>
           <div className="form__container-parrent">
             <div className="form__container">
               <label className="form__label">

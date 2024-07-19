@@ -82,10 +82,16 @@ export default function AdminItemsPage() {
                 </td>
                 <td>{item.is_active ? 'Да' : 'Нет'}</td>
                 <td>
-                  <button onClick={() => {}}>Редактировать</button>
+                  <Link
+                    className="link AdminItemsPage__button"
+                    to={`./edit/${item.id}`}
+                  >
+                    Редактировать
+                  </Link>
                 </td>
                 <td>
                   <button
+                    className="AdminItemsPage__button"
                     onClick={() => {
                       openConfirmPopup(() => handleDeleteItem(item.id));
                     }}
