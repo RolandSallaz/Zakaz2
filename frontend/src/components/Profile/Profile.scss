@@ -1,0 +1,26 @@
+@import '../../variables.scss';
+
+.greed {
+  @include order-grid;
+}
+
+.order {
+  background-color: $gray;
+  width: 460px;
+  padding: 20px;
+
+  & p {
+    font-size: 17px;
+  }
+}
+
+.orders {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  &__heading {
+    margin-top: 20px;
+    text-align: center;
+    font-weight: 500;
+  }
+}

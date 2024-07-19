@@ -93,13 +93,7 @@ export default function Header() {
             />
           </svg>
         </button>
-        <Link
-          to={'/find'}
-          className="header__nav-link"
-          onClick={
-            isLoggedIn ? () => navigate('/profile') : handleOpenAuthPopup
-          }
-        >
+        <Link to={'/find'} className="header__nav-link">
           <svg
             viewBox="0 0 1024 1024"
             fill="currentColor"

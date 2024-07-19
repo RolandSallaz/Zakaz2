@@ -50,6 +50,7 @@ export interface IFIle {
 export type TGender = 'male' | 'female' | 'unisex';
 export type TActiveTime = '90d' | '180d' | 'Infinity';
 export type TCardType = 'default' | 'cart' | 'big';
+export type TOrderState = 'confirmed' | 'canceled' | 'inProgress';
 
 export interface IItemDto
   extends Omit<IItem, 'id' | 'start_sell_date' | 'end_sell_date'> {
@@ -88,6 +89,7 @@ export interface IOrder {
   items: IItem[];
   customer_email: string;
   create_date: Date;
+  state: TOrderState;
 }
 
 export interface IOrderDto extends Pick<IOrder, 'telegram' | 'phone'> {

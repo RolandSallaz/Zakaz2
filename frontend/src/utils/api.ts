@@ -122,3 +122,7 @@ export function ApiGetActualItemsInfo(data: string): Promise<IItem[]> {
 export function ApiSendOrder(data: IOrderDto): Promise<IOrder> {
   return _fetch<IOrder>({ url: 'order', method: 'POST', body: { ...data } });
 }
+
+export function ApiGetMyOrders(): Promise<IOrder[]> {
+  return _fetch<IOrder[]>({ url: 'order/my-orders' });
+}

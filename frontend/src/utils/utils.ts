@@ -1,4 +1,5 @@
 import { ChangeEvent } from 'react';
+import { TOrderState } from './types';
 
 export function ejectFile(e: ChangeEvent<HTMLInputElement>) {
   const files = e.target.files;
@@ -19,3 +20,14 @@ export const getProductText = (count: number) => {
     return 'товаров';
   }
 };
+
+export function getProductStateText(state: TOrderState): string {
+  switch (state) {
+    case 'canceled':
+      return 'Отменён';
+    case 'confirmed':
+      return 'Подтверждён';
+    case 'inProgress':
+      return 'В обработке';
+  }
+}

@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import './OrderPage.scss';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Hearts } from 'react-loader-spinner';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import useErrorHandler from '../../hooks/useErrorHandler';
+import { openInfoPopup, removeFromCart } from '../../services/slices/appSlice';
+import { useDispatch } from '../../services/store';
 import { ApiGetActualItemsInfo, ApiSendOrder } from '../../utils/api';
 import { IItem, IOrderDto } from '../../utils/types';
-import useErrorHandler from '../../hooks/useErrorHandler';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useDispatch } from '../../services/store';
-import { openInfoPopup, removeFromCart } from '../../services/slices/appSlice';
 import { getProductText } from '../../utils/utils';
+import SmallCard from '../SmallCard/SmallCard';
+import './OrderPage.scss';
 
 interface IFormValues {
   telegram: string;
@@ -94,7 +95,7 @@ export default function OrderPage() {
                   required: true,
                   pattern: {
                     value:
-                      /^[+]?\d{1,2}\s?\(?\d{3}\)?\s?\d{3}\-|\s?\d{2}\-|\s?\d{2}$/,
+                      /^[+]?\d{1,2}\s?\(?\d{3}\)?\s?\d{3}-|\s?\d{2}-|\s?\d{2}$/,
                     message: 'Некорректный номер телефона',
                   },
                 })}
@@ -110,15 +111,7 @@ export default function OrderPage() {
             </label>
             <div className="OrderPage__grid-container">
               {items.map((item) => (
-                <Link
-                  className="OrderPage__grid-item"
-                  key={item.id}
-                  to={`/items/${item.id}`}
-                  target="_blank"
-                >
-                  <img src={item.images[0]} alt={item.description} />
-                  <p>{item.price.toLocaleString()} ₽</p>
-                </Link>
+                <SmallCard item={item} key={item.id} />
               ))}
             </div>
           </div>

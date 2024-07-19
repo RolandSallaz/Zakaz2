@@ -1,6 +1,6 @@
 $secondColor: rgb(151, 41, 255);
 $blurColor: #9b9b9b;
-
+$gray: rgba(184, 184, 184, 0.123);
 @mixin order-button {
   background-color: $secondColor;
   color: white;
@@ -29,10 +29,18 @@ $blurColor: #9b9b9b;
 @mixin order-column {
   margin-top: 50px;
   flex-grow: 1;
-  background-color: rgba(184, 184, 184, 0.123);
+  background-color: $gray;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-self: flex-start;
   padding: 20px;
+}
+
+@mixin order-grid {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(92px, 96px));
+  grid-auto-flow: row;
+  gap: 10px;
 }
