@@ -1,4 +1,5 @@
 import { Item } from '@/item/entities/item.entity';
+import { TOrderState } from '@/types';
 import {
   Column,
   CreateDateColumn,
@@ -24,6 +25,9 @@ export class Order {
 
   @CreateDateColumn()
   create_date: Date;
+
+  @Column({ default: 'inProgress' })
+  state: TOrderState;
 
   @ManyToMany(() => Item, (item) => item.orders, { cascade: true })
   @JoinTable() // Это указывает, что Order владеет отношением

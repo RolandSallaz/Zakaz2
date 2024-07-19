@@ -39,6 +39,16 @@ ${order.items.map((item) => `Имя: ${item.name} Цена: ${item.price} руб
     return createdOrder;
   }
 
+  async getMyOrders(user: User): Promise<Order[]> {
+    return await this.orderRepository.find({
+      where: { customer_email: user.email },
+      relations: ['items'],
+      order: {
+        create_date: 'DESC',
+      },
+    });
+  }
+
   findAll() {
     return `This action returns all order`;
   }

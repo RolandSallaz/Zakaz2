@@ -13,6 +13,8 @@ export type TActiveTime = '90d' | '180d' | 'Infinity';
 
 export type TGender = 'male' | 'female' | 'unisex';
 
+export type TOrderState = 'confirmed' | 'canceled' | 'inProgress';
+
 declare global {
   namespace Express {
     interface Request {
