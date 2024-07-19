@@ -35,7 +35,7 @@ export default function AdminItemsPage() {
   }
   useEffect(() => {
     setFilteredItems(items);
-  }, []);
+  }, [items]);
 
   function handleDeleteItem(id: number) {
     ApiDeleteItem(id)
@@ -48,7 +48,10 @@ export default function AdminItemsPage() {
   }
   return (
     <main className="main">
-      <Link className="link AdminItemsPage__link" to={'./add'}>
+      <Link
+        className="link AdminItemsPage__link AdminItemsPage__button"
+        to={'./add'}
+      >
         Добавить новый
       </Link>
       <section className="AdminItemsPage">
