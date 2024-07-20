@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import Select, { SingleValue } from 'react-select';
 import { useSelector } from '../../services/store';
 import { IItem, ISelect } from '../../utils/types';
