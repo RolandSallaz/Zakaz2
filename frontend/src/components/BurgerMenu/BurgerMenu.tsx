@@ -39,16 +39,36 @@ export default function BurgerMenu() {
             Найти товар
           </Link>
         </div>
-        <button className="BurgerMenu__button">Для него</button>
-        <button className="BurgerMenu__button">Для неё</button>
-        <button className="BurgerMenu__button">Как оформить возврат</button>
-        <button className="BurgerMenu__button">Замеры</button>
-        <button className="BurgerMenu__button">Доставка, оплата</button>
-        <button className="BurgerMenu__button">Контакты</button>
-        <button className="BurgerMenu__button">Отзывы</button>
-        <button className="BurgerMenu__button">О нас</button>
-        <button className="BurgerMenu__button">Фотоотчет</button>
-        <button className="BurgerMenu__button">Статьи</button>
+        <Link
+          className="BurgerMenu__button"
+          to={`/find?${new URLSearchParams({ gender: 'male' }).toString()}`}
+        >
+          Для него
+        </Link>
+        <Link className="BurgerMenu__button" to="/profile">
+          Мой аккаунт
+        </Link>
+        <Link className="BurgerMenu__button" to="/about/order">
+          Оформление заказа
+        </Link>
+        <Link className="BurgerMenu__button" to="/likes">
+          Избранное
+        </Link>
+        <Link className="BurgerMenu__button" to="/about/customer-help">
+          Помощь покупателю
+        </Link>
+        <Link className="BurgerMenu__button" to="/about/delivery-and-refund">
+          Доставка и возврат
+        </Link>
+        <Link className="BurgerMenu__button" to="/about/contacts">
+          Контакты
+        </Link>
+        <Link className="BurgerMenu__button" to="/about/reviews">
+          Отзывы
+        </Link>
+        <Link className="BurgerMenu__button" to="/about/privacy-policy">
+          Политика конфиденциальности
+        </Link>
       </div>
     </nav>
   );

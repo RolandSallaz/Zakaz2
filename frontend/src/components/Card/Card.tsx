@@ -154,7 +154,7 @@ export default function Card({
       </h2>
       <Link
         className="card__type"
-        to={`/find?${new URLSearchParams({ search: item.type }).toString()}`}
+        to={`/find?${new URLSearchParams({ type: item.type }).toString()}`}
       >
         {item.type}
       </Link>

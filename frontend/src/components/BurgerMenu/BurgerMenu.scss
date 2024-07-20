@@ -1,4 +1,4 @@
-$width: 250px;
+$width: 320px;
 
 .BurgerMenu {
   position: fixed;
@@ -39,6 +39,7 @@ $width: 250px;
     align-items: center;
     font-size: 17px;
     text-decoration: none;
+    padding: 0 5px;
     &_search {
       width: 100%;
       display: inline-block;

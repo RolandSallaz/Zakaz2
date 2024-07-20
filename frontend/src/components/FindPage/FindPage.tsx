@@ -41,6 +41,12 @@ export default function FindPage() {
     window.scrollTo(0, 0);
     const paramValue = searchParams.get('search') || '';
     const paramGender = searchParams.get('gender') || '*';
+    const paramType = searchParams.get('type');
+
+    if (paramType) {
+      setSelectedType({ value: paramType, label: paramType });
+    }
+
     setValue('find', paramValue);
     setSelectedGender(
       selectOptions.find((item) => item.value === paramGender) ||
@@ -119,7 +125,7 @@ export default function FindPage() {
         />
         <Select
           className="FindPage__select"
-          defaultValue={defaultTypeSelector}
+          value={selectedType}
           options={selectedTypeOptions}
           onChange={handleChangeTypeSelect}
         />

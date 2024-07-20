@@ -28,22 +28,22 @@ export default function Footer() {
           heading="Поддержка"
           children={
             <>
-              <Link className="footerColumn__link" to="about/customer-help">
+              <Link className="footerColumn__link" to="/about/customer-help">
                 Помощь покупателю
               </Link>
               <Link
                 className="footerColumn__link"
-                to="about/delivery-and-refund"
+                to="/about/delivery-and-refund"
               >
                 Доставка и возврат
               </Link>
-              <Link className="footerColumn__link" to="about/contacts">
+              <Link className="footerColumn__link" to="/about/contacts">
                 Контакты
               </Link>
-              <Link className="footerColumn__link" to="about/reviews">
+              <Link className="footerColumn__link" to="/about/reviews">
                 Отзывы
               </Link>
-              <Link className="footerColumn__link" to="about/privacy-policy">
+              <Link className="footerColumn__link" to="/about/privacy-policy">
                 Политика конфиденциальности
               </Link>
             </>
