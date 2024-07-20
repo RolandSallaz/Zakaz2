@@ -71,7 +71,7 @@
     height: 100%;
     width: 100%;
     cursor: pointer;
-    object-fit: cover;
+    object-fit: scale-down;
     &_active {
       border: 2px solid rgba(41, 85, 206, 0.603);
     }
@@ -116,7 +116,7 @@
     &_images {
       margin-top: 20px;
       margin-bottom: 20px;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(100px, min-content));
       grid-auto-rows: 55px; /* Изменено значение на 55px */
       gap: 5px;
       grid-auto-flow: row;

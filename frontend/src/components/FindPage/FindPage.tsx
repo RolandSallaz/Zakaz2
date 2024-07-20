@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import Select, { SingleValue } from 'react-select';
+import useErrorHandler from '../../hooks/useErrorHandler';
 import { useSelector } from '../../services/store';
+import { ApiGetTypeSelectors } from '../../utils/api';
 import { IItem, ISelect } from '../../utils/types';
 import Cards from '../Cards/Cards';
 import './FindPage.scss';
@@ -13,6 +15,8 @@ const selectOptions = [
   { value: 'male', label: 'Мужское' },
   { value: 'female', label: 'Женское' },
 ];
+
+const defaultTypeSelector: ISelect = { value: '*', label: 'Все типы' };
 
 export default function FindPage() {
   const {
@@ -28,6 +32,10 @@ export default function FindPage() {
   const [selectedGender, setSelectedGender] = useState<ISelect>(
     selectOptions[0],
   );
+  const [selectedType, setSelectedType] =
+    useState<ISelect>(defaultTypeSelector);
+  const [selectedTypeOptions, setSelectedTypeOptions] = useState<ISelect[]>([]);
+  const { handleError } = useErrorHandler();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -42,13 +50,18 @@ export default function FindPage() {
 
   useEffect(() => {
     const value = String(inputValue).toLowerCase();
+    const filteredByType =
+      selectedType.value !== '*'
+        ? items.filter((item) => item.type == selectedType.value)
+        : items;
+
     const filteredByGender =
       selectedGender.value !== '*'
-        ? items.filter(
+        ? filteredByType.filter(
             (item) =>
               item.gender === selectedGender.value || item.gender === 'unisex',
           )
-        : items;
+        : filteredByType;
 
     setFilteredItems(
       filteredByGender.filter(
@@ -59,10 +72,34 @@ export default function FindPage() {
           item.type.toLowerCase().includes(value),
       ),
     );
-  }, [selectedGender, inputValue, items, searchParams, setSearchParams]);
+  }, [
+    selectedGender,
+    selectedType,
+    inputValue,
+    items,
+    searchParams,
+    setSearchParams,
+  ]);
 
   const handleChangeSelect = (newValue: SingleValue<ISelect>) => {
     setSelectedGender(newValue as ISelect);
+  };
+
+  useEffect(() => {
+    ApiGetTypeSelectors()
+      .then((options) => {
+        const fetchedOptions: ISelect[] = options.map(
+          (item) => ({ label: item.name, value: item.name }) as ISelect,
+        );
+        setSelectedTypeOptions([defaultTypeSelector, ...fetchedOptions]);
+      })
+      .catch(handleError);
+  }, []);
+
+  const handleChangeTypeSelect = (selected: ISelect | null) => {
+    if (selected) {
+      setSelectedType(selected);
+    }
   };
 
   return (
@@ -79,6 +116,12 @@ export default function FindPage() {
           defaultValue={selectOptions[0]}
           onChange={handleChangeSelect}
           value={selectedGender}
+        />
+        <Select
+          className="FindPage__select"
+          defaultValue={defaultTypeSelector}
+          options={selectedTypeOptions}
+          onChange={handleChangeTypeSelect}
         />
       </div>
 

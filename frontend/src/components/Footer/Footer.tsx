@@ -56,11 +56,13 @@ export default function Footer() {
               <p className="footerColumn__text">
                 Все самое интересное сначала появляется на нашем канале 👇
               </p>
-              <img
-                className="footerColumn__image"
-                src={tgImage}
-                alt="qr код на телеграмм"
-              ></img>
+              <a href="https://t.me/blink_resale" target="_blank">
+                <img
+                  className="footerColumn__image"
+                  src={tgImage}
+                  alt="qr код на телеграмм"
+                />
+              </a>
             </>
           }
         />

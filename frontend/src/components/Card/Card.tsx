@@ -107,7 +107,7 @@ export default function Card({
           </button>
         </div>
       </div>
-      <p className="card__price">{item.price.toLocaleString()}₽</p>
+      <p className="card__price">{item.price.toLocaleString()} ₽</p>
     </>
   );
 
@@ -158,7 +158,7 @@ export default function Card({
       >
         {item.type}
       </Link>
-      <p className="card__price">{item.price.toLocaleString()}₽</p>
+      <p className="card__price">{item.price.toLocaleString()} ₽</p>
     </>
   );
 
