@@ -75,6 +75,19 @@ export default function ItemPage() {
     navigate(`/admin/items/edit/${id}`);
   }
 
+  function makeLinksClickable(text: string) {
+    // Регулярное выражение для поиска ссылок в тексте
+    const linkRegex =
+      /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi;
+
+    // Заменяем ссылки в тексте на кликабельные ссылки
+    const textWithLinks = text.replace(linkRegex, (url) => {
+      return `<a class="link ItemPage__link" href="${url}" target="_blank" rel="noopener noreferrer">${url.replace(/(http)s?:\/\//gi, '')}</a>`;
+    });
+
+    return <div dangerouslySetInnerHTML={{ __html: textWithLinks }} />;
+  }
+
   return (
     <main className="main ItemPage">
       {loading ? (
@@ -157,7 +170,9 @@ export default function ItemPage() {
             )}
             <label className="ItemPage__description">
               Описание
-              <p className="ItemPage__description_text">{item?.description}</p>
+              <p className="ItemPage__description_text">
+                {item && makeLinksClickable(item?.description)}
+              </p>
             </label>
           </div>
 

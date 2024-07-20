@@ -1,5 +1,7 @@
+import { Link } from 'react-router-dom';
 import FooterColumn from '../FooterColumn/FooterColumn';
 import './Footer.scss';
+import tgImage from '../../assets/telegram.png';
 
 export default function Footer() {
   const date = new Date().getFullYear();
@@ -10,21 +12,15 @@ export default function Footer() {
           heading="Клиенту"
           children={
             <>
-              <a className="footerColumn__link" href="#">
+              <Link className="footerColumn__link" to="/profile">
                 Мой аккаунт
-              </a>
-              <a className="footerColumn__link" href="#">
-                Каталог
-              </a>
-              <a className="footerColumn__link" href="#">
+              </Link>
+              <Link className="footerColumn__link" to="/about/order">
                 Оформление заказа
-              </a>
-              <a className="footerColumn__link" href="#">
-                Отслеживание заказа
-              </a>
-              <a className="footerColumn__link" href="#">
+              </Link>
+              <Link className="footerColumn__link" to="/likes">
                 Избранное
-              </a>
+              </Link>
             </>
           }
         />
@@ -32,49 +28,24 @@ export default function Footer() {
           heading="Поддержка"
           children={
             <>
-              <a className="footerColumn__link" href="#">
+              <Link className="footerColumn__link" to="about/customer-help">
                 Помощь покупателю
-              </a>
-              <a className="footerColumn__link" href="#">
+              </Link>
+              <Link
+                className="footerColumn__link"
+                to="about/delivery-and-refund"
+              >
                 Доставка и возврат
-              </a>
-              <a className="footerColumn__link" href="#">
+              </Link>
+              <Link className="footerColumn__link" to="about/contacts">
                 Контакты
-              </a>
-              <a className="footerColumn__link" href="#">
-                FAQs
-              </a>
-              <a className="footerColumn__link" href="#">
+              </Link>
+              <Link className="footerColumn__link" to="about/reviews">
                 Отзывы
-              </a>
-              <a className="footerColumn__link" href="#">
+              </Link>
+              <Link className="footerColumn__link" to="about/privacy-policy">
                 Политика конфиденциальности
-              </a>
-            </>
-          }
-        />
-        <FooterColumn
-          heading="Поддержка"
-          children={
-            <>
-              <a className="footerColumn__link" href="#">
-                Помощь покупателю
-              </a>
-              <a className="footerColumn__link" href="#">
-                Доставка и возврат
-              </a>
-              <a className="footerColumn__link" href="#">
-                Контакты
-              </a>
-              <a className="footerColumn__link" href="#">
-                FAQs
-              </a>
-              <a className="footerColumn__link" href="#">
-                Отзывы
-              </a>
-              <a className="footerColumn__link" href="#">
-                Политика конфиденциальности
-              </a>
+              </Link>
             </>
           }
         />
@@ -87,7 +58,7 @@ export default function Footer() {
               </p>
               <img
                 className="footerColumn__image"
-                src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Rickrolling_QR_code.png"
+                src={tgImage}
                 alt="qr код на телеграмм"
               ></img>
             </>

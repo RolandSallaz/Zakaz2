@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import Select, { SingleValue } from 'react-select';
 import { useSelector } from '../../services/store';
 import { IItem, ISelect } from '../../utils/types';
@@ -30,38 +30,36 @@ export default function FindPage() {
   );
 
   useEffect(() => {
-    const paramValue: string = searchParams.get('search') || '';
-    const paramGender: string | null = searchParams.get('gender');
-    setFilteredItems(items);
-    setValue('find', paramValue);
-    if (paramGender) {
-      setSelectedGender(
-        selectOptions.find((item) => item.value == paramGender)!,
-      );
-    }
     window.scrollTo(0, 0);
-  }, [items]);
+    const paramValue = searchParams.get('search') || '';
+    const paramGender = searchParams.get('gender') || '*';
+    setValue('find', paramValue);
+    setSelectedGender(
+      selectOptions.find((item) => item.value === paramGender) ||
+        selectOptions[0],
+    );
+  }, [searchParams, setValue]);
 
   useEffect(() => {
     const value = String(inputValue).toLowerCase();
-    const filteredByGender: IItem[] =
-      selectedGender !== selectOptions[0]
+    const filteredByGender =
+      selectedGender.value !== '*'
         ? items.filter(
             (item) =>
-              item.gender == selectedGender.value || item.gender == 'unisex',
+              item.gender === selectedGender.value || item.gender === 'unisex',
           )
         : items;
+
     setFilteredItems(
       filteredByGender.filter(
         (item) =>
-          item.name.toLowerCase().startsWith(value) ||
-          item.gender.toLowerCase().startsWith(value) ||
-          item.description.toLowerCase().startsWith(value) ||
-          item.type.toLowerCase().startsWith(value),
+          item.name.toLowerCase().includes(value) ||
+          item.gender.toLowerCase().includes(value) ||
+          item.description.toLowerCase().includes(value) ||
+          item.type.toLowerCase().includes(value),
       ),
     );
-    setSearchParams({ search: inputValue, gender: selectedGender.value });
-  }, [selectedGender, inputValue, items, setSearchParams]);
+  }, [selectedGender, inputValue, items, searchParams, setSearchParams]);
 
   const handleChangeSelect = (newValue: SingleValue<ISelect>) => {
     setSelectedGender(newValue as ISelect);

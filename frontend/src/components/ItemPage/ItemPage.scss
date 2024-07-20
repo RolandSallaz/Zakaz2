@@ -4,6 +4,13 @@
   margin-top: 160px !important;
   flex-direction: row !important;
   gap: 20px;
+  &__link {
+    font-weight: 500;
+    color: #24a1de;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
   &__button {
     padding: 20px;
     width: 100%;
