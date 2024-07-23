@@ -27,8 +27,6 @@ export class ItemSelectorsController {
   }
 
   @Get()
-  @UseGuards(AuthLevelGuard)
-  @AuthLevel(ROLES.MANAGER)
   findAll() {
     return this.itemSelectorsService.findAll();
   }
