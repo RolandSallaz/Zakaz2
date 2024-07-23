@@ -26,9 +26,10 @@ export default function AdminItemsPage() {
     } else {
       const filteredData = items.filter(
         (item) =>
-          item.name.startsWith(value) ||
+          item.name.includes(value) ||
           item.id.toString() === value ||
-          item.description.startsWith(value),
+          item.description.includes(value) ||
+          item.type.includes(value),
       );
       setFilteredItems(filteredData);
     }

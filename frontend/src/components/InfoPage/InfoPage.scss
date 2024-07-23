@@ -1,0 +1,14 @@
+@import '../../variables.scss';
+
+.InfoPage {
+  &__link {
+    margin-top: 20px;
+    &:hover {
+      color: $secondColor;
+    }
+  }
+  &__text {
+    margin-top: 20px;
+    font-size: 17px;
+  }
+}

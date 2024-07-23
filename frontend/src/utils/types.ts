@@ -89,7 +89,8 @@ export interface IOrder {
   items: IItem[];
   customer_email: string;
   create_date: Date;
-  state: TOrderState;
+  // state: TOrderState;
+  is_error: boolean;
 }
 
 export interface IOrderDto extends Pick<IOrder, 'telegram' | 'phone'> {
@@ -99,4 +100,17 @@ export interface IOrderDto extends Pick<IOrder, 'telegram' | 'phone'> {
 export interface IInfoPopup {
   text: string;
   isOpened: boolean;
+}
+
+export type TInfoType =
+  | 'heading_info'
+  | 'order'
+  | 'customer-help'
+  | 'delivery-and-refund'
+  | 'contacts'
+  | 'privacy-policy';
+
+export interface IInfoType {
+  key: TInfoType;
+  value: string;
 }

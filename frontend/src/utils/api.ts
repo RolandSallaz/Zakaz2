@@ -3,6 +3,7 @@ import {
   IAuthData,
   IFIle,
   IFetch,
+  IInfoType,
   IItem,
   IItemDto,
   IOrder,
@@ -10,6 +11,7 @@ import {
   IRequest,
   ITypeSelect,
   IUser,
+  TInfoType,
 } from './types';
 
 function checkResponse<T>(res: Response): Promise<T> {
@@ -127,10 +129,37 @@ export function ApiGetActualItemsInfo(data: string): Promise<IItem[]> {
   return _fetch<IItem[]>({ url: `items/actual/${data}` });
 }
 
+export function ApiGetAllOrders(): Promise<IOrder[]> {
+  return _fetch<IOrder[]>({ url: 'orders' });
+}
+
 export function ApiSendOrder(data: IOrderDto): Promise<IOrder> {
-  return _fetch<IOrder>({ url: 'order', method: 'POST', body: { ...data } });
+  return _fetch<IOrder>({ url: 'orders', method: 'POST', body: { ...data } });
+}
+
+export function ApiUpdateOrder(id: number, dto: IOrder): Promise<IOrder> {
+  return _fetch<IOrder>({
+    url: `orders/${id}`,
+    method: 'PATCH',
+    body: { ...dto },
+  });
 }
 
 export function ApiGetMyOrders(): Promise<IOrder[]> {
-  return _fetch<IOrder[]>({ url: 'order/my-orders' });
+  return _fetch<IOrder[]>({ url: 'ordesr/my-orders' });
+}
+
+export function ApiGetInfo(infoType: TInfoType): Promise<IInfoType> {
+  return _fetch<IInfoType>({ url: `info/${infoType}` });
+}
+
+export function ApiUpdateInfo(
+  infoType: TInfoType,
+  value: string,
+): Promise<IInfoType> {
+  return _fetch<IInfoType>({
+    url: `info/${infoType}`,
+    method: 'PATCH',
+    body: { value },
+  });
 }

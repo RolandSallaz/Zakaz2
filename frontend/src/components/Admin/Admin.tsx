@@ -3,6 +3,9 @@ import './Admin.scss';
 import AdminUsers from '../AdminUsers/AdminUsers';
 import AdminItems from '../AdminItems/AdminItems';
 import AdminItemsPage from '../AdminItemsPage/AdminItemsPage';
+import AdminOrders from '../AdminOrders/AdminOrders';
+import AdminInfoPage from '../AdminInfoPage/AdminInfoPage';
+import AdminInfoForm from '../AdminInfoForm/AdminInfoForm';
 
 export default function Admin() {
   return (
@@ -66,6 +69,29 @@ export default function Admin() {
         <Route path="items" element={<AdminItemsPage />} />
         <Route path="items/add" element={<AdminItems />} />
         <Route path="items/edit/:id" element={<AdminItems type="edit" />} />
+        <Route path="orders" element={<AdminOrders />} />
+        <Route path="info" element={<AdminInfoPage />} />
+        <Route path="info/order" element={<AdminInfoForm infoType="order" />} />
+        <Route
+          path="info/heading_info"
+          element={<AdminInfoForm infoType="heading_info" />}
+        />
+        <Route
+          path="info/customer-help"
+          element={<AdminInfoForm infoType="customer-help" />}
+        />
+        <Route
+          path="info/delivery-and-refund"
+          element={<AdminInfoForm infoType="delivery-and-refund" />}
+        />
+        <Route
+          path="info/contacts"
+          element={<AdminInfoForm infoType="contacts" />}
+        />
+        <Route
+          path="info/privacy-policy"
+          element={<AdminInfoForm infoType="privacy-policy" />}
+        />
       </Routes>
     </main>
   );

@@ -40,9 +40,13 @@ export default function Footer() {
               <Link className="footerColumn__link" to="/about/contacts">
                 Контакты
               </Link>
-              <Link className="footerColumn__link" to="/about/reviews">
+              <a
+                className="footerColumn__link"
+                target="_blank"
+                href="https://t.me/blinkresale_reviews"
+              >
                 Отзывы
-              </Link>
+              </a>
               <Link className="footerColumn__link" to="/about/privacy-policy">
                 Политика конфиденциальности
               </Link>

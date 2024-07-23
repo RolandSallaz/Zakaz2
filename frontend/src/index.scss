@@ -13,6 +13,9 @@ body {
   height: 100%;
   overflow-x: hidden;
   font-family: 'Lora', serif;
+  -webkit-font-smoothing: antialiased; /* Для Safari, Chrome и Opera */
+  -moz-osx-font-smoothing: grayscale; /* Для Firefox на macOS */
+  font-smoothing: antialiased; /* Общий стиль для других браузеров */
 }
 
 header,

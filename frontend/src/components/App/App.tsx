@@ -2,11 +2,15 @@ import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { ConfirmPopupProvider } from '../../context/ConfirmPopupContext';
 import useErrorHandler from '../../hooks/useErrorHandler';
-import { loadCart, loadLikes } from '../../services/slices/appSlice';
+import {
+  loadCart,
+  loadLikes,
+  setMainHeading,
+} from '../../services/slices/appSlice';
 import { setItems } from '../../services/slices/itemSlice';
 import { login } from '../../services/slices/userSlice';
 import { useDispatch, useSelector } from '../../services/store';
-import { ApiCheckAuth, ApiGetItems } from '../../utils/api';
+import { ApiCheckAuth, ApiGetInfo, ApiGetItems } from '../../utils/api';
 import { ROLES } from '../../utils/types';
 import Admin from '../Admin/Admin';
 import AuthPopup from '../AuthPopup/AuthPopup';
@@ -25,6 +29,7 @@ import Profile from '../Profile/Profile';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import SnackBar from '../SnackBar/SnackBar';
 import './App.scss';
+import InfoPage from '../InfoPage/InfoPage';
 
 function App() {
   const { isAuthPopupOpened } = useSelector((state) => state.authPopupSlice);
@@ -52,6 +57,10 @@ function App() {
     if (likesItems) {
       dispatch(loadLikes(JSON.parse(likesItems)));
     }
+
+    ApiGetInfo('heading_info').then((info) =>
+      dispatch(setMainHeading(info.value)),
+    );
   }, []);
 
   return (
@@ -80,6 +89,27 @@ function App() {
         <Route path="/likes" element={<LikesPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/order" element={<OrderPage />} />
+        <Route path="/about/order" element={<InfoPage infoType="order" />} />
+        <Route
+          path="/about/heading_info"
+          element={<InfoPage infoType="heading_info" />}
+        />
+        <Route
+          path="/about/customer-help"
+          element={<InfoPage infoType="customer-help" />}
+        />
+        <Route
+          path="/about/delivery-and-refund"
+          element={<InfoPage infoType="delivery-and-refund" />}
+        />
+        <Route
+          path="/about/contacts"
+          element={<InfoPage infoType="contacts" />}
+        />
+        <Route
+          path="/about/privacy-policy"
+          element={<InfoPage infoType="privacy-policy" />}
+        />
       </Routes>
       <Footer />
       {isAuthPopupOpened && <AuthPopup />}

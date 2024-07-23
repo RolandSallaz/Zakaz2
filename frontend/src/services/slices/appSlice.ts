@@ -12,6 +12,7 @@ interface IAppState {
   cart: ILikeOrCart[];
   likes: ILikeOrCart[];
   infoPopup: IInfoPopup;
+  main_heading: string;
 }
 
 const initialState: IAppState = {
@@ -20,6 +21,7 @@ const initialState: IAppState = {
   cart: [],
   likes: [],
   infoPopup: { isOpened: false, text: '' },
+  main_heading: '',
 };
 
 export const slice = createSlice({
@@ -73,6 +75,9 @@ export const slice = createSlice({
     closeInfoPopup(state) {
       state.infoPopup = initialState.infoPopup;
     },
+    setMainHeading(state, action: PayloadAction<string>) {
+      state.main_heading = action.payload;
+    },
   },
 });
 export const {
@@ -87,6 +92,7 @@ export const {
   removeFromLikes,
   openInfoPopup,
   closeInfoPopup,
+  setMainHeading,
 } = slice.actions;
 
 export default slice.reducer;

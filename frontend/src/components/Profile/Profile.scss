@@ -4,16 +4,6 @@
   @include order-grid;
 }
 
-.order {
-  background-color: $gray;
-  width: 460px;
-  padding: 20px;
-
-  & p {
-    font-size: 17px;
-  }
-}
-
 .orders {
   display: flex;
   flex-direction: column;

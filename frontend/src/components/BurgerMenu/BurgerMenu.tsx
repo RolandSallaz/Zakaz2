@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { setIsBurgerMenuOpened } from '../../services/slices/appSlice';
 import { useDispatch, useSelector } from '../../services/store';
 import './BurgerMenu.scss';
-import { MouseEvent } from 'react';
 
 export default function BurgerMenu() {
   const { isBurgerMenuOpened } = useSelector((state) => state.appSlice);
@@ -12,10 +11,8 @@ export default function BurgerMenu() {
     dispatch(setIsBurgerMenuOpened(false));
   }
 
-  function handleBackgroundClick(e: MouseEvent<HTMLDivElement>) {
-    if (e.target == e.currentTarget) {
-      handleClose();
-    }
+  function handleBackgroundClick() {
+    handleClose();
   }
   return (
     <nav
@@ -63,9 +60,13 @@ export default function BurgerMenu() {
         <Link className="BurgerMenu__button" to="/about/contacts">
           Контакты
         </Link>
-        <Link className="BurgerMenu__button" to="/about/reviews">
+        <a
+          className="BurgerMenu__button"
+          target="_blank"
+          href="https://t.me/blinkresale_reviews"
+        >
           Отзывы
-        </Link>
+        </a>
         <Link className="BurgerMenu__button" to="/about/privacy-policy">
           Политика конфиденциальности
         </Link>

@@ -1,0 +1,18 @@
+@import '../../variables.scss';
+
+.AdminInfoForm {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 80%;
+  &__input {
+    width: 100%;
+    resize: vertical;
+    font-size: 17px;
+    padding: 10px;
+  }
+  & button {
+    border: 1px solid $secondColor;
+  }
+}

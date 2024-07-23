@@ -1,0 +1,12 @@
+.AdminItemsPage {
+  &__grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    margin-top: 20px;
+  }
+  &__flex-container {
+    display: flex;
+    gap: 5px;
+  }
+}

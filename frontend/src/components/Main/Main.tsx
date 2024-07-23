@@ -9,6 +9,7 @@ type mainFilter = 'male' | 'female' | 'all' | 'new';
 
 export default function Main() {
   const { data: items } = useSelector((state) => state.itemSlice);
+  const { main_heading } = useSelector((state) => state.appSlice);
   const [columnsCount, setColumnsCount] = useState<number>(4);
   const [selectedFilter, setSelectedFilter] = useState<mainFilter>('all');
   const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
@@ -40,7 +41,8 @@ export default function Main() {
 
   return (
     <main className="main">
-      <h1 className="main__heading">Магазин крутой одежды</h1>
+      {/* <h1>toDo seo</h1> */}
+      {main_heading && <h2 className="main__heading">{main_heading}</h2>}
       <section className="main__filters">
         <FilterCard
           text="Женское"

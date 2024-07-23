@@ -31,3 +31,7 @@ export function getProductStateText(state: TOrderState): string {
       return 'В обработке';
   }
 }
+
+export function parseNumbers(value: string): string {
+  return value.match(/(\d+)/g)?.join('') || '';
+}

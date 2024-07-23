@@ -1,0 +1,18 @@
+@import '../../variables.scss';
+.order {
+  background-color: $gray;
+  width: 460px;
+  padding: 20px;
+
+  & p {
+    font-size: 17px;
+  }
+  &__container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    & button {
+      border: 1px solid $secondColor;
+    }
+  }
+}

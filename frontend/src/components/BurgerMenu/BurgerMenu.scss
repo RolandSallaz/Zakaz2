@@ -1,3 +1,4 @@
+@import '../../variables.scss';
 $width: 320px;
 
 .BurgerMenu {
@@ -33,13 +34,14 @@ $width: 320px;
     gap: 10px;
   }
   &__button {
-    border: 1px solid black;
+    border: 1px solid $secondColor;
     border-radius: 4px;
     display: flex;
     align-items: center;
     font-size: 17px;
     text-decoration: none;
     padding: 0 5px;
+
     &_search {
       width: 100%;
       display: inline-block;
@@ -47,6 +49,7 @@ $width: 320px;
     }
     &:hover {
       scale: 1.1;
+      color: $secondColor;
     }
   }
   &__top-buttons {
