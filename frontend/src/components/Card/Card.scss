@@ -166,5 +166,46 @@
     font-weight: 600;
     color: #9b9b9b;
     text-transform: capitalize;
+    white-space: nowrap; /* предотвращает перенос текста */
+    overflow: hidden; /* скрывает текст, который не помещается */
+    text-overflow: ellipsis; /* отображает текст под точками */
+  }
+}
+
+@media screen and (max-width: 1279px) {
+  .card {
+    &_type {
+      &_cart {
+        gap: 5px;
+        & .card__image {
+          flex-grow: 1;
+          min-width: 75px;
+        }
+        & .card__price {
+          font-size: 16px;
+          text-wrap: nowrap;
+        }
+        & .card__flex {
+          gap: 0px;
+        }
+        & .card__type {
+          font-size: 14px;
+          max-width: 50px;
+        }
+      }
+    }
+    &__container {
+      min-height: auto;
+      height: 200px;
+      width: 100% !important;
+    }
+    &__button {
+      &_like {
+        right: 20px !important;
+      }
+      &_buy {
+        bottom: 0;
+      }
+    }
   }
 }

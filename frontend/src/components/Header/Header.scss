@@ -103,6 +103,13 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     justify-items: center;
+    gap: 10px;
+    &__container {
+      order: 1;
+    }
+    &__navigation {
+      order: 2;
+    }
     &__heading-link {
       font-size: 22px;
       letter-spacing: normal;

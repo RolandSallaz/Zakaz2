@@ -43,4 +43,11 @@ $gray: rgba(184, 184, 184, 0.123);
   grid-template-columns: repeat(auto-fit, minmax(92px, 96px));
   grid-auto-flow: row;
   gap: 10px;
+  @media screen and (max-width: 1279px) {
+    grid-template-columns: repeat(
+      2,
+      1fr
+    ); /* Изменения для мобильных устройств */
+    gap: 5px; /* Изменения для мобильных устройств */
+  }
 }

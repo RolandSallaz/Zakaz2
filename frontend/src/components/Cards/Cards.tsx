@@ -1,7 +1,7 @@
+import { ChangeEvent } from 'react';
 import { IItem, TCardType } from '../../utils/types';
 import Card from '../Card/Card';
 import './Cards.scss';
-import { ChangeEvent } from 'react';
 
 interface props {
   items: IItem[];
@@ -11,14 +11,16 @@ interface props {
 }
 export default function Cards({
   items,
-  columnsCount = 4,
+  columnsCount,
   type = 'default',
   onCheckBoxChange = () => null,
 }: props) {
   return (
     <section
       className={`cards cards_type_${type}`}
-      style={{ gridTemplateColumns: `repeat(${columnsCount}, 1fr)` }}
+      style={{
+        gridTemplateColumns: `repeat(${columnsCount}, minmax(100px, 1fr))`,
+      }}
     >
       {items?.map((item) => (
         <Card

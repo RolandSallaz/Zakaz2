@@ -116,7 +116,9 @@ export default function Card({
       <Link
         to={link}
         className={`card__container card__container_${type}`}
-        style={{ backgroundImage: `url(${item.images[1]})` }}
+        style={{
+          backgroundImage: `url(${item.images[1].replace('localhost', '192.168.1.2')})`,
+        }}
         onMouseEnter={handleHovered}
         onMouseLeave={handleHovered}
       >

@@ -32,3 +32,16 @@
     }
   }
 }
+
+@media screen and (max-width: 1279px) {
+  .CartPage {
+    flex-direction: column-reverse !important;
+    align-items: center;
+    &__column {
+      align-self: center;
+      &_right {
+        margin-top: 80px;
+      }
+    }
+  }
+}

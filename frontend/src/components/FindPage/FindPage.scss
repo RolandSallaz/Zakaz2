@@ -17,3 +17,12 @@
     width: 220px;
   }
 }
+
+@media screen and (max-width: 1279px) {
+  .FindPage {
+    &__container {
+      margin-top: 90px;
+      width: 100%;
+    }
+  }
+}

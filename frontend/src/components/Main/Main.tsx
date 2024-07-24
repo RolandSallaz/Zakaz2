@@ -4,19 +4,23 @@ import Cards from '../Cards/Cards';
 import FilterCard from '../FilterCard/FilterCard';
 import './Main.scss';
 import { IItem } from '../../utils/types';
-
+import { useMediaQuery } from 'react-responsive';
 type mainFilter = 'male' | 'female' | 'all' | 'new';
 
 export default function Main() {
   const { data: items } = useSelector((state) => state.itemSlice);
   const { main_heading } = useSelector((state) => state.appSlice);
-  const [columnsCount, setColumnsCount] = useState<number>(4);
+  const [columnsCount, setColumnsCount] = useState<number>(0);
   const [selectedFilter, setSelectedFilter] = useState<mainFilter>('all');
   const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
-
+  const isMobile = useMediaQuery({ maxWidth: 1279 });
   useEffect(() => {
     changeMainFilter(selectedFilter);
   }, [items, selectedFilter]);
+
+  useEffect(() => {
+    setColumnsCount(isMobile ? 2 : 4);
+  }, [isMobile]);
 
   function changeMainFilter(filter: mainFilter) {
     if (filter == 'new') {
@@ -88,23 +92,23 @@ export default function Main() {
         </div>
         <div className="tags__container tags__container_right">
           <button
-            className={`tags__button ${columnsCount == 2 && 'tags__button_active'}`}
-            onClick={() => setColumnsCount(2)}
+            className={`tags__button ${columnsCount == (isMobile ? 1 : 2) && 'tags__button_active'}`}
+            onClick={() => setColumnsCount(isMobile ? 1 : 2)}
           >
-            ll
+            {isMobile ? 'l' : 'll'}
           </button>
           <button
-            className={`tags__button ${columnsCount == 4 && 'tags__button_active'}`}
-            onClick={() => setColumnsCount(4)}
+            className={`tags__button ${columnsCount == (isMobile ? 2 : 4) && 'tags__button_active'}`}
+            onClick={() => setColumnsCount(isMobile ? 2 : 4)}
           >
-            llll
+            {isMobile ? 'll' : 'llll'}
           </button>
         </div>
       </section>
       <Cards
         items={filteredItems}
         columnsCount={columnsCount}
-        type={columnsCount < 4 ? 'big' : 'default'}
+        type={columnsCount < (isMobile ? 2 : 4) ? 'big' : 'default'}
       />
     </main>
   );

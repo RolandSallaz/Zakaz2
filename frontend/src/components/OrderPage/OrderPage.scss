@@ -59,3 +59,16 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
+
+@media screen and (max-width: 1279px) {
+  .OrderPage {
+    &__form {
+      margin-top: 60px;
+      flex-direction: column;
+    }
+    &__column {
+      width: 100%;
+      align-self: center;
+    }
+  }
+}

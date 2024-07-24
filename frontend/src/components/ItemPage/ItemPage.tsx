@@ -15,13 +15,14 @@ import {
   removeFromCart,
   removeFromLikes,
 } from '../../services/slices/appSlice';
+import { useMediaQuery } from 'react-responsive';
 export default function ItemPage() {
   const { id } = useParams();
   const { data: allItems } = useSelector((state) => state.itemSlice);
   const [item, setItem] = useState<IItem | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeImage, setActiveImage] = useState<string>('');
-  const isMobile: boolean = window.innerWidth < 1280;
+  const isMobile = useMediaQuery({ maxWidth: 1279 });
   const dispatch = useDispatch();
   const { cart, likes } = useSelector((state) => state.appSlice);
   const {

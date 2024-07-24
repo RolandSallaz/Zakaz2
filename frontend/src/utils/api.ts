@@ -146,7 +146,7 @@ export function ApiUpdateOrder(id: number, dto: IOrder): Promise<IOrder> {
 }
 
 export function ApiGetMyOrders(): Promise<IOrder[]> {
-  return _fetch<IOrder[]>({ url: 'ordesr/my-orders' });
+  return _fetch<IOrder[]>({ url: 'orders/my-orders' });
 }
 
 export function ApiGetInfo(infoType: TInfoType): Promise<IInfoType> {

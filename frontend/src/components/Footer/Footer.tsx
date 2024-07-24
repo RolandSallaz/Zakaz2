@@ -60,12 +60,12 @@ export default function Footer() {
               <p className="footerColumn__text">
                 Все самое интересное сначала появляется на нашем канале 👇
               </p>
-              <a href="https://t.me/blink_resale" target="_blank">
-                <img
-                  className="footerColumn__image"
-                  src={tgImage}
-                  alt="qr код на телеграмм"
-                />
+              <a
+                className="footerColumn__image"
+                href="https://t.me/blink_resale"
+                target="_blank"
+              >
+                <img src={tgImage} alt="qr код на телеграмм" />
               </a>
             </>
           }
