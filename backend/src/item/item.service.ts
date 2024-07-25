@@ -1,14 +1,13 @@
+import { ROLES } from '@/auth/enums';
+import { ItemSelectorsService } from '@/item-selectors/item-selectors.service';
+import { User } from '@/users/entities/user.entity';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { addDays } from 'date-fns';
+import { Repository } from 'typeorm';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { Item } from './entities/item.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { addDays } from 'date-fns';
-import { ItemSelectorsService } from '@/item-selectors/item-selectors.service';
-import { CurrentUser } from '@/auth/decorators/CurrentUser';
-import { User } from '@/users/entities/user.entity';
-import { ROLES } from '@/auth/enums';
 
 @Injectable()
 export class ItemService {
@@ -49,7 +48,7 @@ export class ItemService {
       .getMany();
   }
 
-  async findAll(user: User) {
+  async findAll(user: User): Promise<Item[]> {
     if (user?.auth_level >= ROLES.MANAGER) {
       return await this.itemRepository
         .createQueryBuilder('item')
@@ -60,13 +59,13 @@ export class ItemService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} item`;
+  async findOne(id: number): Promise<Item> {
+    return await this.itemRepository.findOneOrFail({ where: { id } });
   }
 
   async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
     const item = await this.itemRepository.findOneOrFail({ where: { id } });
-    Object.assign(item, updateItemDto);
+    this.itemRepository.merge(item, updateItemDto);
     return await this.itemRepository.save(item);
   }
 

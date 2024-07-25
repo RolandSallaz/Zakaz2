@@ -36,8 +36,6 @@ export class ItemController {
   }
 
   @Get(':id')
-  @UseGuards(AuthLevelGuard)
-  @AuthLevel(ROLES.MANAGER)
   findOne(@Param('id') id: string) {
     return this.itemService.findOne(+id);
   }
