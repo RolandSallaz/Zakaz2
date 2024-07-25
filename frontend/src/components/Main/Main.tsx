@@ -83,7 +83,10 @@ export default function Main() {
 
   return (
     <main className="main">
-      {/* <h1>toDo seo</h1> */}
+      <h1 className="hidden-seo">
+        Обновите свой гардероб с BlinkResale: Эксклюзивная одежда от топовых
+        мировых брендов для создания вашего неповторимого и стильного образа
+      </h1>
       {main_heading && <h2 className="main__heading">{main_heading}</h2>}
       <section className="main__filters">
         <FilterCard
