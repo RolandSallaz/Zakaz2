@@ -14,6 +14,14 @@ export default function Main() {
   const [selectedFilter, setSelectedFilter] = useState<mainFilter>('all');
   const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
   const isMobile = useMediaQuery({ maxWidth: 1279 });
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 8;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Общее количество страниц
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
   useEffect(() => {
     changeMainFilter(selectedFilter);
   }, [items, selectedFilter]);
@@ -21,6 +29,10 @@ export default function Main() {
   useEffect(() => {
     setColumnsCount(isMobile ? 2 : 4);
   }, [isMobile]);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
   function changeMainFilter(filter: mainFilter) {
     if (filter == 'new') {
@@ -42,6 +54,32 @@ export default function Main() {
       );
     }
   }
+
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, currentPage + 2);
+
+    if (startPage > 1) {
+      pageNumbers.push(1);
+      if (startPage > 2) {
+        pageNumbers.push('...');
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pageNumbers.push('...');
+      }
+      pageNumbers.push(totalPages);
+    }
+
+    return pageNumbers;
+  };
 
   return (
     <main className="main">
@@ -106,10 +144,47 @@ export default function Main() {
         </div>
       </section>
       <Cards
-        items={filteredItems}
+        items={currentItems}
         columnsCount={columnsCount}
         type={columnsCount < (isMobile ? 2 : 4) ? 'big' : 'default'}
       />
+      <div className="pagination">
+        {/* Кнопка "Предыдущая" */}
+        {totalPages > 0 && (
+          <button
+            className="pagination__button"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Назад
+          </button>
+        )}
+
+        {/* Кнопки страниц */}
+        {getPageNumbers().map((number, index) => (
+          <button
+            key={index}
+            className={`pagination__button ${currentPage === number ? 'pagination__button_active' : ''}`}
+            onClick={() =>
+              typeof number === 'number' && handlePageChange(number)
+            }
+            disabled={typeof number !== 'number'}
+          >
+            {number}
+          </button>
+        ))}
+
+        {/* Кнопка "Следующая" */}
+        {totalPages > 0 && (
+          <button
+            className="pagination__button"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Вперед
+          </button>
+        )}
+      </div>
     </main>
   );
 }

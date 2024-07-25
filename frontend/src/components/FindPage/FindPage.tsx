@@ -8,6 +8,7 @@ import { ApiGetTypeSelectors } from '../../utils/api';
 import { IItem, ISelect } from '../../utils/types';
 import Cards from '../Cards/Cards';
 import './FindPage.scss';
+import { useMediaQuery } from 'react-responsive';
 
 const selectOptions = [
   { value: '*', label: 'Все' },
@@ -36,6 +37,7 @@ export default function FindPage() {
     useState<ISelect>(defaultTypeSelector);
   const [selectedTypeOptions, setSelectedTypeOptions] = useState<ISelect[]>([]);
   const { handleError } = useErrorHandler();
+  const isMobile = useMediaQuery({ maxWidth: 1279 });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -132,7 +134,7 @@ export default function FindPage() {
       </div>
 
       {isDirty && <p>Результатов: {filteredItems.length}</p>}
-      <Cards items={filteredItems} />
+      <Cards items={filteredItems} columnsCount={isMobile ? 2 : 4} />
     </main>
   );
 }

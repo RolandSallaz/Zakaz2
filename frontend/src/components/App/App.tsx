@@ -12,6 +12,9 @@ import { login } from '../../services/slices/userSlice';
 import { useDispatch, useSelector } from '../../services/store';
 import { ApiCheckAuth, ApiGetInfo, ApiGetItems } from '../../utils/api';
 import { ROLES } from '../../utils/types';
+import AboutHowToOrder from '../AboutHowToOrder/AboutHowToOrder';
+import AboutMeasurements from '../AboutMeasurements/AboutMeasurements';
+import AboutOrder from '../AboutOrder/AboutOrder';
 import Admin from '../Admin/Admin';
 import AuthPopup from '../AuthPopup/AuthPopup';
 import BurgerMenu from '../BurgerMenu/BurgerMenu';
@@ -29,7 +32,7 @@ import Profile from '../Profile/Profile';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import SnackBar from '../SnackBar/SnackBar';
 import './App.scss';
-import InfoPage from '../InfoPage/InfoPage';
+import AboutDelivery from '../AboutDelivery/AboutDelivery';
 
 function App() {
   const { isAuthPopupOpened } = useSelector((state) => state.authPopupSlice);
@@ -89,27 +92,10 @@ function App() {
         <Route path="/likes" element={<LikesPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/order" element={<OrderPage />} />
-        <Route path="/about/order" element={<InfoPage infoType="order" />} />
-        <Route
-          path="/about/heading_info"
-          element={<InfoPage infoType="heading_info" />}
-        />
-        <Route
-          path="/about/customer-help"
-          element={<InfoPage infoType="customer-help" />}
-        />
-        <Route
-          path="/about/delivery-and-refund"
-          element={<InfoPage infoType="delivery-and-refund" />}
-        />
-        <Route
-          path="/about/contacts"
-          element={<InfoPage infoType="contacts" />}
-        />
-        <Route
-          path="/about/privacy-policy"
-          element={<InfoPage infoType="privacy-policy" />}
-        />
+        <Route path="/about/customer-help" element={<AboutOrder />} />
+        <Route path="/about/order" element={<AboutHowToOrder />} />
+        <Route path="/about/measurements" element={<AboutMeasurements />} />
+        <Route path="/about/delivery" element={<AboutDelivery />} />
       </Routes>
       <Footer />
       {isAuthPopupOpened && <AuthPopup />}

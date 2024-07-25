@@ -117,6 +117,10 @@ export function ApiGetItems(): Promise<IItem[]> {
   return _fetch<IItem[]>({ url: 'items' });
 }
 
+export function ApiGetItem(id: number): Promise<IItem> {
+  return _fetch<IItem>({ url: `items/${id}` });
+}
+
 export function ApiDeleteItem(id: number): Promise<IItem> {
   return _fetch<IItem>({ url: `items/${id}`, method: 'DELETE' });
 }

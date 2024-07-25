@@ -16,6 +16,8 @@ import {
   removeFromLikes,
 } from '../../services/slices/appSlice';
 import { useMediaQuery } from 'react-responsive';
+import { ApiGetItem } from '../../utils/api';
+import useErrorHandler from '../../hooks/useErrorHandler';
 export default function ItemPage() {
   const { id } = useParams();
   const { data: allItems } = useSelector((state) => state.itemSlice);
@@ -30,11 +32,14 @@ export default function ItemPage() {
   } = useSelector((state) => state.userSlice);
   const itemId = Number(id);
   const navigate = useNavigate();
+  const { handleError } = useErrorHandler();
   useEffect(() => {
     const foundedItem = allItems.find((item) => item.id == itemId);
     if (foundedItem) {
       setItem(foundedItem);
       setLoading(false);
+    } else {
+      ApiGetItem(itemId).then(setItem).catch(handleError);
     }
   }, [navigate, allItems]);
 

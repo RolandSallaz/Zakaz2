@@ -15,11 +15,14 @@ export default function Footer() {
               <Link className="footerColumn__link" to="/profile">
                 Мой аккаунт
               </Link>
-              <Link className="footerColumn__link" to="/about/order">
-                Оформление заказа
-              </Link>
               <Link className="footerColumn__link" to="/likes">
                 Избранное
+              </Link>
+              <Link className="footerColumn__link" to="/about/measurements">
+                Замеры
+              </Link>
+              <Link className="footerColumn__link" to="/about/delivery">
+                Доставка
               </Link>
             </>
           }
@@ -31,14 +34,8 @@ export default function Footer() {
               <Link className="footerColumn__link" to="/about/customer-help">
                 Помощь покупателю
               </Link>
-              <Link
-                className="footerColumn__link"
-                to="/about/delivery-and-refund"
-              >
-                Доставка и возврат
-              </Link>
-              <Link className="footerColumn__link" to="/about/contacts">
-                Контакты
+              <Link className="footerColumn__link" to="/about/order">
+                Оформление заказа
               </Link>
               <a
                 className="footerColumn__link"
@@ -47,9 +44,6 @@ export default function Footer() {
               >
                 Отзывы
               </a>
-              <Link className="footerColumn__link" to="/about/privacy-policy">
-                Политика конфиденциальности
-              </Link>
             </>
           }
         />

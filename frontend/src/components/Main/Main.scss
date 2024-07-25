@@ -1,3 +1,4 @@
+@import '../../variables.scss';
 .main {
   display: flex;
   flex-direction: column;
@@ -46,6 +47,22 @@
     &_active {
       border-color: rgb(151, 41, 255);
       color: rgb(151, 41, 255);
+    }
+  }
+}
+
+.pagination {
+  margin-top: 20px;
+  &__button {
+    color: $blurColor;
+    font-size: 17px;
+    font-weight: 500;
+    &_active {
+      color: $secondColor;
+      cursor: default;
+    }
+    &:hover {
+      opacity: 0.8;
     }
   }
 }

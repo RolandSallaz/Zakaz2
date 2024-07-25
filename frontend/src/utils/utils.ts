@@ -35,3 +35,28 @@ export function getProductStateText(state: TOrderState): string {
 export function parseNumbers(value: string): string {
   return value.match(/(\d+)/g)?.join('') || '';
 }
+
+export const importAllImages = async (
+  folder: string = '',
+): Promise<string[]> => {
+  const images: string[] = [];
+
+  // Определяем пути для всех возможных папок
+  let imageModules;
+  if (folder === '') {
+    imageModules = import.meta.glob<{ default: string }>(
+      '../assets/*.{png,jpg,jpeg,svg}',
+    );
+  } else if (folder === 'orderImages') {
+    imageModules = import.meta.glob<{ default: string }>(
+      '../assets/orderImages/*.{png,jpg,jpeg,svg}',
+    );
+  }
+
+  for (const path in imageModules) {
+    const module = await imageModules[path]();
+    images.push(module.default);
+  }
+
+  return images;
+};
