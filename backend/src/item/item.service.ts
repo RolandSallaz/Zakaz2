@@ -48,7 +48,7 @@ export class ItemService {
       .getMany();
   }
 
-  async findAll(user: User): Promise<Item[]> {
+  async findAll(user?: User): Promise<Item[]> {
     if (user?.auth_level >= ROLES.MANAGER) {
       return await this.itemRepository
         .createQueryBuilder('item')
