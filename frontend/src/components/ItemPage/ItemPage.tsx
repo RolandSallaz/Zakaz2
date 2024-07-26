@@ -49,6 +49,16 @@ export default function ItemPage() {
     }
   }, [item]);
 
+  useEffect(() => {
+    const cachedTitle = document.title;
+    if (item) {
+      document.title = `${item.name} - купить в магазине эксклюзивной одежды ${import.meta.env.VITE_SHOP_NAME}`;
+    }
+    return () => {
+      document.title = cachedTitle;
+    };
+  }, [item]);
+
   const isItemInCart: boolean = Boolean(
     cart.find((cartItem) => (item && item.id) == cartItem.id),
   );
