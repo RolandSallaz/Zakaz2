@@ -36,12 +36,15 @@
       align-items: center;
       justify-content: center;
       padding: 10px;
+      border: 2px solid black;
+      background: none;
+      color: black;
       &_active {
         color: red;
       }
 
       &:hover {
-        color: rgb(170, 51, 51);
+        opacity: 0.8;
       }
     }
   }
