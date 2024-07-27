@@ -18,6 +18,7 @@ import {
 import { useMediaQuery } from 'react-responsive';
 import { ApiGetItem } from '../../utils/api';
 import useErrorHandler from '../../hooks/useErrorHandler';
+import { Helmet } from 'react-helmet';
 export default function ItemPage() {
   const { id } = useParams();
   const { data: allItems } = useSelector((state) => state.itemSlice);
@@ -48,6 +49,14 @@ export default function ItemPage() {
       setActiveImage(item.images[0]);
     }
   }, [item]);
+
+  useEffect(() => {
+    const cachedTitle = document.title;
+
+    return () => {
+      document.title = cachedTitle;
+    };
+  }, []);
 
   const isItemInCart: boolean = Boolean(
     cart.find((cartItem) => (item && item.id) == cartItem.id),
@@ -107,6 +116,30 @@ export default function ItemPage() {
         />
       ) : (
         <>
+          <Helmet>
+            <title>
+              {item
+                ? `${item.name} - купить в магазине эксклюзивной одежды ${import.meta.env.VITE_SHOP_NAME}`
+                : 'Загрузка...'}
+            </title>
+            <meta
+              property="og:title"
+              content={
+                item
+                  ? `${item.name} - купить в магазине эксклюзивной одежды ${import.meta.env.VITE_SHOP_NAME}`
+                  : 'Загрузка...'
+              }
+            />
+            <meta
+              property="og:description"
+              content={item ? item.description : ''}
+            />
+            <meta property="og:image" content={item ? item.images[0] : ''} />
+            <meta
+              property="og:url"
+              content={`${import.meta.env.VITE_DOMAIN}/#/items/${id}`}
+            />
+          </Helmet>
           <div className="ItemPage__container ItemPage__container_left">
             <div className="ItemPage__container ItemPage__container_name">
               <h1 className="ItemPage__name">{item?.name}</h1>
