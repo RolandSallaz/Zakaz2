@@ -35,15 +35,10 @@ services:
     build:
       context: frontend
       dockerfile: Dockerfile
-    ports:
-      - "80:80"
-      - "443:443"
     networks:
       - net
     depends_on:
       - backend
-    volumes:
-      - ./ssl:/etc/ssl
 
   emailservice:
     container_name: "emailservice"
@@ -74,6 +69,20 @@ services:
       - net
     volumes:
       - ./logs/tgBot_service:/app/logs
+
+  nginx:
+    build:
+      context: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./ssl:/etc/ssl
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - net
 
 networks:
   net:

@@ -1,0 +1,13 @@
+@import "../../variables.scss";
+
+.orders {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  &__heading {
+    margin-top: 20px;
+    text-align: center;
+    font-weight: 500;
+  }
+}

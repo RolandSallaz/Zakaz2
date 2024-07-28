@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ItemService } from './item.service';
 import { ItemController } from './item.controller';
 import { JwtModule } from '@nestjs/jwt';
@@ -11,8 +11,8 @@ import { ItemSelectorsModule } from '@/item-selectors/item-selectors.module';
   imports: [
     TypeOrmModule.forFeature([Item]),
     JwtModule,
-    UsersModule,
-    ItemSelectorsModule,
+    forwardRef(() => UsersModule),
+    forwardRef(() => ItemSelectorsModule),
   ],
   controllers: [ItemController],
   providers: [ItemService],

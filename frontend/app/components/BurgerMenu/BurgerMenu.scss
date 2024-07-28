@@ -1,0 +1,60 @@
+@import "../../variables.scss";
+$width: 320px;
+
+.BurgerMenu {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.247);
+  z-index: 9999;
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.5s ease;
+  &_opened {
+    visibility: visible;
+    opacity: 1;
+    & .BurgerMenu__content {
+      margin: 0;
+    }
+  }
+  &__content {
+    padding: 25px;
+    transition: all 0.5s ease;
+    margin-left: -$width;
+    width: $width;
+    background-color: white;
+    border-radius: 0 0 4px 0;
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  &__button {
+    border: 1px solid $secondColor;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    font-size: 17px;
+    text-decoration: none;
+    padding: 0 5px;
+
+    &_search {
+      width: 100%;
+      display: inline-block;
+      text-align: center;
+    }
+    &:hover {
+      scale: 1.1;
+      color: $secondColor;
+    }
+  }
+  &__top-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+}

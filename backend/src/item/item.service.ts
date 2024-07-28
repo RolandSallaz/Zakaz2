@@ -59,6 +59,12 @@ export class ItemService {
     }
   }
 
+  async findAllByUser(user: User): Promise<Item[]> {
+    return await this.itemRepository.find({
+      where: { creator_email: user.email },
+    });
+  }
+
   async findOne(id: number): Promise<Item> {
     return await this.itemRepository.findOneOrFail({ where: { id } });
   }

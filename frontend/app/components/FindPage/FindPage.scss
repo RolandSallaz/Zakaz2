@@ -1,0 +1,28 @@
+.FindPage {
+  min-height: 100vh;
+  &__input {
+    width: 100%;
+    padding: 10px 20px;
+    border: 1px solid black;
+    border-radius: 4px;
+  }
+  &__container {
+    margin-top: 50px;
+    gap: 5px;
+    display: flex;
+    width: 50%;
+    align-items: center;
+  }
+  &__select {
+    width: 220px;
+  }
+}
+
+@media screen and (max-width: 1279px) {
+  .FindPage {
+    &__container {
+      margin-top: 90px;
+      width: 100%;
+    }
+  }
+}

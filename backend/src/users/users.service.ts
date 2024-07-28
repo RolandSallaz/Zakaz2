@@ -1,20 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { generateSixDigitCode } from 'src/common/helpers/codeGenerator';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Item } from '@/item/entities/item.entity';
+import { ItemService } from '@/item/item.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    private readonly itemService: ItemService,
   ) {}
 
   async findAll(): Promise<User[]> {
-    return await this.userRepository.find({});
+    const users = await this.userRepository.find();
+
+    // Для каждого пользователя добавляем createdItems
+    const usersWithItems = await Promise.all(
+      users.map(async (user) => {
+        const createdItems = await this.itemService.findAllByUser(user);
+        return { ...user, createdItems };
+      }),
+    );
+
+    return usersWithItems;
   }
 
   async findUserByEmail(email: string): Promise<User> {

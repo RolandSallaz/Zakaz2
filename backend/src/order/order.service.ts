@@ -30,7 +30,7 @@ export class OrderService {
 Номер телефона: ${order.phone}\n
 Оформил заказ на сумму: ${order.items.reduce((total, item) => total + item.price, 0)} руб\n
 Товары: \n
-${order.items.map((item) => `Имя: ${item.name} Цена: ${item.price} руб id: ${item.id} \n`)}`;
+${order.items.map((item) => `Имя: ${item.name} Цена: ${item.price} руб ссылка на товар: https://${this.configService.get('domain')}/items/${item.id}\n`)}`;
     try {
       await sendMessageToAdmin(message, this.configService);
     } catch (err) {

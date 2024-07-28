@@ -21,7 +21,7 @@ export class FilesController {
   @UseGuards(AuthLevelGuard)
   @AuthLevel(ROLES.MANAGER)
   @UseInterceptors(
-    FilesInterceptor('files', 10, {
+    FilesInterceptor('files', 50, {
       storage: diskStorage({
         destination: 'public/uploads',
         filename: (req, file, cb) => {
@@ -31,9 +31,6 @@ export class FilesController {
           cb(null, randomFileName);
         },
       }),
-      limits: {
-        fileSize: 1024 * 1024 * 30, // Максимальный размер файла (30MB)
-      },
     }),
   )
   public async uploadFiles(@UploadedFiles() files: Multer.File[]) {

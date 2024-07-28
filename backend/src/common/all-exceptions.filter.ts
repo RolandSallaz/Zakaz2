@@ -22,7 +22,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     let ex;
-    console.log(exception);
     if (exception.code == 23505) {
       ex = new HttpException(exception.detail, 409);
     } else if (exception instanceof PayloadTooLargeException) {
@@ -32,7 +31,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     } else if (exception instanceof HttpException) {
       ex = exception;
     } else {
-      ex = new InternalServerErrorException(`Что-то пошло не так`);
+      ex = new InternalServerErrorException(
+        exception.message || `Что-то пошло не так`,
+      );
     }
     const httpStatus = ex.getStatus();
     response.status(httpStatus).json({

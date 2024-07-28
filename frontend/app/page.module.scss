@@ -1,0 +1,84 @@
+@import "./variables.scss";
+.main {
+  &__heading {
+    font-size: 40px;
+    font-weight: 400;
+    padding: 30px 0;
+    width: 100%;
+    text-align: center;
+    margin-top: 0px;
+  }
+  &__filters {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    justify-content: center;
+    padding-bottom: 40px;
+  }
+}
+
+.tags {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgb(155, 155, 155);
+  &__container {
+    display: flex;
+    gap: 10px;
+  }
+  &__button {
+    border: 1px solid rgb(155, 155, 155);
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 4px 10px;
+    &:hover {
+      border: 1px solid rgb(116, 118, 255);
+      color: rgb(116, 118, 255);
+    }
+    &_active {
+      border-color: rgb(151, 41, 255);
+      color: rgb(151, 41, 255);
+    }
+  }
+}
+
+.pagination {
+  margin-top: 20px;
+  &__button {
+    color: $blurColor;
+    font-size: 17px;
+    font-weight: 500;
+    &_active {
+      color: $secondColor;
+      cursor: default;
+    }
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+@media screen and (max-width: 1279px) {
+  .main {
+    &__heading {
+      padding: 0;
+    }
+  }
+  .tags {
+    &__container {
+      gap: 5px;
+    }
+  }
+}
+
+.not_found {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & a {
+    color: $secondColor;
+    font-size: 20px;
+  }
+}

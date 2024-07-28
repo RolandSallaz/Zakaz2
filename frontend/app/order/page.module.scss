@@ -1,0 +1,67 @@
+@import "../variables.scss";
+
+.OrderPage {
+  &__form {
+    display: flex;
+    gap: 20px;
+  }
+  &__input {
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px 5px 30px;
+    width: 100%;
+    font-size: 16px;
+    background-color: white !important;
+    &_error {
+      color: red;
+    }
+    &_label {
+      cursor: text;
+      position: relative;
+      width: 100%;
+
+      & svg {
+        position: absolute;
+        left: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #24a1de;
+      }
+    }
+  }
+  &__button {
+    &_order {
+      @include order-button;
+      background-color: #10c44c;
+    }
+  }
+  &__space_between {
+    @include space-between;
+  }
+  &__column {
+    @include order-column;
+    width: 560px;
+    gap: 10px;
+    &_right {
+      @include order-column_right;
+    }
+  }
+  &__grid {
+    &_container {
+      @include order_grid;
+    }
+  }
+}
+
+@media screen and (max_width: 1279px) {
+  .OrderPage {
+    &__form {
+      margin-top: 60px;
+      flex-direction: column;
+    }
+    &__column {
+      width: 100%;
+      align-self: center;
+    }
+  }
+}

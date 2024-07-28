@@ -1,0 +1,17 @@
+.AdminItemsPage {
+  &__grid_container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    margin-top: 20px;
+  }
+  &__flex_container {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+  }
+}
+
+.admin__input {
+  width: 50%;
+}
