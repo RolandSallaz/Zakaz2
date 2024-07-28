@@ -14,7 +14,6 @@ services:
       - net
     depends_on:
       - postgres
-      - emailservice
     volumes:
       - ./backend/public/uploads:/app/public/uploads
 
@@ -36,7 +35,7 @@ services:
       context: frontend
       dockerfile: Dockerfile
       ports:
-        - "3000:3000"
+        - "5173:3000"
     networks:
       - net
     depends_on:
@@ -54,6 +53,8 @@ services:
       - "3001:3000"
     networks:
       - net
+    depends_on:
+      - backend
     volumes:
       - ./logs/mail_service:/app/logs
 
