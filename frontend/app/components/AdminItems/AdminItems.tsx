@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { MultiValue, SingleValue } from "react-select";
@@ -21,6 +21,7 @@ import { useParams } from "next/navigation";
 import CreatableSelect from "react-select/creatable";
 import AdminImage from "../AdminImage/AdminImage";
 import "./AdminItems.scss";
+import { useMediaQuery } from "react-responsive";
 interface IInputData extends Omit<IItemDto, "images"> {}
 
 interface props {
@@ -40,7 +41,7 @@ export default function AdminItems({ type = "add" }: props) {
   const dispatch = useAppDispatch();
   const { data: items } = useAppSelector((state) => state.itemSlice);
   const [images, setImages] = useState<string[]>([]);
-
+  const isMobile = useMediaQuery({ maxWidth: 1279 });
   function handleDeleteImage(image: string) {
     setImages((prev) => prev.filter((item) => item != image));
   }
@@ -142,6 +143,13 @@ export default function AdminItems({ type = "add" }: props) {
     setSelectedType(newValue as SingleValue<ISelect>);
   };
 
+  function filesOnChangeHandler(e: ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (files) {
+      handleDropImages(files);
+    }
+  }
+
   return (
     <>
       <Link href={"/admin/items"} className="link admin__section-link">
@@ -240,17 +248,32 @@ export default function AdminItems({ type = "add" }: props) {
                 ))}
               </div>
               <div className="form__label_absolute">
-                <FileUploader
-                  handleChange={handleDropImages}
-                  multiple
-                  hoverTitle="Перетащите фото"
-                >
-                  {!images.length && (
-                    <p className="form__centralized-text">
-                      Перетащите фото (мин количество 2)
-                    </p>
-                  )}
-                </FileUploader>
+                {isMobile ? (
+                  <label className="form__centralized-text">
+                    {images.length == 0
+                      ? "Перетащите фото (мин количество 2)"
+                      : ""}
+                    <input
+                      type="file"
+                      onChange={filesOnChangeHandler}
+                      multiple
+                      accept="image/*"
+                      style={{ display: "none" }} // чтобы скрыть стандартный стиль загрузки файла
+                    />
+                  </label>
+                ) : (
+                  <FileUploader
+                    handleChange={handleDropImages}
+                    multiple
+                    hoverTitle="Перетащите фото"
+                  >
+                    {!images.length && (
+                      <p className="form__centralized-text">
+                        Перетащите фото (мин количество 2)
+                      </p>
+                    )}
+                  </FileUploader>
+                )}
               </div>
             </div>
           </div>

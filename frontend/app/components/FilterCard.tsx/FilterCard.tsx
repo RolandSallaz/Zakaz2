@@ -3,6 +3,7 @@ import useHover from "@/app/lib/hooks/useHover";
 import Link from "next/link";
 import Image from "next/image";
 import "./FilterCard.scss";
+import { useRouter } from "next/navigation";
 interface props {
   image: string;
   text: string;
@@ -11,17 +12,22 @@ interface props {
 }
 
 export default function FilterCard({ image, text, description, param }: props) {
+  const router = useRouter();
   const { isHovered, handleHovered } = useHover();
   const link = `/find?${new URLSearchParams({
     [param.name]: param.value,
   }).toString()}`;
+
+  function handleCardClick() {
+    router.push(link);
+  }
 
   return (
     <div
       className={"filterCard"}
       onMouseEnter={handleHovered}
       onMouseLeave={handleHovered}
-      // onClick={handleCardClick}
+      onClick={handleCardClick}
     >
       <img
         src={image}
