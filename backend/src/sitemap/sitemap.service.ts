@@ -26,7 +26,7 @@ export class SitemapService {
     });
     items.forEach((item) => {
       smStream.write({
-        url: `#/items/${item.id}`,
+        url: `/items/${item.id}`,
         changefreq: 'monthly',
         priority: 1,
       });
