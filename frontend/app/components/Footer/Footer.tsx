@@ -7,7 +7,7 @@ export default function Footer() {
   const date = new Date().getFullYear();
   return (
     <footer className="footer">
-      <div className="footer__columns">
+      <nav className="footer__columns">
         <FooterColumn heading="Клиенту">
           <>
             <Link className="link footerColumn__link" href="/profile">
@@ -61,7 +61,7 @@ export default function Footer() {
             </a>
           </>
         </FooterColumn>
-      </div>
+      </nav>
       <p className="footer__copyright">{`© ${date} ${
         process.env.NEXT_PUBLIC_SHOP_NAME || "название магазина"
       }. ALL RIGHTS RESERVED.`}</p>

@@ -1,4 +1,10 @@
 User-agent: *
 Disallow: /admin
+Disallow: /find
+Disallow: /cart
+Disallow: /order
+Disallow: /profile
+Disallow: /likes
+
 Allow: /
 Sitemap: https://blinkresale.ru/sitemap.xml
