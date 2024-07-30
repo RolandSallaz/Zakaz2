@@ -108,10 +108,7 @@ export default function AdminItems({ type = "add" }: props) {
           ...images.map((image) => `${apiUrl}/${image.filePath}`),
         ])
       )
-      .catch((err) => {
-        handleError(err);
-        alert(err);
-      });
+      .catch(handleError);
   };
 
   useEffect(() => {
