@@ -46,7 +46,7 @@ services:
     restart: always
     build:
       context: systemInfoService
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     ports:
       - "3003:3000"
     networks:
