@@ -1,0 +1,26 @@
+.systemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 20px;
+  &__container {
+    margin-top: 20px;
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+  }
+  &__title {
+    margin: 0 auto;
+  }
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  &__disk {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

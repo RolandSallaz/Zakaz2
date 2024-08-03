@@ -80,16 +80,17 @@
     position: absolute;
     transition: all 0.5s;
     padding: 5px;
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 4px;
     z-index: 3;
+    color: white;
 
     &:hover {
-      background-color: black;
-      color: white;
+      background-color: rgba(0, 0, 0, 0.527);
+      // color: white;
     }
     & svg {
       font-size: 24px;

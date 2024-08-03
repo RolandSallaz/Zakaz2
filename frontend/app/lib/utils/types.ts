@@ -4,6 +4,22 @@ export enum ROLES {
   ADMIN = 2,
 }
 
+export interface ISystemInfo {
+  cpu: string;
+  disk: {
+    space: {
+      usedInGB: string;
+      sizeInGB: string;
+    }[];
+  };
+  ram: {
+    totalMemory: string;
+    freeMemory: string;
+    usedMemory: string;
+    nodeMemory: string;
+  };
+}
+
 export interface IRequest {
   message: string;
 }

@@ -1,3 +1,6 @@
 [submodule "emailService"]
 	path = emailService
 	url = https://github.com/RolandSallaz/emailService
+[submodule "systemInfoService"]
+	path = systemInfoService
+	url = https://github.com/RolandSallaz/systemInfoService.git

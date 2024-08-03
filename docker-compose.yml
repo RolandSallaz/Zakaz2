@@ -41,7 +41,18 @@ services:
       - net
     depends_on:
       - backend
-
+  systeminfoservice:
+    container_name: "systeminfoservice"
+    restart: always
+    build:
+      context: systemInfoService
+      dockerfile: dockerfile
+    ports:
+      - "3003:3000"
+    networks:
+      - net
+    depends_on:
+      - frontend
   emailservice:
     container_name: "emailservice"
     restart: always

@@ -54,7 +54,7 @@ export default function Layout({
           </Link>
           <Link
             className={`${styles.link} ${styles.admin__link}`}
-            href="./items"
+            href="/admin/system-info"
             style={{ backgroundColor: "#fe6f47" }}
           >
             <svg viewBox="0 0 24 24" fill="currentColor">

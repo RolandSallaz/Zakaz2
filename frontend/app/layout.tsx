@@ -30,26 +30,16 @@ export default function RootLayout({
       <body className={`${jost.className}`}>
         <ConfirmPopupProvider>
           <ReduxProvider>
-            {isProduction ? (
-              <YandexMetricaProvider>
-                <Header />
-                <h1 className={"hidden_seo"}>
-                  Обновите свой гардероб с BlinkResale: Эксклюзивная одежда от
-                  топовых мировых брендов для создания вашего неповторимого и
-                  стильного образа
-                </h1>
-                {children}
-                <Footer />
-                <InitialDataLoader />
-              </YandexMetricaProvider>
-            ) : (
-              <>
-                <Header />
-                {children}
-                <Footer />
-                <InitialDataLoader />
-              </>
-            )}
+            <Header />
+            <h1 className={"hidden_seo"}>
+              Обновите свой гардероб с BlinkResale: Эксклюзивная одежда от
+              топовых мировых брендов для создания вашего неповторимого и
+              стильного образа
+            </h1>
+            {children}
+            <Footer />
+            <InitialDataLoader />
+            {isProduction && <YandexMetricaProvider />}
           </ReduxProvider>
         </ConfirmPopupProvider>
       </body>
