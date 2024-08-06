@@ -1,18 +1,12 @@
 "use client";
-import { usePathname, useSearchParams } from "next/navigation";
 import Script from "next/script";
-import { useEffect } from "react";
-import ym from "react-yandex-metrika";
+import { Suspense } from "react";
 
 export default function YandexMetricaProvider() {
-  const pathName = usePathname();
-  const searchParams = useSearchParams();
-  useEffect(() => {
-    ym("97929915", "hit", window.location.href);
-  }, [pathName, searchParams]);
   return (
-    <Script id="yandex-metrika">
-      {`
+    <Suspense>
+      <Script id="yandex-metrika">
+        {`
         (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
         m[i].l=1*new Date();
         for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
@@ -26,6 +20,7 @@ export default function YandexMetricaProvider() {
           accurateTrackBounce:true
         });    
       `}
-    </Script>
+      </Script>
+    </Suspense>
   );
 }
