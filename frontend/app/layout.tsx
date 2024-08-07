@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Jost } from "next/font/google";
 import { ConfirmPopupProvider } from "./components/context/ConfirmPopupContext";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
@@ -7,8 +6,7 @@ import "./globals.scss";
 import InitialDataLoader from "./lib/redux/InitialDataLoader";
 import ReduxProvider from "./lib/redux/StoreProvider";
 import YandexMetricaProvider from "./components/YandexMetricaProvider"; // Импортируем YandexMetricaProvider
-
-const jost = Jost({ weight: ["400", "500", "600"], subsets: ["cyrillic"] });
+import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "BlinkResale: Эксклюзивная одежда от топовых мировых брендов",
@@ -27,7 +25,15 @@ export default function RootLayout({
 
   return (
     <html lang="ru">
-      <body className={`${jost.className}`}>
+      <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <body>
         <ConfirmPopupProvider>
           <ReduxProvider>
             <Header />
