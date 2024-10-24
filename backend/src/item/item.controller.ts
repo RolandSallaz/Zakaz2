@@ -40,6 +40,11 @@ export class ItemController {
     return this.itemService.findOne(+id);
   }
 
+  @Get('/by-name/:name')
+  findByName(@Param('name') name: string) {
+    return this.itemService.findByName(name);
+  }
+
   @Get('/actual/:itemsIdArray')
   getActualItems(@Param('itemsIdArray') itemsIdArray: string) {
     const ids = JSON.parse(itemsIdArray);

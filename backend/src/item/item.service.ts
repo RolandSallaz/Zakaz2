@@ -4,7 +4,7 @@ import { User } from '@/users/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { addDays } from 'date-fns';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { Item } from './entities/item.entity';
@@ -15,7 +15,7 @@ export class ItemService {
     @InjectRepository(Item)
     private itemRepository: Repository<Item>,
     private itemsSelectorService: ItemSelectorsService,
-  ) {}
+  ) { }
   async create(
     createItemDto: CreateItemDto,
     creatorEmail: string,
@@ -78,5 +78,15 @@ export class ItemService {
   async remove(id: number): Promise<Item> {
     const item = await this.itemRepository.findOneOrFail({ where: { id } });
     return await this.itemRepository.remove(item);
+  }
+
+  async findByName(name: string): Promise<Item[]> {
+    const items = await this.itemRepository.find({
+      where: {
+        name: ILike(`%${name}%`),
+      },
+      take: 5,
+    });
+    return items;
   }
 }
