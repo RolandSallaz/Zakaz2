@@ -1,6 +1,7 @@
 $secondColor: rgb(151, 41, 255);
 $blurColor: #9b9b9b;
 $gray: rgba(184, 184, 184, 0.123);
+$closeColor: #535353;
 @mixin order-button {
   background-color: $secondColor;
   color: white;
