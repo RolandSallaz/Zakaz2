@@ -19,7 +19,7 @@ export default function Cards({
     <section
       className={`cards cards_type_${type}`}
       style={{
-        gridTemplateColumns: `repeat(${columnsCount}, minmax(100px, 1fr))`,
+        gridTemplateColumns: `repeat(${columnsCount || 3}, minmax(100px, 1fr))`,
       }}
     >
       {items?.map((item) => (

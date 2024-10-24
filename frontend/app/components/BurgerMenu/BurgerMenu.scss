@@ -137,11 +137,14 @@ $width: 100%;
     list-style: none;
     gap: 10px;
     box-shadow: 2px 2px 2px -2px rgb(185, 185, 185);
-
+    & li {
+      display: flex;
+      width: 100%;
+    }
     & a {
+      width: 100%;
       font-size: 16px;
       color: #28282c;
-
       &:hover {
         color: $secondColor;
       }
