@@ -7,10 +7,12 @@ import { useAppSelector } from "./lib/redux/store";
 import { IItem } from "./lib/utils/types";
 import styles from "./page.module.scss";
 import { Hearts } from "react-loader-spinner";
-type mainFilter = "male" | "female" | "all" | "new";
+import { ApiGetItemsWithPage } from "./lib/utils/api";
+import useErrorHandler from "./lib/hooks/useErrorHandler";
+export type mainFilter = "male" | "female" | "all" | "new";
 
 export default function Home() {
-  const { data: items } = useAppSelector((state) => state.itemSlice);
+  const [items, setItems] = useState<IItem[]>([]);
   const { main_heading } = useAppSelector((state) => state.appSlice);
   const [columnsCount, setColumnsCount] = useState<number>(0);
   const [selectedFilter, setSelectedFilter] = useState<mainFilter>("all");
@@ -20,10 +22,11 @@ export default function Home() {
   const itemsPerPage = 8;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { handleError } = useErrorHandler();
   // Общее количество страниц
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const [totalPages, setTotalPages] = useState<number>(0);
   useEffect(() => {
     changeMainFilter(selectedFilter);
     if (items) {
@@ -39,23 +42,19 @@ export default function Home() {
     setCurrentPage(pageNumber);
   };
 
+  useEffect(() => {
+    ApiGetItemsWithPage({ filter: selectedFilter, page: currentPage }).then((res) => {
+      setFilteredItems(res.items)
+      setTotalPages(res.totalPages)
+    }).catch(handleError)
+  }, [currentPage])
+
   function changeMainFilter(filter: mainFilter) {
-    if (filter == "new") {
-      setFilteredItems(
-        items.filter((item) => {
-          const today = new Date();
-          const weekAgo = new Date(today.setDate(today.getDate() - 7));
-          const itemDate = new Date(item.start_sell_date);
-          return itemDate > weekAgo;
-        })
-      );
-    } else if (filter == "all") {
-      setFilteredItems(items);
-    } else {
-      setFilteredItems(
-        items.filter((item) => item.gender == filter || item.gender == "unisex")
-      );
-    }
+    ApiGetItemsWithPage({ filter, itemsInPage: itemsPerPage }).then((res) => {
+      setFilteredItems(res.items);
+      setTotalPages(res.totalPages)
+      setCurrentPage(1);
+    }).catch(handleError)
   }
 
   const getPageNumbers = () => {
@@ -108,33 +107,29 @@ export default function Home() {
           className={`${styles.tags__container} ${styles.tags__container_left}`}
         >
           <button
-            className={`${styles.tags__button} ${
-              selectedFilter === "all" ? styles.tags__button_active : ""
-            }`}
+            className={`${styles.tags__button} ${selectedFilter === "all" ? styles.tags__button_active : ""
+              }`}
             onClick={() => setSelectedFilter("all")}
           >
             Все
           </button>
           <button
-            className={`${styles.tags__button} ${
-              selectedFilter === "new" ? styles.tags__button_active : ""
-            }`}
+            className={`${styles.tags__button} ${selectedFilter === "new" ? styles.tags__button_active : ""
+              }`}
             onClick={() => setSelectedFilter("new")}
           >
             Новое
           </button>
           <button
-            className={`${styles.tags__button} ${
-              selectedFilter === "male" ? styles.tags__button_active : ""
-            }`}
+            className={`${styles.tags__button} ${selectedFilter === "male" ? styles.tags__button_active : ""
+              }`}
             onClick={() => setSelectedFilter("male")}
           >
             Он
           </button>
           <button
-            className={`${styles.tags__button} ${
-              selectedFilter === "female" ? styles.tags__button_active : ""
-            }`}
+            className={`${styles.tags__button} ${selectedFilter === "female" ? styles.tags__button_active : ""
+              }`}
             onClick={() => setSelectedFilter("female")}
           >
             Она
@@ -144,21 +139,19 @@ export default function Home() {
           className={`${styles.tags__container} ${styles.tags__container_right}`}
         >
           <button
-            className={`${styles.tags__button} ${
-              columnsCount === (isMobile ? 1 : 2)
-                ? styles.tags__button_active
-                : ""
-            }`}
+            className={`${styles.tags__button} ${columnsCount === (isMobile ? 1 : 2)
+              ? styles.tags__button_active
+              : ""
+              }`}
             onClick={() => setColumnsCount(isMobile ? 1 : 2)}
           >
             {isMobile ? "l" : "ll"}
           </button>
           <button
-            className={`${styles.tags__button} ${
-              columnsCount === (isMobile ? 2 : 4)
-                ? styles.tags__button_active
-                : ""
-            }`}
+            className={`${styles.tags__button} ${columnsCount === (isMobile ? 2 : 4)
+              ? styles.tags__button_active
+              : ""
+              }`}
             onClick={() => setColumnsCount(isMobile ? 2 : 4)}
           >
             {isMobile ? "ll" : "llll"}
@@ -176,7 +169,7 @@ export default function Home() {
         />
       ) : (
         <Cards
-          items={currentItems}
+          items={filteredItems}
           columnsCount={columnsCount}
           type={columnsCount < (isMobile ? 2 : 4) ? "big" : "default"}
         />
@@ -198,9 +191,8 @@ export default function Home() {
         {getPageNumbers().map((number, index) => (
           <button
             key={index}
-            className={`${styles.pagination__button} ${
-              currentPage === number ? styles.pagination__button_active : ""
-            }`}
+            className={`${styles.pagination__button} ${currentPage === number ? styles.pagination__button_active : ""
+              }`}
             onClick={() =>
               typeof number === "number" && handlePageChange(number)
             }

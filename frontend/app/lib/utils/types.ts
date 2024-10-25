@@ -135,3 +135,10 @@ export interface IInfoType {
 export interface INextImage {
   src: string;
 }
+
+export interface IItemPagination {
+  items: IItem[];
+  totalPages: number;
+  currentPage: number;
+  totalItems: number;
+}

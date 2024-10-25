@@ -1,3 +1,4 @@
+import { mainFilter } from "@/app/page";
 import { apiUrl } from "./config";
 import {
   IAuthData,
@@ -6,6 +7,7 @@ import {
   IInfoType,
   IItem,
   IItemDto,
+  IItemPagination,
   IOrder,
   IOrderDto,
   IRequest,
@@ -119,12 +121,29 @@ export function ApiGetItems(): Promise<IItem[]> {
   return _fetch<IItem[]>({ url: "items" });
 }
 
+export function ApiGetItemsWithPage({
+  itemsInPage = 8,
+  page = 1,
+  filter = 'all',
+}: {
+  itemsInPage?: number;
+  page?: number;
+  filter?: mainFilter;
+} = {}): Promise<IItemPagination> {
+  return _fetch<IItemPagination>({ url: `items/with-pagination?itemsInPage=${itemsInPage}&page=${page}&filter=${filter}` })
+}
+
 export function ApiGetItem(id: number): Promise<IItem> {
   return _fetch<IItem>({ url: `items/${id}` });
 }
 
 export function ApiGetItemsByName(name: string): Promise<IItem[]> {
   return _fetch<IItem[]>({ url: `items/by-name/${name}` })
+}
+
+export function ApiGetItemsBySearch({ find, gender, type }: { find: string, gender: string | null, type: string }): Promise<IItem[]> {
+  return _fetch<IItem[]>({ url: `items/search?find=${find}&gender=${gender}&type=${type}` })
+
 }
 
 export function ApiDeleteItem(id: number): Promise<IItem> {

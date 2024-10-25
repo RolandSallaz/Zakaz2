@@ -23,10 +23,10 @@ export default function InitialDataLoader() {
     infoPopup: { isOpened: isInfoPopupOpened },
   } = useAppSelector((state) => state.appSlice);
   useEffect(() => {
-    ApiCheckAuth().then((user) => dispatch(login(user)));
-    ApiGetItems()
-      .then((items) => dispatch(setItems(items)))
-      .catch(handleError);
+    ApiCheckAuth().then((user) => dispatch(login(user))).catch(console.log);
+    // ApiGetItems()
+    //   .then((items) => dispatch(setItems(items)))
+    //   .catch(handleError);
 
     const cartItems = localStorage.getItem("cart");
     const likesItems = localStorage.getItem("likes");
@@ -39,7 +39,8 @@ export default function InitialDataLoader() {
 
     ApiGetInfo("heading_info").then((info) =>
       dispatch(setMainHeading(info.value))
-    );
+    ).catch(console.log);
+
   }, []);
   return (
     <>
