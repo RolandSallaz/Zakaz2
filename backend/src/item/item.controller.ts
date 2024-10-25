@@ -11,16 +11,18 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { ItemService } from './item.service';
+import { TGender } from '@/types';
 
 @Controller('items')
 export class ItemController {
-  constructor(private readonly itemService: ItemService) {}
+  constructor(private readonly itemService: ItemService) { }
 
   @Post()
   @UseGuards(AuthLevelGuard)
@@ -35,14 +37,32 @@ export class ItemController {
     return this.itemService.findAll(user);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.itemService.findOne(+id);
+  @Get('/with-pagination')
+  getItemsByPage(
+    @Query('itemsInPage') itemsInPage: number = 8, // Установите значение по умолчанию, если нужно
+    @Query('page') page: number = 1, // Значение по умолчанию для номера страницы
+    @Query('filter') filter: 'new' | 'female' | 'male',
+  ) {
+    return this.itemService.getByPages(itemsInPage, page, filter);
   }
 
   @Get('/by-name/:name')
   findByName(@Param('name') name: string) {
     return this.itemService.findByName(name);
+  }
+
+  @Get('/search')
+  search(
+    @Query('find') find: string = '',
+    @Query('gender') gender: TGender,
+    @Query('type') type: string = '',
+  ) {
+    return this.itemService.find(find, gender, type);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.itemService.findOne(+id);
   }
 
   @Get('/actual/:itemsIdArray')
