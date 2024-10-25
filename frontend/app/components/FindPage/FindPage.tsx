@@ -5,7 +5,7 @@ import { ApiGetTypeSelectors } from "@/app/lib/utils/api";
 import { ISelect, IItem } from "@/app/lib/utils/types";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useEffect, useCallback, Suspense, FocusEvent } from "react";
 import { useForm } from "react-hook-form";
 import { useMediaQuery } from "react-responsive";
 import { SingleValue } from "react-select";
@@ -16,7 +16,7 @@ import "./FindPage.scss";
 import Layout from "@/app/admin/layout";
 const selectOptions = [
   { value: "*", label: "Все" },
-  { value: "unisex", label: "Унисекс" },
+  // { value: "unisex", label: "Унисекс" },
   { value: "male", label: "Мужское" },
   { value: "female", label: "Женское" },
 ];
@@ -58,7 +58,7 @@ export default function FindPage() {
     setValue("find", paramValue);
     setSelectedGender(
       selectOptions.find((item) => item.value === paramGender) ||
-        selectOptions[0]
+      selectOptions[0]
     );
   }, [searchParams, setValue]);
 
@@ -72,9 +72,9 @@ export default function FindPage() {
     const filteredByGender =
       selectedGender.value !== "*"
         ? filteredByType.filter(
-            (item) =>
-              item.gender === selectedGender.value || item.gender === "unisex"
-          )
+          (item) =>
+            item.gender === selectedGender.value || item.gender === "unisex"
+        )
         : filteredByType;
 
     setFilteredItems(
@@ -123,6 +123,7 @@ export default function FindPage() {
     }
   };
 
+
   return (
     <main className="main FindPage">
       <div className="FindPage__container">
@@ -130,6 +131,7 @@ export default function FindPage() {
           className="FindPage__input"
           placeholder="Поиск"
           {...register("find", { minLength: 2 })}
+
         />
         <Select
           className="FindPage__select"
@@ -137,12 +139,14 @@ export default function FindPage() {
           defaultValue={selectOptions[0]}
           onChange={handleChangeSelect}
           value={selectedGender}
+          isSearchable={false}
         />
         <Select
           className="FindPage__select"
           value={selectedType}
           options={selectedTypeOptions}
           onChange={handleChangeTypeSelect}
+          isSearchable={false}
         />
       </div>
 
