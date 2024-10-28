@@ -62,7 +62,7 @@ export default function Footer() {
           </>
         </FooterColumn>
       </nav>
-      <p className="footer__copyright">{`© ${date} ${
+      <p className="footer__copyright">{`© 2020-${date} ${
         process.env.NEXT_PUBLIC_SHOP_NAME || "название магазина"
       }. ALL RIGHTS RESERVED.`}</p>
     </footer>

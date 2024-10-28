@@ -7,22 +7,26 @@ import CheckBox from "../components/CheckBox/CheckBox";
 import Cards from "../components/Cards/Cards";
 import { getProductText } from "../lib/utils/utils";
 import styles from "./page.module.scss";
+import { ApiGetActualItemsInfo } from "../lib/utils/api";
+import useErrorHandler from "../lib/hooks/useErrorHandler";
 export default function Page() {
   const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
   const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
   const [selectedItems, setSelectedItems] = useState<IItem[]>([]);
-  const { data: items } = useAppSelector((state) => state.itemSlice);
   const { cart } = useAppSelector((state) => state.appSlice);
   const router = useRouter();
+  const { handleError } = useErrorHandler();
   useEffect(() => {
-    const itemsFromCart: IItem[] = items.filter((item) =>
-      cart.some((cartItem) => cartItem.id === item.id)
-    );
+    const itemsArray = cart.map(item => item.id)
+    if (itemsArray.length > 0) {
+      ApiGetActualItemsInfo(`[${String(itemsArray)}]`).then((res)=>{
+        setFilteredItems(
+          res.map((item) => ({ ...item, selected: isAllSelected })) //Выбираем все товары по умолчанию
+        );
+      }).catch(handleError)
+    }
 
-    setFilteredItems(
-      itemsFromCart.map((item) => ({ ...item, selected: isAllSelected })) //Выбираем все товары по умолчанию
-    );
-  }, [items, cart]);
+  }, [cart]);
 
   function handleSelectAllChange(e: ChangeEvent<HTMLInputElement>) {
     setIsAllSelected(e.target.checked);

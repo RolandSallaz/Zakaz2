@@ -4,7 +4,7 @@ import useErrorHandler from "@/app/lib/hooks/useErrorHandler";
 import { openSnackBar } from "@/app/lib/redux/slices/appSlice";
 import { setItems } from "@/app/lib/redux/slices/itemSlice";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/store";
-import { ApiDeleteItem } from "@/app/lib/utils/api";
+import { ApiDeleteItem, ApiGetItems } from "@/app/lib/utils/api";
 import { IItem } from "@/app/lib/utils/types";
 import Link from "next/link";
 import React, { ChangeEvent, useEffect, useState } from "react";
@@ -12,12 +12,11 @@ import { formatDistance } from "date-fns";
 import { ru } from "date-fns/locale/ru";
 import styles from "./page.module.scss";
 export default function Page() {
-  const { data: items } = useAppSelector((state) => state.itemSlice);
+  const [items, setItems] = useState<IItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
   const { handleError } = useErrorHandler();
   const dispatch = useAppDispatch();
   const { openConfirmPopup } = useConfirmPopup();
-
   function handleItemInputChange(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value.trim();
 
@@ -41,12 +40,17 @@ export default function Page() {
   function handleDeleteItem(id: number) {
     ApiDeleteItem(id)
       .then(() => {
-        dispatch(setItems(items.filter((item) => item.id !== id)));
+        setItems(prev => prev.filter((item) => item.id !== id))
         setFilteredItems((prev) => prev.filter((item) => item.id !== id));
         dispatch(openSnackBar({ text: `Карточка с id ${id} успешно удалена` }));
       })
       .catch(handleError);
   }
+
+  useEffect(() => {
+    ApiGetItems().then(setItems).catch(handleError);
+  }, [])
+
   return (
     <main className={"main"}>
       <Link
@@ -80,8 +84,8 @@ export default function Page() {
                 <td>
                   {item.end_sell_date
                     ? formatDistance(new Date(), new Date(item.end_sell_date), {
-                        locale: ru,
-                      })
+                      locale: ru,
+                    })
                     : "Бессрочно"}
                 </td>
                 <td>{item.is_active ? "Да" : "Нет"}</td>
