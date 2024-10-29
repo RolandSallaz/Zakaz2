@@ -14,6 +14,7 @@ import {
 } from "@/app/lib/redux/slices/appSlice";
 import { IItem, ROLES } from "@/app/lib/utils/types";
 import "./ItemPage.scss";
+import ImageSlider from "../ImageSlider/ImageSlider";
 
 interface ItemPageProps {
   item: IItem;
@@ -70,7 +71,7 @@ export default function ItemPage({ item }: ItemPageProps) {
     <main className="main ItemPage">
       <div className="ItemPage__container ItemPage__container_left">
         <h1 className="ItemPage__name">{item.name}</h1>
-        
+
         {isMobile ? (
           <Swiper slidesPerView={1} spaceBetween={10} className="swiper" modules={[Autoplay]}>
             {item.images.map((image, index) => (
@@ -86,20 +87,13 @@ export default function ItemPage({ item }: ItemPageProps) {
             ))}
           </Swiper>
         ) : (
-          <div className="ItemPage__grid-container ItemPage__grid-container_images">
-            {item.images.map((image) => (
-              <img
-                onClick={() => openFullscreen(image)}
-                key={image}
-                src={image}
-                alt={`Изображение ${item.name}`}
-                className={`ItemPage__image ${image === activeImage && "ItemPage__image_active"}`}
-                loading="lazy"
-              />
-            ))}
-          </div>
+          <ImageSlider
+            item={item}
+            activeImage={activeImage}
+            setActiveImage={setActiveImage}
+          />
         )}
-        
+
         {isFullscreen && (
           <div className="fullscreen-overlay" onClick={closeFullscreen}>
             <Swiper
@@ -116,13 +110,14 @@ export default function ItemPage({ item }: ItemPageProps) {
             </Swiper>
           </div>
         )}
-        
+
         <label className="ItemPage__description">
           Описание
           <p className="ItemPage__description_text">{makeLinksClickable(item.description)}</p>
+          <p className="ItemPage__description_text">*Цена может отличаться, так как напрямую зависит от Курса, уточнять у менеджера</p>
         </label>
       </div>
-      
+
       <div className="ItemPage__container ItemPage__container_right">
         <p className="ItemPage__price">{item.price.toLocaleString("ru-RU")}</p>
         <div className="ItemPage__button-container">

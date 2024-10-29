@@ -20,7 +20,7 @@ export default function Footer() {
               className="link footerColumn__link"
               href="/about/measurements"
             >
-              Замеры
+              Как сделать замер
             </Link>
             <Link className="link footerColumn__link" href="/about/delivery">
               Доставка
@@ -33,7 +33,7 @@ export default function Footer() {
               className="link footerColumn__link"
               href="/about/customer-help"
             >
-              Помощь покупателю
+              Процесс заказа
             </Link>
             <Link className="link footerColumn__link" href="/about/order">
               Оформление заказа
