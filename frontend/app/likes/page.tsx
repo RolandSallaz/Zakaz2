@@ -6,11 +6,12 @@ import { IItem } from "../lib/utils/types";
 import styles from "./page.module.scss";
 import useErrorHandler from "../lib/hooks/useErrorHandler";
 import { ApiGetActualItemsInfo } from "../lib/utils/api";
+import { useMediaQuery } from "react-responsive";
 export default function Page() {
   const { likes } = useAppSelector((state) => state.appSlice);
   const [likedItems, setLikedItems] = useState<IItem[]>([]);
   const { handleError } = useErrorHandler();
-
+  const isMobile = useMediaQuery({ maxWidth: 1279 });
   useEffect(() => {
     const itemsArray = likes.map(item => item.id)
     if (itemsArray.length > 0) {
@@ -26,7 +27,7 @@ export default function Page() {
           Понравившиеся вещи будут добавлены сюда.
         </h2>
       ) : (
-        <Cards items={likedItems} />
+        <Cards items={likedItems} columnsCount={isMobile ? 2 : 3} />
       )}
     </main>
   );

@@ -24,7 +24,12 @@
       background-color: $secondColor;
     }
     &_green {
-      background-color: #00aaff;
+      background-color: rgba(82, 70, 60, 0.08);
+      color: #3d3d3d;
+    }
+    &_buy {
+      background-color: rgba(188, 116, 50, 8%);
+      color: #bc7432;
     }
     &:hover {
       opacity: 0.8;
@@ -148,6 +153,9 @@
   .ItemPage {
     flex-direction: column !important;
     align-items: center !important;
+    &__button {
+      padding: 10px;
+    }
     &__container {
       &_left {
         max-width: 100%;
@@ -155,12 +163,7 @@
       }
       &_right {
         width: 100%;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        top: auto;
-        z-index: 999;
+
         background-color: white;
         padding: 10px;
       }
@@ -169,4 +172,22 @@
       font-size: 20px;
     }
   }
+}
+
+.fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.fullscreen-overlay img {
+
+  object-fit: cover;
 }
