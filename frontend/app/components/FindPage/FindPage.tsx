@@ -169,7 +169,7 @@ export default function FindPage() {
       ) : (
         <Cards items={filteredItems} columnsCount={isMobile ? 2 : 4} />
       )}
-      {totalPages > 0 && <Pagination totalPages={totalPages} currentPage={page} handlePageChange={handlePageChange} />}
+      {totalPages > 0 && !isLoading &&<Pagination totalPages={totalPages} currentPage={page} handlePageChange={handlePageChange} />}
     </main>
   );
 }
