@@ -91,11 +91,22 @@ export class ItemService {
     return items;
   }
 
-  async find(find: string, gender?: TGender, type?: string) {
+  async find({
+    find = '',
+    gender,
+    type,
+    itemsInPage = 20,
+    page = 1,
+  }: {
+    find?: string;
+    gender?: TGender;
+    type?: string;
+    itemsInPage?: number;
+    page?: number;
+  }) {
     const queryBuilder = this.itemRepository.createQueryBuilder('item');
-    // Приводим `find` к нижнему регистру для корректного поиска
     const searchTerm = find.toLowerCase();
-    // Условие для поиска по имени, описанию и типу
+
     if (searchTerm) {
       queryBuilder.andWhere(
         '(LOWER(item.name) LIKE :searchTerm OR LOWER(item.description) LIKE :searchTerm OR LOWER(item.type) LIKE :searchTerm)',
@@ -103,28 +114,38 @@ export class ItemService {
       );
     }
 
-    // Фильтрация по гендеру, если оно указано
     if (gender) {
       queryBuilder.andWhere('item.gender = :gender', { gender });
     } else {
-      // Если gender не передан, возвращаем unisex, male и female
       queryBuilder.andWhere('item.gender IN (:...genders)', {
         genders: ['unisex', 'male', 'female'],
       });
     }
 
-    // Фильтрация по типу, если он указан
     if (type) {
       queryBuilder.andWhere('LOWER(item.type) = :type', {
         type: type.toLowerCase(),
       });
     }
 
-    queryBuilder.take(20);
-    // Получаем отфильтрованные элементы
-    const items = await queryBuilder.getMany();
+    // Сначала получаем общее количество найденных элементов
+    const totalItems = await queryBuilder.getCount();
 
-    return items;
+    // Пагинация
+    const items = await queryBuilder
+      .skip((page - 1) * itemsInPage)
+      .take(itemsInPage)
+      .getMany();
+
+    // Вычисляем общее количество страниц
+    const totalPages = Math.ceil(totalItems / itemsInPage);
+
+    return {
+      items,
+      totalPages,
+      currentPage: page,
+      totalItems,
+    };
   }
 
   async getByPages(

@@ -56,8 +56,10 @@ export class ItemController {
     @Query('find') find: string = '',
     @Query('gender') gender: TGender,
     @Query('type') type: string = '',
+    @Query('page') page: number = 1
+
   ) {
-    return this.itemService.find(find, gender, type);
+    return this.itemService.find({ find, gender, type, page });
   }
 
   @Get(':id')
