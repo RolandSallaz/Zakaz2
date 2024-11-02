@@ -14,6 +14,7 @@ import Cards from "../Cards/Cards";
 import { Hearts } from "react-loader-spinner";
 import "./FindPage.scss";
 import { debounce } from "lodash";
+import Pagination from "../Pagination/Pagination";
 
 const selectOptions = [
   { value: "*", label: "Все" },
@@ -42,12 +43,16 @@ export default function FindPage() {
   const [selectedTypeOptions, setSelectedTypeOptions] = useState<ISelect[]>([]);
   const { handleError } = useErrorHandler();
   const isMobile = useMediaQuery({ maxWidth: 1279 });
+  const [page, setPage] = useState<number>(1);
+  const [results, setResults] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     const paramValue = searchParams.get("search") || "";
     const paramGender = searchParams.get("gender") || "*";
-
+    const paramPage = Number(searchParams.get("page")) || 1;
+    setPage(paramPage);
     setValue("find", paramValue);
     setSelectedGender(
       selectOptions.find((item) => item.value === paramGender) || selectOptions[0]
@@ -70,8 +75,9 @@ export default function FindPage() {
       gender: selectedGender.value,
       search: inputValue,
       type: selectedType.value,
+      page: page.toString(),
     });
-  }, [selectedGender, selectedType, inputValue, updateQueryParams]);
+  }, [selectedGender, selectedType, inputValue, updateQueryParams, page]);
 
   const handleChangeSelect = (newValue: SingleValue<ISelect>) => {
     setSelectedGender(newValue as ISelect);
@@ -90,31 +96,40 @@ export default function FindPage() {
 
   useEffect(() => {
     setIsLoading(true);
-  
+
     // Оборачиваем ApiGetItemsBySearch в debounce
     const debouncedSearch = debounce(() => {
       ApiGetItemsBySearch({
         find: inputValue,
         gender: selectedGender.value == '*' ? '' : selectedGender.value,
-        type: selectedType.value == '*' ? '' : selectedType.value
+        type: selectedType.value == '*' ? '' : selectedType.value,
+        page,
       })
-        .then(setFilteredItems)
+        .then((res) => {
+          setFilteredItems(res.items)
+          setResults(res.totalItems)
+          setTotalPages(res.totalPages)
+        })
         .catch(handleError)
         .finally(() => setIsLoading(false));
     }, 1000); // Задержка в 1000 мс (1 секунда)
-  
+
     // Вызываем debounced функцию
     debouncedSearch();
-  
+
     // Очищаем дебаунс, если компонента размонтируется
     return () => debouncedSearch.cancel();
-  }, [inputValue, selectedGender, selectedType]);
-  
+  }, [inputValue, selectedGender, selectedType, page]);
+
   const handleChangeTypeSelect = (selected: ISelect | null) => {
     if (selected) {
       setSelectedType(selected);
     }
   };
+
+  function handlePageChange(newPage:number) {
+    setPage(newPage)
+  }
 
   return (
     <main className="main FindPage">
@@ -141,7 +156,7 @@ export default function FindPage() {
         />
       </div>
 
-      {isDirty && filteredItems.length == 0 && <p>Результатов: {filteredItems.length}</p>}
+      {isDirty && <p>Результатов: {results}</p>}
       {isLoading ? (
         <Hearts
           height="160"
@@ -154,6 +169,7 @@ export default function FindPage() {
       ) : (
         <Cards items={filteredItems} columnsCount={isMobile ? 2 : 4} />
       )}
+      {totalPages > 0 && <Pagination totalPages={totalPages} currentPage={page} handlePageChange={handlePageChange} />}
     </main>
   );
 }
