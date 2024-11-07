@@ -26,6 +26,14 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT
+# Copy the .env and .env.development files
+COPY .env ./
+
+# Creates a "dist" folder with the production build
+RUN npm run build
+
+# Expose the port on which the app will run
+EXPOSE 3000
+
+# Start the server using the production build
+CMD ["npm", "run", "start"]
