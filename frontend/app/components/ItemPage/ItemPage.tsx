@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import "swiper/css";
-import { Autoplay } from "swiper/modules";
+import 'swiper/css/zoom';
+import SwiperCore from 'swiper';
+import { Autoplay, Zoom } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useMediaQuery } from "react-responsive";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/store";
@@ -19,6 +21,7 @@ import ImageSlider from "../ImageSlider/ImageSlider";
 interface ItemPageProps {
   item: IItem;
 }
+SwiperCore.use([Zoom]);
 
 export default function ItemPage({ item }: ItemPageProps) {
   const [activeImage, setActiveImage] = useState<string>(item.images[0]);
@@ -93,7 +96,6 @@ export default function ItemPage({ item }: ItemPageProps) {
             setActiveImage={setActiveImage}
           />
         )}
-
         {isFullscreen && (
           <div className="fullscreen-overlay" onClick={closeFullscreen}>
             <Swiper
@@ -101,16 +103,19 @@ export default function ItemPage({ item }: ItemPageProps) {
               spaceBetween={10}
               initialSlide={item.images.indexOf(activeImage || "")}
               className="fullscreen-swiper"
+              zoom={true} // Включаем возможность масштабирования
             >
               {item.images.map((image, index) => (
-                <SwiperSlide key={index}>
-                  <img src={image} alt={`Изображение ${item.name}`} className="fullscreen-image" />
+                <SwiperSlide key={index} zoom>
+                  {/* Оборачиваем изображение в swiper-zoom-container */}
+                  <div className="swiper-zoom-container">
+                    <img src={image} alt={`Изображение ${item.name}`} className="fullscreen-image" />
+                  </div>
                 </SwiperSlide>
               ))}
             </Swiper>
           </div>
         )}
-
         <label className="ItemPage__description">
           Описание
           <p className="ItemPage__description_text">{makeLinksClickable(item.description)}</p>
