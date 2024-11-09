@@ -16,7 +16,7 @@ export class ItemService {
     @InjectRepository(Item)
     private itemRepository: Repository<Item>,
     private itemsSelectorService: ItemSelectorsService,
-  ) {}
+  ) { }
   async create(
     createItemDto: CreateItemDto,
     creatorEmail: string,
@@ -115,7 +115,12 @@ export class ItemService {
     }
 
     if (gender) {
-      queryBuilder.andWhere('item.gender = :gender', { gender });
+      queryBuilder.andWhere(
+        '(item.gender = :gender OR item.gender = :unisex)',
+        {
+          gender,
+          unisex: 'unisex',
+      });
     } else {
       queryBuilder.andWhere('item.gender IN (:...genders)', {
         genders: ['unisex', 'male', 'female'],
