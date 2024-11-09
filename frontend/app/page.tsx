@@ -9,13 +9,14 @@ import styles from "./page.module.scss";
 import { Hearts } from "react-loader-spinner";
 import { ApiGetItemsWithPage } from "./lib/utils/api";
 import useErrorHandler from "./lib/hooks/useErrorHandler";
+import Link from "next/link";
 export type mainFilter = "male" | "female" | "all" | "new";
 
 export default function Home() {
   const [items, setItems] = useState<IItem[]>([]);
   const { main_heading } = useAppSelector((state) => state.appSlice);
   const [columnsCount, setColumnsCount] = useState<number>(0);
-  const [selectedFilter, setSelectedFilter] = useState<mainFilter>("all");
+  const [selectedFilter, setSelectedFilter] = useState<mainFilter>("new");
   const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
   const isMobile = useMediaQuery({ maxWidth: 1279 });
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -106,13 +107,13 @@ export default function Home() {
         <div
           className={`${styles.tags__container} ${styles.tags__container_left}`}
         >
-          <button
+          {/* <button
             className={`${styles.tags__button} ${selectedFilter === "all" ? styles.tags__button_active : ""
               }`}
             onClick={() => setSelectedFilter("all")}
           >
             Все
-          </button>
+          </button> */}
           <button
             className={`${styles.tags__button} ${selectedFilter === "new" ? styles.tags__button_active : ""
               }`}
@@ -120,20 +121,20 @@ export default function Home() {
           >
             Новое
           </button>
-          <button
+          <Link href={'find?gender=male'}
             className={`${styles.tags__button} ${selectedFilter === "male" ? styles.tags__button_active : ""
               }`}
-            onClick={() => setSelectedFilter("male")}
+            // onClick={() => setSelectedFilter("male")}
           >
             Он
-          </button>
-          <button
+          </Link>
+          <Link href={'find?gender=female'}
             className={`${styles.tags__button} ${selectedFilter === "female" ? styles.tags__button_active : ""
               }`}
-            onClick={() => setSelectedFilter("female")}
+            // onClick={() => setSelectedFilter("female")}
           >
             Она
-          </button>
+          </Link>
         </div>
         <div
           className={`${styles.tags__container} ${styles.tags__container_right}`}

@@ -82,10 +82,10 @@
     cursor: pointer;
     object-fit: scale-down;
     &_active {
-      border: 2px solid rgba(41, 85, 206, 0.603);
+      // border: 2px solid rgba(41, 85, 206, 0.603);
     }
     &:hover {
-      border: 2px solid rgba(41, 85, 206, 0.438);
+      // border: 2px solid rgba(41, 85, 206, 0.438);
     }
   }
   &__loading {

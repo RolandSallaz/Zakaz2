@@ -1,20 +1,17 @@
 "use client";
 import useErrorHandler from "@/app/lib/hooks/useErrorHandler";
-import { useAppSelector } from "@/app/lib/redux/store";
 import { ApiGetItemsBySearch, ApiGetTypeSelectors } from "@/app/lib/utils/api";
-import { ISelect, IItem } from "@/app/lib/utils/types";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
-import { useForm } from "react-hook-form";
-import { useMediaQuery } from "react-responsive";
-import { SingleValue } from "react-select";
-import Select from "react-select";
-import Cards from "../Cards/Cards";
-import { Hearts } from "react-loader-spinner";
-import "./FindPage.scss";
+import { IItem, ISelect } from "@/app/lib/utils/types";
 import { debounce } from "lodash";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Hearts } from "react-loader-spinner";
+import { useMediaQuery } from "react-responsive";
+import Select, { SingleValue } from "react-select";
+import Cards from "../Cards/Cards";
 import Pagination from "../Pagination/Pagination";
+import "./FindPage.scss";
 
 const selectOptions = [
   { value: "*", label: "Все" },
@@ -50,10 +47,11 @@ export default function FindPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
     const paramValue = searchParams.get("search") || "";
+
     const paramGender = searchParams.get("gender") || "*";
     const paramPage = Number(searchParams.get("page")) || 1;
     setPage(paramPage);
-    setValue("find", paramValue);
+    setValue("find", paramValue == 'undefined' ? '' : paramValue);
     setSelectedGender(
       selectOptions.find((item) => item.value === paramGender) || selectOptions[0]
     );
@@ -127,7 +125,7 @@ export default function FindPage() {
     }
   };
 
-  function handlePageChange(newPage:number) {
+  function handlePageChange(newPage: number) {
     setPage(newPage)
   }
 
@@ -146,6 +144,7 @@ export default function FindPage() {
           onChange={handleChangeSelect}
           value={selectedGender}
           isSearchable={false}
+          styles={{ menu: base => ({ ...base, zIndex: 9999 }) }}
         />
         <Select
           className="FindPage__select"
@@ -153,6 +152,7 @@ export default function FindPage() {
           options={selectedTypeOptions}
           onChange={handleChangeTypeSelect}
           isSearchable={false}
+          styles={{ menu: base => ({ ...base, zIndex: 9999 }) }}
         />
       </div>
 
@@ -169,7 +169,7 @@ export default function FindPage() {
       ) : (
         <Cards items={filteredItems} columnsCount={isMobile ? 2 : 4} />
       )}
-      {totalPages > 0 && !isLoading &&<Pagination totalPages={totalPages} currentPage={page} handlePageChange={handlePageChange} />}
+      {totalPages > 0 && !isLoading && <Pagination totalPages={totalPages} currentPage={page} handlePageChange={handlePageChange} />}
     </main>
   );
 }

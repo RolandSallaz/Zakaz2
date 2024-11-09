@@ -9,10 +9,31 @@ interface props {
 
 export default function Pagination({ totalPages, currentPage, handlePageChange }: props) {
 
-    const getPageNumbers = useCallback(() => 
-        Array.from({ length: totalPages }, (_, i) => i + 1),
-        [totalPages]
-      );
+    const getPageNumbers = () => {
+        const pageNumbers = [];
+        const startPage = Math.max(1, currentPage - 2);
+        const endPage = Math.min(totalPages, currentPage + 2);
+    
+        if (startPage > 1) {
+          pageNumbers.push(1);
+          if (startPage > 2) {
+            pageNumbers.push("...");
+          }
+        }
+    
+        for (let i = startPage; i <= endPage; i++) {
+          pageNumbers.push(i);
+        }
+    
+        if (endPage < totalPages) {
+          if (endPage < totalPages - 1) {
+            pageNumbers.push("...");
+          }
+          pageNumbers.push(totalPages);
+        }
+    
+        return pageNumbers;
+      };
       
     return (
         <div className={'pagination'}>

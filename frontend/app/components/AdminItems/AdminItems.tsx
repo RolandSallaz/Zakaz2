@@ -9,6 +9,7 @@ import { openSnackBar } from "@/app/lib/redux/slices/appSlice";
 import { addItem, setItems } from "@/app/lib/redux/slices/itemSlice";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/store";
 import {
+  ApiGetItem,
   ApiGetTypeSelectors,
   ApiPostImages,
   ApiPostItem,
@@ -22,7 +23,7 @@ import CreatableSelect from "react-select/creatable";
 import AdminImage from "../AdminImage/AdminImage";
 import "./AdminItems.scss";
 import { useMediaQuery } from "react-responsive";
-interface IInputData extends Omit<IItemDto, "images"> {}
+interface IInputData extends Omit<IItemDto, "images"> { }
 
 interface props {
   type?: "add" | "edit";
@@ -122,20 +123,24 @@ export default function AdminItems({ type = "add" }: props) {
   }, []);
 
   useEffect(() => {
-    if (type == "edit") {
-      const item = items.find((item) => item.id == Number(id));
-      if (item) {
-        setImages(item.images);
-        setValue("name", item.name);
-        setValue("description", item.description);
-        setValue("price", item.price);
-        setValue("gender", item.gender);
-        setSelectedType({ label: item.type, value: item.type });
-        setValue("is_active", item.is_active);
-        trigger();
+    const fetchData = async () => {
+      if (type === "edit") {
+        const item = await ApiGetItem(Number(id));
+        if (item) {
+          setImages(item.images);
+          setValue("name", item.name);
+          setValue("description", item.description);
+          setValue("price", item.price);
+          setValue("gender", item.gender);
+          setSelectedType({ label: item.type, value: item.type });
+          setValue("is_active", item.is_active);
+          trigger();
+        }
       }
-    }
-  }, [items]);
+    };
+
+    fetchData();
+  }, [type, id, trigger, setValue]);
 
   const handleChangeSelect = (
     newValue: SingleValue<ISelect> | MultiValue<ISelect>
