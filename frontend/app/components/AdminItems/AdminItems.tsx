@@ -23,6 +23,8 @@ import CreatableSelect from "react-select/creatable";
 import AdminImage from "../AdminImage/AdminImage";
 import "./AdminItems.scss";
 import { useMediaQuery } from "react-responsive";
+import Select from "react-select";
+import { selectTypes } from "../FindPage/FindPage";
 interface IInputData extends Omit<IItemDto, "images"> { }
 
 interface props {
@@ -132,7 +134,7 @@ export default function AdminItems({ type = "add" }: props) {
           setValue("description", item.description);
           setValue("price", item.price);
           setValue("gender", item.gender);
-          setSelectedType({ label: item.type, value: item.type });
+          setSelectedType({ label: selectTypes.find(i => i.value = item.type)?.label || item.type, value: item.type });
           setValue("is_active", item.is_active);
           trigger();
         }
@@ -224,9 +226,14 @@ export default function AdminItems({ type = "add" }: props) {
                 </select>
               </label>
               <label>
-                <CreatableSelect
+                {/* <CreatableSelect
                   isClearable
                   options={typeOptions}
+                  onChange={handleChangeSelect}
+                  value={selectedType}
+                /> */}
+                <Select
+                  options={selectTypes.slice(1)}
                   onChange={handleChangeSelect}
                   value={selectedType}
                 />

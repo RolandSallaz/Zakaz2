@@ -4,7 +4,7 @@ import { ApiGetItemsBySearch, ApiGetTypeSelectors } from "@/app/lib/utils/api";
 import { IItem, ISelect } from "@/app/lib/utils/types";
 import { debounce } from "lodash";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Hearts } from "react-loader-spinner";
 import { useMediaQuery } from "react-responsive";
@@ -19,6 +19,15 @@ const selectOptions = [
   { value: "female", label: "Женское" },
 ];
 
+export const selectTypes = [
+  { value: "*", label: "Все типы" },
+  { value: "bags", label: "Сумки" },
+  { value: "cloth", label: "Одежда" },
+  { value: "accessories", label: "Аксессуары" },
+  { value: "technique", label: "Техника" },
+  { value: "home", label: "Для дома" },
+]
+
 const defaultTypeSelector: ISelect = { value: "*", label: "Все типы" };
 
 export default function FindPage() {
@@ -29,68 +38,77 @@ export default function FindPage() {
     setValue,
   } = useForm<{ find: string }>();
   const router = useRouter();
-
   const searchParams = useSearchParams();
-  // const { data: items } = useAppSelector((state) => state.itemSlice);
+  const [initial, setInitial] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
   const inputValue = watch("find");
   const [selectedGender, setSelectedGender] = useState<ISelect>(selectOptions[0]);
-  const [selectedType, setSelectedType] = useState<ISelect>(defaultTypeSelector);
-  const [selectedTypeOptions, setSelectedTypeOptions] = useState<ISelect[]>([]);
+  const [selectedType, setSelectedType] = useState<ISelect>(selectTypes[0]);
+  // const [selectedTypeOptions, setSelectedTypeOptions] = useState<ISelect[]>(selectTypes);
   const { handleError } = useErrorHandler();
   const isMobile = useMediaQuery({ maxWidth: 1279 });
   const [page, setPage] = useState<number>(1);
   const [results, setResults] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
 
+  // Восстановление фильтров из sessionStorage
   useEffect(() => {
     window.scrollTo(0, 0);
+    const savedFilters = JSON.parse(sessionStorage.getItem("findPageFilters") || "{}");
     const paramValue = searchParams.get("search") || "";
-
     const paramGender = searchParams.get("gender") || "*";
+    const paramType = searchParams.get("type") || "*";
     const paramPage = Number(searchParams.get("page")) || 1;
-    setPage(paramPage);
-    setValue("find", paramValue == 'undefined' ? '' : paramValue);
-    setSelectedGender(
-      selectOptions.find((item) => item.value === paramGender) || selectOptions[0]
-    );
+    if (initial) {
+      setPage(paramPage);
+      setValue("find", paramValue === "undefined" ? "" : paramValue);
+      setSelectedGender(selectOptions.find((item) => item.value === paramGender) || selectOptions[0]);
+      setSelectedType(selectTypes.find((item) => item.value === paramType) || selectTypes[0]);
+    }
+    setInitial(false)
+
   }, [searchParams, setValue]);
 
+  // Обновление URL-параметров и sessionStorage
   const updateQueryParams = useCallback(
     (params: Record<string, string>) => {
       const searchParams = new URLSearchParams(window.location.search);
       Object.entries(params).forEach(([key, value]) => {
         searchParams.set(key, value);
       });
-      router.push(`${window.location.pathname}?${searchParams.toString()}`);
+      router.replace(`${window.location.pathname}?${searchParams.toString()}`);
+      sessionStorage.setItem("findPageFilters", JSON.stringify(params));
     },
     [router]
   );
 
   useEffect(() => {
-    updateQueryParams({
-      gender: selectedGender.value,
-      search: inputValue,
-      type: selectedType.value,
-      page: page.toString(),
-    });
+    if (!initial) {
+      updateQueryParams({
+        gender: selectedGender.value,
+        search: inputValue,
+        type: selectedType.value,
+        page: page.toString(),
+      });
+    }
+
   }, [selectedGender, selectedType, inputValue, updateQueryParams, page]);
 
   const handleChangeSelect = (newValue: SingleValue<ISelect>) => {
     setSelectedGender(newValue as ISelect);
   };
 
-  useEffect(() => {
-    ApiGetTypeSelectors()
-      .then((options) => {
-        const fetchedOptions: ISelect[] = options.map(
-          (item) => ({ label: item.name, value: item.name } as ISelect)
-        );
-        setSelectedTypeOptions([defaultTypeSelector, ...fetchedOptions]);
-      })
-      .catch(handleError);
-  }, [handleError]);
+  // useEffect(() => {
+  //   ApiGetTypeSelectors()
+  //     .then((options) => {
+  //       const fetchedOptions: ISelect[] = options.map(
+  //         (item) => ({ label: item.name, value: item.name } as ISelect)
+  //       );
+  //       setSelectedTypeOptions([defaultTypeSelector, ...fetchedOptions]);
+  //     })
+  //     .catch(handleError);
+  // }, [handleError]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -99,14 +117,15 @@ export default function FindPage() {
     const debouncedSearch = debounce(() => {
       ApiGetItemsBySearch({
         find: inputValue,
-        gender: selectedGender.value == '*' ? '' : selectedGender.value,
-        type: selectedType.value == '*' ? '' : selectedType.value,
+        gender: selectedGender.value === "*" ? "" : selectedGender.value,
+        type: selectedType.value === "*" ? "" : selectedType.value,
         page,
+        itemsInPage: 60,
       })
         .then((res) => {
-          setFilteredItems(res.items)
-          setResults(res.totalItems)
-          setTotalPages(res.totalPages)
+          setFilteredItems(res.items);
+          setResults(res.totalItems);
+          setTotalPages(res.totalPages);
         })
         .catch(handleError)
         .finally(() => setIsLoading(false));
@@ -126,7 +145,7 @@ export default function FindPage() {
   };
 
   function handlePageChange(newPage: number) {
-    setPage(newPage)
+    setPage(newPage);
   }
 
   return (
@@ -140,19 +159,18 @@ export default function FindPage() {
         <Select
           className="FindPage__select"
           options={selectOptions}
-          defaultValue={selectOptions[0]}
-          onChange={handleChangeSelect}
           value={selectedGender}
+          onChange={handleChangeSelect}
           isSearchable={false}
-          styles={{ menu: base => ({ ...base, zIndex: 9999 }) }}
+          styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
         />
         <Select
           className="FindPage__select"
           value={selectedType}
-          options={selectedTypeOptions}
+          options={selectTypes}
           onChange={handleChangeTypeSelect}
           isSearchable={false}
-          styles={{ menu: base => ({ ...base, zIndex: 9999 }) }}
+          styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
         />
       </div>
 
@@ -169,7 +187,14 @@ export default function FindPage() {
       ) : (
         <Cards items={filteredItems} columnsCount={isMobile ? 2 : 4} />
       )}
-      {totalPages > 0 && !isLoading && <Pagination totalPages={totalPages} currentPage={page} handlePageChange={handlePageChange} />}
+      {totalPages > 0 && !isLoading && page !== totalPages && (
+        <button className={"nextPage"} onClick={() => handlePageChange(page + 1)}>
+          Следующая страница
+        </button>
+      )}
+      {totalPages > 0 && !isLoading && (
+        <Pagination totalPages={totalPages} currentPage={page} handlePageChange={handlePageChange} />
+      )}
     </main>
   );
 }

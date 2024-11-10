@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .FindPage {
   min-height: 100vh;
   &__input {
@@ -16,6 +18,19 @@
   &__select {
     width: 220px;
 
+  }
+}
+
+.nextPage {
+  border: 2px solid $secondColor;
+  margin: 30px auto 10px auto;
+  padding: 15px;
+  width: 90%;
+  max-width: 768px;
+  border-radius: 10px;
+  font-size: 17px;
+  &:hover{
+    color:$secondColor;
   }
 }
 

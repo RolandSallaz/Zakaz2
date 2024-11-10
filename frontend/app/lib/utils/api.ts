@@ -141,8 +141,8 @@ export function ApiGetItemsByName(name: string): Promise<IItem[]> {
   return _fetch<IItem[]>({ url: `items/by-name/${name}` })
 }
 
-export function ApiGetItemsBySearch({ find, gender, type, page }: { find: string, gender: string | null, type: string, page: number; }): Promise<IItemPagination> {
-  return _fetch<IItemPagination>({ url: `items/search?find=${find}&gender=${gender}&type=${type}&page=${page}` })
+export function ApiGetItemsBySearch({ find, gender, type, page, itemsInPage = 20 }: { find: string, gender: string | null, type: string, page: number, itemsInPage?: number; }): Promise<IItemPagination> {
+  return _fetch<IItemPagination>({ url: `items/search?find=${find}&gender=${gender}&type=${type}&page=${page}&itemsInPage=${itemsInPage}` })
 
 }
 

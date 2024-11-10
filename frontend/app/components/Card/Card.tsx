@@ -11,6 +11,7 @@ import { IItem, TCardType } from "../../lib/utils/types";
 import "./Card.scss";
 import CheckBox from "../CheckBox/CheckBox";
 import Link from "next/link";
+import { selectTypes } from "../FindPage/FindPage";
 
 interface props {
   item: IItem;
@@ -164,7 +165,7 @@ export default function Card({
         className="card__type"
         href={`/find?${new URLSearchParams({ type: item.type }).toString()}`}
       >
-        {item.type}
+        {selectTypes.find(i=>i.value == item.type)?.label || item.type}
       </Link>
       <p className="card__price">{item.price.toLocaleString()} ₽</p>
     </>

@@ -1,16 +1,32 @@
 @import '../../variables.scss';
 .pagination {
     margin-top: 20px;
+    display: flex;
+    width: 100%;
+    max-width: 768px;
+    justify-content: space-between;
     &__button {
       color: $blurColor;
       font-size: 17px;
       font-weight: 500;
+      padding: 0 0.5em;
+      border-radius: 4px;
+      &_right {
+        transform: scaleX(-1);
+      }
       &_active {
-        color: $secondColor;
+        color: white;
         cursor: default;
+        background-color: $secondColor;
       }
       &:hover {
         opacity: 0.8;
+      }
+      svg {
+        color:black;
+        height: 100%;
+        width: 100%;
+        font-size: 30px;
       }
     }
   }

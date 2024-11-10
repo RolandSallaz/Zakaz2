@@ -10,6 +10,9 @@ import { Hearts } from "react-loader-spinner";
 import { ApiGetItemsWithPage } from "./lib/utils/api";
 import useErrorHandler from "./lib/hooks/useErrorHandler";
 import Link from "next/link";
+import Pagination from "./components/Pagination/Pagination";
+import maleImage from './lib/assets/male.jpg';
+import femaleImage from './lib/assets/female.jpg';
 export type mainFilter = "male" | "female" | "all" | "new";
 
 export default function Home() {
@@ -90,16 +93,16 @@ export default function Home() {
       <section className={styles.main__filters}>
         <FilterCard
           text="Женское"
-          image="https://shilliano.su/wp-content/uploads/2022/10/%D0%91%D0%B5%D0%B7-%D0%B8%D0%BC%D0%B5%D0%BD%D0%B8-13-1.png"
-          description="Теперь можешь порадовать не только
-          себя но и свою подругу ♥️"
+          image={femaleImage.src}
+          description="Товары лучше качества для нашей прекрасной половины"
           param={{ name: "gender", value: "female" }}
+          aboutText="Открыть"
         />
         <FilterCard
           text="Мужское"
-          image="https://img.joomcdn.net/9a8eebbe42af8198669cf87967b8dadbaa02e70b_original.jpeg"
+          image={maleImage.src}
           description="Только самые новые и стильные
-          коллекции в нашем магазине"
+          коллекции"
           param={{ name: "gender", value: "male" }}
         />
       </section>
@@ -124,14 +127,14 @@ export default function Home() {
           <Link href={'find?gender=male'}
             className={`${styles.tags__button} ${selectedFilter === "male" ? styles.tags__button_active : ""
               }`}
-            // onClick={() => setSelectedFilter("male")}
+          // onClick={() => setSelectedFilter("male")}
           >
             Он
           </Link>
           <Link href={'find?gender=female'}
             className={`${styles.tags__button} ${selectedFilter === "female" ? styles.tags__button_active : ""
               }`}
-            // onClick={() => setSelectedFilter("female")}
+          // onClick={() => setSelectedFilter("female")}
           >
             Она
           </Link>
@@ -175,45 +178,7 @@ export default function Home() {
           type={columnsCount < (isMobile ? 2 : 4) ? "big" : "default"}
         />
       )}
-
-      <div className={styles.pagination}>
-        {/* Кнопка "Предыдущая" */}
-        {totalPages > 0 && (
-          <button
-            className={styles.pagination__button}
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Назад
-          </button>
-        )}
-
-        {/* Кнопки страниц */}
-        {getPageNumbers().map((number, index) => (
-          <button
-            key={index}
-            className={`${styles.pagination__button} ${currentPage === number ? styles.pagination__button_active : ""
-              }`}
-            onClick={() =>
-              typeof number === "number" && handlePageChange(number)
-            }
-            disabled={typeof number !== "number"}
-          >
-            {number}
-          </button>
-        ))}
-
-        {/* Кнопка "Следующая" */}
-        {totalPages > 0 && (
-          <button
-            className={styles.pagination__button}
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Вперед
-          </button>
-        )}
-      </div>
+      <Pagination totalPages={totalPages} currentPage={currentPage} handlePageChange={handlePageChange} />
     </main>
   );
 }
