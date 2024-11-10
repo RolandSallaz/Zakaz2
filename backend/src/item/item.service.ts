@@ -120,7 +120,8 @@ export class ItemService {
         {
           gender,
           unisex: 'unisex',
-      });
+        },
+      );
     } else {
       queryBuilder.andWhere('item.gender IN (:...genders)', {
         genders: ['unisex', 'male', 'female'],
@@ -132,6 +133,7 @@ export class ItemService {
         type: type.toLowerCase(),
       });
     }
+    queryBuilder.orderBy('item.start_sell_date', 'DESC');
 
     // Сначала получаем общее количество найденных элементов
     const totalItems = await queryBuilder.getCount();
@@ -178,6 +180,8 @@ export class ItemService {
       .skip((page - 1) * itemsInPage)
       .take(itemsInPage)
       .getMany();
+
+    queryBuilder.orderBy('item.start_sell_date', 'DESC');
 
     // Вычисляем общее количество страниц
     const totalPages = Math.ceil(totalItems / itemsInPage);
