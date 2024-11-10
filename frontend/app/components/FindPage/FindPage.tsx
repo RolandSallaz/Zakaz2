@@ -21,11 +21,12 @@ const selectOptions = [
 
 export const selectTypes = [
   { value: "*", label: "Все типы" },
-  { value: "bags", label: "Сумки" },
-  { value: "cloth", label: "Одежда" },
-  { value: "accessories", label: "Аксессуары" },
-  { value: "technique", label: "Техника" },
-  { value: "home", label: "Для дома" },
+  { value: "Сумки", label: "Сумки" },
+  { value: "Обувь", label: "Обувь" },
+  { value: "Одежда", label: "Одежда" },
+  { value: "Аксессуары", label: "Аксессуары" },
+  { value: "Техника", label: "Техника" },
+  { value: "Для дома", label: "Для дома" },
 ]
 
 const defaultTypeSelector: ISelect = { value: "*", label: "Все типы" };
