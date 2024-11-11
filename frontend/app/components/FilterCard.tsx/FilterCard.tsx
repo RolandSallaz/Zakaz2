@@ -12,7 +12,7 @@ interface props {
   aboutText?: string;
 }
 
-export default function FilterCard({ image, text, description, param, aboutText = 'Подробнее' }: props) {
+export default function FilterCard({ image, text, description, param, aboutText = 'Открыть' }: props) {
   const router = useRouter();
   const { isHovered, handleHovered } = useHover();
   const link = `/find?${new URLSearchParams({

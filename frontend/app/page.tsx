@@ -96,7 +96,6 @@ export default function Home() {
           image={femaleImage.src}
           description="Товары лучше качества для нашей прекрасной половины"
           param={{ name: "gender", value: "female" }}
-          aboutText="Открыть"
         />
         <FilterCard
           text="Мужское"

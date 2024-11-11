@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "swiper/css";
 import 'swiper/css/zoom';
 import SwiperCore from 'swiper';
@@ -69,6 +69,10 @@ export default function ItemPage({ item }: ItemPageProps) {
   const closeFullscreen = () => {
     setIsFullscreen(false);
   };
+
+  useEffect(() => {
+    sessionStorage.setItem('lastVisited', String(item.id));
+  }, [])
 
   return (
     <main className="main ItemPage">

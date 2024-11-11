@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent } from "react";
+import { ChangeEvent, MouseEvent, useEffect } from "react";
 import useHover from "../../lib/hooks/useHover";
 import {
   addLikes,
@@ -75,9 +75,8 @@ export default function Card({
         <div className="card__flex">
           <p className="card__type">{item.type}</p>
           <button
-            className={`card__cart-button card__cart-button_like ${
-              isItemLiked && "card__cart-button_like_active"
-            }`}
+            className={`card__cart-button card__cart-button_like ${isItemLiked && "card__cart-button_like_active"
+              }`}
             onClick={(e) =>
               isItemLiked ? handleRemoveFromLikes(e) : handleLikeClick(e)
             }
@@ -110,7 +109,7 @@ export default function Card({
           </button>
         </div>
       </div>
-      <p className="card__price">{item.price.toLocaleString()} ₽</p>
+      <p className="card__price">{item.price == 0 ? 'По запросу' : `${item.price.toLocaleString()} ₽`}</p>
     </>
   );
 
@@ -124,14 +123,14 @@ export default function Card({
         }}
         onMouseEnter={handleHovered}
         onMouseLeave={handleHovered}
+        id={item.id.toString()}
       >
         <button
           onClick={(e) =>
             isItemInCart ? handleRemoveFromCart(e) : handleAddToCartClick(e)
           }
-          className={`card__button card__button_buy ${
-            isHovered && "card__button_buy_hovered"
-          }`}
+          className={`card__button card__button_buy ${isHovered && "card__button_buy_hovered"
+            }`}
         >
           {isItemInCart ? "Убрать из корзины" : "В корзину"}
         </button>
@@ -139,9 +138,8 @@ export default function Card({
           onClick={(e) =>
             isItemLiked ? handleRemoveFromLikes(e) : handleLikeClick(e)
           }
-          className={`card__button card__button_like ${
-            isItemLiked && "card__button_like_active"
-          } ${isHovered && "card__button_like_hovered"}`}
+          className={`card__button card__button_like ${isItemLiked && "card__button_like_active"
+            } ${isHovered && "card__button_like_hovered"}`}
         >
           <svg
             viewBox="0 0 1024 1024"
@@ -165,9 +163,9 @@ export default function Card({
         className="card__type"
         href={`/find?${new URLSearchParams({ type: item.type }).toString()}`}
       >
-        {selectTypes.find(i=>i.value == item.type)?.label || item.type}
+        {selectTypes.find(i => i.value == item.type)?.label || item.type}
       </Link>
-      <p className="card__price">{item.price.toLocaleString()} ₽</p>
+      <p className="card__price">{item.price == 0 ? 'По запросу' : `${item.price.toLocaleString()} ₽`}</p>
     </>
   );
 

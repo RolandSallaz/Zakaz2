@@ -134,7 +134,10 @@ export default function AdminItems({ type = "add" }: props) {
           setValue("description", item.description);
           setValue("price", item.price);
           setValue("gender", item.gender);
-          setSelectedType({ label: selectTypes.find(i => i.value = item.type)?.label || item.type, value: item.type });
+          const type = selectTypes.find(i => i.value == item.type);
+          if (type) {
+            setSelectedType(type);
+          }
           setValue("is_active", item.is_active);
           trigger();
         }
@@ -236,6 +239,7 @@ export default function AdminItems({ type = "add" }: props) {
                   options={selectTypes.slice(1)}
                   onChange={handleChangeSelect}
                   value={selectedType}
+                  styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
                 />
               </label>
               <label className="form__label">

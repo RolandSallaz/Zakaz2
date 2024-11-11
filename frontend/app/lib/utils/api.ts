@@ -122,7 +122,7 @@ export function ApiGetItems(): Promise<IItem[]> {
 }
 
 export function ApiGetItemsWithPage({
-  itemsInPage = 8,
+  itemsInPage = 20,
   page = 1,
   filter = 'all',
 }: {

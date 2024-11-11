@@ -12,6 +12,7 @@ import Select, { SingleValue } from "react-select";
 import Cards from "../Cards/Cards";
 import Pagination from "../Pagination/Pagination";
 import "./FindPage.scss";
+import ColumnsCount from "../ColumnsCount/ColumnsCount";
 
 const selectOptions = [
   { value: "*", label: "Все" },
@@ -52,11 +53,11 @@ export default function FindPage() {
   const [page, setPage] = useState<number>(1);
   const [results, setResults] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [columnsCount, setColumnsCount] = useState<number>(0);
 
   // Восстановление фильтров из sessionStorage
   useEffect(() => {
     window.scrollTo(0, 0);
-    const savedFilters = JSON.parse(sessionStorage.getItem("findPageFilters") || "{}");
     const paramValue = searchParams.get("search") || "";
     const paramGender = searchParams.get("gender") || "*";
     const paramType = searchParams.get("type") || "*";
@@ -149,14 +150,36 @@ export default function FindPage() {
     setPage(newPage);
   }
 
+  useEffect(() => {
+    if (filteredItems) {
+      const lastVisitedItem = sessionStorage.getItem('lastVisited')
+      const item = filteredItems.find((i => i.id == Number(lastVisitedItem)));
+      if (item) {
+        const element = document.getElementById(item.id.toString());
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+          sessionStorage.removeItem('lastVisited')
+        }
+      }
+    }
+  }, [filteredItems]);
+
+  useEffect(() => {
+    setColumnsCount(isMobile ? 2 : 4);
+  }, [isMobile]);
+
   return (
     <main className="main FindPage">
       <div className="FindPage__container">
-        <input
-          className="FindPage__input"
-          placeholder="Поиск"
-          {...register("find", { minLength: 2 })}
-        />
+        <div className="FindPage__search-container">
+          <input
+            className="FindPage__input"
+            placeholder="Поиск"
+            {...register("find", { minLength: 2 })}
+          />
+          {isMobile && (<ColumnsCount isMobile={isMobile} columnsCount={columnsCount} setColumnsCount={setColumnsCount} />)}
+        </div>
+
         <Select
           className="FindPage__select"
           options={selectOptions}
@@ -173,6 +196,7 @@ export default function FindPage() {
           isSearchable={false}
           styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
         />
+         {!isMobile && (<ColumnsCount isMobile={isMobile} columnsCount={columnsCount} setColumnsCount={setColumnsCount} />)}
       </div>
 
       {isDirty && <p>Результатов: {results}</p>}
@@ -186,7 +210,7 @@ export default function FindPage() {
           visible={true}
         />
       ) : (
-        <Cards items={filteredItems} columnsCount={isMobile ? 2 : 4} />
+        <Cards items={filteredItems} columnsCount={columnsCount} />
       )}
       {totalPages > 0 && !isLoading && page !== totalPages && (
         <button className={"nextPage"} onClick={() => handlePageChange(page + 1)}>
