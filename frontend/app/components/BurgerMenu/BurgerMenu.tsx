@@ -61,7 +61,7 @@ export default function BurgerMenu() {
           </button>
         </div>
         <div className="BurgerMenu__bottom-container">
-          <div className="burger-search">
+          {/* <div className="burger-search">
             <Link className="burger-search__button" href={'find'}>
               <svg
                 viewBox="0 0 1024 1024"
@@ -82,7 +82,7 @@ export default function BurgerMenu() {
                 {searchedItems.map(item => (<li key={item.id}><Link href={`items/${item.id}`}>{item.name}</Link></li>))}
               </ul>
             )}
-          </div>
+          </div> */}
           <Link
             className="BurgerMenu__button"
             href={`/find?${new URLSearchParams({ gender: "female" }).toString()}`}

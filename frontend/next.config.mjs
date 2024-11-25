@@ -21,7 +21,7 @@ const localIp = getLocalIp();  // Теперь функция выберет IP 
 const nextConfig = {
   output: "standalone",
   env: {
-    apiUrl: dev ? `http://${localIp}:3000` : `${process.env.NEXT_PUBLIC_DOMAIN}/api`,
+    apiUrl: dev ? `http://${localIp}:3000/api` : `${process.env.NEXT_PUBLIC_DOMAIN}/api`,
   },
 };
 
