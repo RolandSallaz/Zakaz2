@@ -105,15 +105,22 @@ export class ItemService {
     page?: number;
   }) {
     const queryBuilder = this.itemRepository.createQueryBuilder('item');
-    const searchTerm = find.toLowerCase();
-
-    if (searchTerm) {
-      queryBuilder.andWhere(
-        '(LOWER(item.name) LIKE :searchTerm OR LOWER(item.description) LIKE :searchTerm OR LOWER(item.type) LIKE :searchTerm)',
-        { searchTerm: `%${searchTerm}%` },
-      );
+  
+    if (find) {
+      const searchTerms = find
+        .toLowerCase()
+        .split(' ')
+        .filter(term => term.trim() !== ''); // Разбиваем строку на слова и убираем пустые строки
+  
+      // Добавляем условия для каждого слова
+      searchTerms.forEach((term, index) => {
+        queryBuilder.andWhere(
+          `(LOWER(item.name) LIKE :searchTerm${index} OR LOWER(item.description) LIKE :searchTerm${index} OR LOWER(item.type) LIKE :searchTerm${index})`,
+          { [`searchTerm${index}`]: `%${term}%` },
+        );
+      });
     }
-
+  
     if (gender) {
       queryBuilder.andWhere(
         '(item.gender = :gender OR item.gender = :unisex)',
@@ -127,26 +134,27 @@ export class ItemService {
         genders: ['unisex', 'male', 'female'],
       });
     }
-
+  
     if (type) {
       queryBuilder.andWhere('LOWER(item.type) = :type', {
         type: type.toLowerCase(),
       });
     }
+    
     queryBuilder.orderBy('item.start_sell_date', 'DESC');
-
-    // Сначала получаем общее количество найденных элементов
+  
+    // Получаем общее количество найденных элементов
     const totalItems = await queryBuilder.getCount();
-
+  
     // Пагинация
     const items = await queryBuilder
       .skip((page - 1) * itemsInPage)
       .take(itemsInPage)
       .getMany();
-
+  
     // Вычисляем общее количество страниц
     const totalPages = Math.ceil(totalItems / itemsInPage);
-
+  
     return {
       items,
       totalPages,
@@ -154,7 +162,6 @@ export class ItemService {
       totalItems,
     };
   }
-
   async getByPages(
     itemsInPage: number,
     page: number = 1,

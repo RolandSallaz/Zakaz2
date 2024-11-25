@@ -17,7 +17,7 @@ async function bootstrap() {
     }),
   );
   app.use(compression());
-  app.setGlobalPrefix(configService.get('isDev') ? '' : 'api');
+  app.setGlobalPrefix('api');
   app.enableCors({
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
