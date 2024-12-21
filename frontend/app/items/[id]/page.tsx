@@ -17,13 +17,13 @@ export async function generateMetadata({
   const item = await fetchData(id);
   return {
     title: item
-      ? `${item.name} - купить в магазине эксклюзивной одежды ${process.env.NEXT_PUBLIC_SHOP_NAME}`
+      ? `Купить ${item.name}`
       : "Загрузка...",
     openGraph: {
       title: item
-        ? `${item.name} - купить в магазине эксклюзивной одежды ${process.env.NEXT_PUBLIC_SHOP_NAME}`
+        ? `Купить ${item.name}`
         : "Загрузка...",
-      description: item ? item.description : "",
+      description: item ? `Купить ${item.name} в продаже магазине эсклюзивной одежды ${process.env.NEXT_PUBLIC_SHOP_NAME}` : "",
       images: item ? [item.images[0]] : [],
       url: `${process.env.NEXT_PUBLIC_DOMAIN}/items/${id}`,
     },

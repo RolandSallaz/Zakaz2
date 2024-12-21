@@ -86,6 +86,7 @@ services:
       - ./logs/tgBot_service:/app/logs
 
   nginx:
+    restart: always
     build:
       context: nginx
     ports:
