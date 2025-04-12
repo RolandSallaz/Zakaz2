@@ -100,7 +100,6 @@ services:
     networks:
       - net
   
-services:
   certbot:
     build:
       context: ./nodejs-certbot-autoupdater 
