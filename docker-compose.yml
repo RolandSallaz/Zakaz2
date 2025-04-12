@@ -99,6 +99,19 @@ services:
       - backend
     networks:
       - net
+  
+services:
+  certbot:
+    build:
+      context: ./nodejs-certbot-autoupdater 
+      dockerfile: Dockerfile              
+    restart: always
+    environment:
+      - EMAIL=${EMAIL_LOGIN}      
+      - DOMAIN=${DOMAIN}
+    volumes:
+      - ./ssl:/app/ssl                  
+      - ./ssl:/app/data                      
 
 networks:
   net:

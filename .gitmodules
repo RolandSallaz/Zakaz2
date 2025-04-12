@@ -4,3 +4,6 @@
 [submodule "systemInfoService"]
 	path = systemInfoService
 	url = https://github.com/RolandSallaz/systemInfoService.git
+[submodule "nodejs-certbot-autoupdater"]
+	path = nodejs-certbot-autoupdater
+	url = https://github.com/RolandSallaz/nodejs-certbot-autoupdater
