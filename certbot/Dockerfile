@@ -2,18 +2,14 @@ FROM ubuntu:22.04
 
 EXPOSE 6000 80
 
-WORKDIR /certbot
-COPY . /certbot
-WORKDIR /certbot
+# Устанавливаем необходимые пакеты
+RUN apt-get update && apt-get install -y certbot cron nginx
 
-RUN apt-get update
-RUN apt-get -y install certbot cron
+# Копируем файл cron из вашей папки certbot в контейнер
+COPY certbot/certbot-renew.cron /etc/cron.d/certbot-renew
 
-# добавляем скрипт генерации сертификатов
-RUN chmod +x generate-certificate.sh
+# Устанавливаем права для cron файла
+RUN chmod 0644 /etc/cron.d/certbot-renew
 
-# создаем cronjob для автообновления сертификатов
-RUN echo "@monthly /certbot/generate-certificate.sh" >> /etc/crontab
-
-# запускаем cron
-CMD cron && tail
+# Запускаем cron
+CMD ["cron", "-f"]

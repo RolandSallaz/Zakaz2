@@ -112,8 +112,7 @@ services:
       - DOMAIN=${DOMAIN}
     volumes:
       - ./ssl:/app/ssl                  
-      - ./ssl:/app/data
-      - ./certbot/www:/var/www/certbot
+      - ./certbot:/etc/cron.d
     networks:
       - net
 
