@@ -100,7 +100,7 @@ services:
     networks:
       - net
 
-certbot:
+  certbot:
     build:
       context: ./nodejs-certbot-autoupdater 
       dockerfile: Dockerfile              
