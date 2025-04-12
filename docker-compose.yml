@@ -94,6 +94,9 @@ services:
       - "443:443"
     volumes:
       - ./ssl:/etc/ssl
+    environment:
+   
+      - DOMAIN=${DOMAIN}
     depends_on:
       - frontend
       - backend
@@ -101,21 +104,31 @@ services:
     networks:
       - net
 
-  certbot:
+  # certbot:
+  #   ports:
+  #     - "6000:80"
+  #   build:
+  #     context: certbot
+  #     dockerfile: Dockerfile              
+  #   restart: always
+  #   environment:
+  #     - EMAIL=${EMAIL_LOGIN}      
+  #     - DOMAIN=${DOMAIN}
+  #   volumes:
+  #     - ./ssl:/app/ssl                  
+  #     - ./certbot:/etc/cron.d
+  #   networks:
+  #     - net
+  letsencrypt:
     ports:
-      - "6000:80"
-    build:
-      context: certbot
-      dockerfile: Dockerfile              
-    restart: always
-    environment:
-      - EMAIL=${EMAIL_LOGIN}      
-      - DOMAIN=${DOMAIN}
+      - "80:80"
+    image: certbot/certbot:latest
+    command: sh -c "certbot certonly --standalone -d ${DOMAIN} --text --agree-tos --email ${EMAIL_LOGIN} --server https://acme-v02.api.letsencrypt.org/directory --rsa-key-size 4096 --verbose --keep-until-expiring --preferred-challenges=http"
+    entrypoint: ""
     volumes:
-      - ./ssl:/app/ssl                  
-      - ./certbot:/etc/cron.d
-    networks:
-      - net
+      - "./ssl:/etc/letsencrypt"
+    environment:
+      - TERM=xterm
 
 networks:
   net:
