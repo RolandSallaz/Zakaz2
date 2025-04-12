@@ -101,8 +101,10 @@ services:
       - net
 
   certbot:
+    ports:
+      - "6000:80"
     build:
-      context: ./nodejs-certbot-autoupdater 
+      context: certbot
       dockerfile: Dockerfile              
     restart: always
     environment:
@@ -112,6 +114,8 @@ services:
       - ./ssl:/app/ssl                  
       - ./ssl:/app/data
       - ./certbot/www:/var/www/certbot
+    networks:
+      - net
 
 networks:
   net:
