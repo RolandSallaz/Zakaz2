@@ -121,7 +121,7 @@ services:
   #     - net
   letsencrypt:
     ports:
-      - "80:80"
+      - "6000:80"
     image: certbot/certbot:latest
     command: sh -c "certbot certonly --standalone -d ${DOMAIN} --text --agree-tos --email ${EMAIL_LOGIN} --server https://acme-v02.api.letsencrypt.org/directory --rsa-key-size 4096 --verbose --keep-until-expiring --preferred-challenges=http"
     entrypoint: ""
