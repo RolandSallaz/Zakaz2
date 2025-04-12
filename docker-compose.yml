@@ -97,6 +97,7 @@ services:
     depends_on:
       - frontend
       - backend
+      - certbot
     networks:
       - net
 
