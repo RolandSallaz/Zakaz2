@@ -16,4 +16,4 @@ RUN chmod +x generate-certificate.sh
 RUN echo "@monthly /certbot/generate-certificate.sh" >> /etc/crontab
 
 # запускаем cron
-CMD cron && tail -f /var/log/cron.log
+CMD cron && tail
