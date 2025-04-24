@@ -25,6 +25,7 @@
     "react-select": "^5.8.0",
     "react-yandex-metrika": "^2.6.0",
     "sass": "^1.77.8",
+    "sharp": "^0.34.1",
     "socket.io-client": "^4.7.5",
     "swiper": "^11.1.8"
   },
