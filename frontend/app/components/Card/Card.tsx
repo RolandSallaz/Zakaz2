@@ -278,7 +278,7 @@ export default function Card({
   return (
     <div className={`card card_type_${type}`}>
       {/* {type == "cart" ? cartItem : defaultItem} дефолтная карточка*/}
-      {type == "cart" ? cartItem : cardWithSlide} дефолтная карточка
+      {type == "cart" ? cartItem : cardWithSlide}
     </div>
   );
 }
