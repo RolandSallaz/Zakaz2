@@ -80,7 +80,7 @@ export default function ItemPage({ item }: ItemPageProps) {
         <h1 className="ItemPage__name">{item.name}</h1>
 
         {isMobile ? (
-          <Swiper slidesPerView={1} spaceBetween={10} className="swiper" modules={[Autoplay]}>
+          <Swiper slidesPerView={1} spaceBetween={10} className="ItemPage__swiper" modules={[Autoplay]}>
             {item.images.map((image, index) => (
               <SwiperSlide key={index}>
                 <img
