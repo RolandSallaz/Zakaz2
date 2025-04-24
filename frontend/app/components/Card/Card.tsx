@@ -1,4 +1,10 @@
+import Link from "next/link";
 import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import SwiperCore from 'swiper';
+import "swiper/css";
+import 'swiper/css/pagination';
+import { EffectCards, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import useHover from "../../lib/hooks/useHover";
 import {
   addLikes,
@@ -6,17 +12,11 @@ import {
   removeFromCart,
   removeFromLikes,
 } from "../../lib/redux/slices/appSlice";
-import { useAppSelector, useAppDispatch } from "../../lib/redux/store";
+import { useAppDispatch, useAppSelector } from "../../lib/redux/store";
 import { IItem, TCardType } from "../../lib/utils/types";
-import "./Card.scss";
 import CheckBox from "../CheckBox/CheckBox";
-import Link from "next/link";
 import { selectTypes } from "../FindPage/FindPage";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectCards, Navigation, Pagination, Virtual, Zoom } from "swiper/modules";
-import SwiperCore from 'swiper';
-import "swiper/css";
-import 'swiper/css/pagination';
+import "./Card.scss";
 
 interface props {
   item: IItem;
