@@ -17,6 +17,7 @@ import { IItem, TCardType } from "../../lib/utils/types";
 import CheckBox from "../CheckBox/CheckBox";
 import { selectTypes } from "../FindPage/FindPage";
 import "./Card.scss";
+import Image from "next/image";
 
 interface props {
   item: IItem;
@@ -141,12 +142,14 @@ export default function Card({
           {item.images.map((image, index) => (
             <SwiperSlide key={index} className="card__swiper_slide">
               <div className="blur" style={{ backgroundImage: `url(${image})` }} />
-              <img
+              <Image
                 onClick={() => { }}
                 src={image}
                 alt={`Изображение ${item.name}`}
                 className={`card__swiper_img`}
                 loading="lazy"
+                width={315}
+                height={385}
               />
 
             </SwiperSlide>

@@ -22,6 +22,8 @@ const nextConfig = {
   output: "standalone",
   env: {
     apiUrl: dev ? `http://${localIp}:3000/api` : `${process.env.NEXT_PUBLIC_DOMAIN}/api`,
+  }, images: {
+    domains: [localIp, 'blinkresale.ru'],
   },
 };
 
