@@ -23,7 +23,10 @@ const nextConfig = {
   env: {
     apiUrl: dev ? `http://${localIp}:3000/api` : `${process.env.NEXT_PUBLIC_DOMAIN}/api`,
   }, images: {
-    domains: [localIp, 'blinkresale.ru'],
+    domains: [
+      ...(dev ? [localIp] : []),
+      ...(process.env.NEXT_PUBLIC_DOMAIN ? [new URL(process.env.NEXT_PUBLIC_DOMAIN).hostname] : []),
+    ],
   },
 };
 

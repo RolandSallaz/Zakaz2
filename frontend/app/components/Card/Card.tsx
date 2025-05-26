@@ -37,6 +37,7 @@ export default function Card({
   const swiperRef = useRef<SwiperCore | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const [slideInterval, setSlideInterval] = useState<NodeJS.Timeout | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   function handleLikeClick(e: MouseEvent) {
     e.preventDefault();
@@ -74,7 +75,7 @@ export default function Card({
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     let interval: NodeJS.Timeout;
-  
+
     if (isHovered) {
       timeout = setTimeout(() => {
         interval = setInterval(() => {
@@ -84,7 +85,7 @@ export default function Card({
       }, 2000);
       setHoverTimeout(timeout);
     }
-  
+
     return () => {
       clearTimeout(timeout);
       clearInterval(interval);
@@ -136,24 +137,36 @@ export default function Card({
           className="card__swiper"
           modules={[Pagination, EffectCards]}
           pagination
-          onSwiper={(swiper) => (swiperRef.current = swiper)}
           loop
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+            setActiveIndex(swiper.realIndex);
+          }}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
         >
-          {item.images.map((image, index) => (
-            <SwiperSlide key={index} className="card__swiper_slide">
-              <div className="blur" style={{ backgroundImage: `url(${image})` }} />
-              <Image
-                onClick={() => { }}
-                src={image}
-                alt={`Изображение ${item.name}`}
-                className={`card__swiper_img`}
-                loading="lazy"
-                width={315}
-                height={385}
-              />
+          {item.images.map((image, index) => {
+            const total = item.images.length;
+            const prevIndex = (activeIndex - 1 + total) % total;
+            const nextIndex = (activeIndex + 1) % total;
 
-            </SwiperSlide>
-          ))}
+            const shouldRender = index === activeIndex || index === prevIndex || index === nextIndex;
+
+            return (
+              <SwiperSlide key={index} className="card__swiper_slide">
+                <div className="blur" style={{ backgroundImage: `url(${image})` }} />
+                {shouldRender && (
+                  <Image
+                    src={image}
+                    alt={`Изображение ${item.name}`}
+                    className="card__swiper_img"
+                    loading="lazy"
+                    width={315}
+                    height={385}
+                  />
+                )}
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </Link>
       <h2 className="card__name">
