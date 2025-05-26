@@ -27,6 +27,7 @@ const nextConfig = {
       ...(dev ? [localIp] : []),
       ...(process.env.NEXT_PUBLIC_DOMAIN ? [new URL(process.env.NEXT_PUBLIC_DOMAIN).hostname] : []),
     ],
+    formats: ['image/webp']
   },
 };
 

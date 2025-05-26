@@ -149,6 +149,7 @@ export default function Card({
             src={item.images[0]}
             fill
             alt="фоновое изображение карточки"
+            quality={30}
           />
           {item.images.map((image, index) => {
             const total = item.images.length;
