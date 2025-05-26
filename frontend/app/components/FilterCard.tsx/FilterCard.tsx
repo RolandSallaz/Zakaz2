@@ -30,11 +30,13 @@ export default function FilterCard({ image, text, description, param, aboutText 
       onMouseLeave={handleHovered}
       onClick={handleCardClick}
     >
-      <img
+      <Image
         src={image}
         className={`filterCard__image ${isHovered && "filterCard__image_hovered"
           }`}
         alt="Изображение карточки"
+        height={660}
+        width={550}
       />
       <div className="filterCard__container">
         <h3 className="filterCard__heading">{text}</h3>

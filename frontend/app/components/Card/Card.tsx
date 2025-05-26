@@ -144,6 +144,12 @@ export default function Card({
           }}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
         >
+          <Image
+            className="blur"
+            src={item.images[0]}
+            fill
+            alt="фоновое изображение карточки"
+          />
           {item.images.map((image, index) => {
             const total = item.images.length;
             const prevIndex = (activeIndex - 1 + total) % total;
@@ -153,15 +159,13 @@ export default function Card({
 
             return (
               <SwiperSlide key={index} className="card__swiper_slide">
-                <div className="blur" style={{ backgroundImage: `url(${image})` }} />
                 {shouldRender && (
                   <Image
                     src={image}
                     alt={`Изображение ${item.name}`}
                     className="card__swiper_img"
                     loading="lazy"
-                    width={315}
-                    height={385}
+                    fill
                   />
                 )}
               </SwiperSlide>
