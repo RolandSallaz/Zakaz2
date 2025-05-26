@@ -132,6 +132,14 @@ export default function Card({
           className={`card__image ${isHovered && "card__image_hovered"}`}
           style={{ backgroundImage: `url(${item.images[0]})` }}
         /> */}
+        <Image
+          className="blur"
+          src={item.images[0]}
+          alt="фоновое изображение карточки"
+          width={369}
+          height={385}
+          quality={1}
+        />
         <Swiper
           slidesPerView={1}
           className="card__swiper"
@@ -144,13 +152,7 @@ export default function Card({
           }}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
         >
-          <Image
-            className="blur"
-            src={item.images[0]}
-            fill
-            alt="фоновое изображение карточки"
-            quality={30}
-          />
+
           {item.images.map((image, index) => {
             const total = item.images.length;
             const prevIndex = (activeIndex - 1 + total) % total;
@@ -166,7 +168,9 @@ export default function Card({
                     alt={`Изображение ${item.name}`}
                     className="card__swiper_img"
                     loading="lazy"
-                    fill
+                    quality={50}
+                    width={369}
+                    height={385}
                   />
                 )}
               </SwiperSlide>
