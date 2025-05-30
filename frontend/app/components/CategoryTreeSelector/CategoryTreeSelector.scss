@@ -1,0 +1,45 @@
+@import "../../variables.scss";
+
+.CategoryTreeSelector {
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    &__container {
+        position: absolute;
+        top: 40px;
+        left: 0;
+
+        // &::before {
+        //     z-index: -2;
+        //     content: '';
+        //     position: fixed;
+        //     top: 0;
+        //     left: 0;
+        //     right: 0;
+        //     bottom: 0;
+        //     background-color: rgba($color: #000000, $alpha: 0.3);
+        // }
+
+    }
+
+    &__image {
+        border: 1px solid rgb(155, 155, 155);
+        border-radius: 4px;
+        font-size: 28px;
+        color: rgb(155, 155, 155);
+        width: 100%;
+        height: 100%;
+        padding: 6px;
+        margin: auto 0;
+
+        &_active {
+            color: $secondColor;
+            border-color: $secondColor;
+        }
+    }
+
+
+}

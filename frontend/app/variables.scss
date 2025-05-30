@@ -2,6 +2,8 @@ $secondColor: rgb(151, 41, 255);
 $blurColor: #9b9b9b;
 $gray: rgba(184, 184, 184, 0.123);
 $closeColor: #535353;
+$blueColor: rgb(116, 118, 255);
+
 @mixin order-button {
   background-color: $secondColor;
   color: white;
@@ -9,6 +11,7 @@ $closeColor: #535353;
   font-size: 16px;
   font-weight: 500;
   border-radius: 10px;
+
   &:disabled {
     background-color: $blurColor;
     cursor: default;
@@ -44,11 +47,12 @@ $closeColor: #535353;
   grid-template-columns: repeat(auto-fit, minmax(92px, 96px));
   grid-auto-flow: row;
   gap: 10px;
+
   @media screen and (max-width: 1279px) {
-    grid-template-columns: repeat(
-      2,
-      1fr
-    ); /* Изменения для мобильных устройств */
-    gap: 5px; /* Изменения для мобильных устройств */
+    grid-template-columns: repeat(2,
+        1fr);
+    /* Изменения для мобильных устройств */
+    gap: 5px;
+    /* Изменения для мобильных устройств */
   }
 }

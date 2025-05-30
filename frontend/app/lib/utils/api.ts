@@ -17,7 +17,12 @@ import {
 } from "./types";
 
 function checkResponse<T>(res: Response): Promise<T> {
-  return res.ok ? res.json() : res.json().then((data) => Promise.reject(data));
+  if (!res.ok) {
+    return res.text().then((text) => {
+      throw new Error(`HTTP error! status: ${res.status}, response: ${text}`);
+    });
+  }
+  return res.json();
 }
 
 function _fetch<T>({ url, method = "GET", headers, body }: IFetch): Promise<T> {
@@ -141,8 +146,8 @@ export function ApiGetItemsByName(name: string): Promise<IItem[]> {
   return _fetch<IItem[]>({ url: `items/by-name/${name}` })
 }
 
-export function ApiGetItemsBySearch({ find, gender, type, page, itemsInPage = 20 }: { find: string, gender: string | null, type: string, page: number, itemsInPage?: number; }): Promise<IItemPagination> {
-  return _fetch<IItemPagination>({ url: `items/search?find=${find}&gender=${gender}&type=${type}&page=${page}&itemsInPage=${itemsInPage}` })
+export function ApiGetItemsBySearch({ find, page, itemsInPage = 20, category = [] }: { find: string, page: number, category: string[], itemsInPage?: number; }): Promise<IItemPagination> {
+  return _fetch<IItemPagination>({ url: `items/search?find=${find}&category=${category}&page=${page}&itemsInPage=${itemsInPage}` })
 
 }
 

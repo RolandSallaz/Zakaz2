@@ -85,13 +85,13 @@ export default function BurgerMenu() {
           </div> */}
           <Link
             className="BurgerMenu__button"
-            href={`/find?${new URLSearchParams({ gender: "female" }).toString()}`}
+            href={`/find?${new URLSearchParams({ category: '["female"]' }).toString()}`}
           >
             Женское
           </Link>
           <Link
             className="BurgerMenu__button"
-            href={`/find?${new URLSearchParams({ gender: "male" }).toString()}`}
+            href={`/find?${new URLSearchParams({ category: '["male"]' }).toString()}`}
           >
             Мужское
           </Link>

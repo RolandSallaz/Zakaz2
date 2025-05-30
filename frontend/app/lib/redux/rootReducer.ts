@@ -3,12 +3,14 @@ import appSlice from './slices/appSlice';
 import authPopupSlice from './slices/authPopupSlice';
 import userSlice from './slices/userSlice';
 import itemSlice from './slices/itemSlice';
+import searchCategorySlice from './slices/searchCategoryPopupSlice';
 
 export const rootReducer = combineReducers({
   appSlice,
   authPopupSlice,
   userSlice,
   itemSlice,
+  searchCategorySlice
 });
 
 const store = configureStore({

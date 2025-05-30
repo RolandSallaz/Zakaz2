@@ -1,0 +1,126 @@
+@import "../../variables.scss";
+$borderColor: #dee3f2;
+
+.TreeList {
+    border-radius: 4px;
+    list-style: none;
+    padding: 0 10px;
+    min-width: 160px;
+    background-color: white;
+    position: relative;
+
+
+    border: 1px solid #dee3f2;
+    box-sizing: border-box;
+
+    &.with-shadow {
+        box-shadow: -10px 0 10px -5px rgba($secondColor, 0.2);
+    }
+
+
+    &__item {
+        box-sizing: border-box;
+        position: relative;
+        border-bottom: 1px solid $borderColor;
+        white-space: nowrap;
+        padding: 8px 12px;
+        cursor: pointer;
+        color: black;
+        width: 100%;
+
+        &>ul {
+            position: absolute;
+            top: -1px;
+            left: 100%;
+
+        }
+
+        &.text_blue {
+            color: $blueColor;
+        }
+
+        &.text_purple {
+            color: $secondColor;
+        }
+
+        // &:hover {
+        //     color: $secondColor;
+        // }
+
+        &:last-of-type {
+            border-bottom: none;
+        }
+    }
+}
+
+.TreeListMobile {
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    &__header {
+        display: flex;
+        border-bottom: 1px solid $borderColor;
+        align-items: center;
+        padding-bottom: 10px;
+
+        &>button {
+            font-size: 16px;
+            border: 1px solid $secondColor;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+    }
+
+    &__overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    &__container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-height: 40vh;
+        background-color: white;
+        padding: 10px;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    &__list {
+        list-style: none;
+        overflow-y: auto;
+        flex-grow: 1;
+        max-height: 100%;
+
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: $secondColor; // сам ползунок
+            border-radius: 4px;
+            border: 2px solid #f0f0f0; // отступы
+        }
+    }
+
+    &__item {
+        border-bottom: 1px solid $borderColor;
+        padding: 10px;
+        cursor: pointer;
+        &:last-of-type {
+            border-bottom: none;
+        }
+    }
+}

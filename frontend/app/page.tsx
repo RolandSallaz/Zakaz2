@@ -95,14 +95,14 @@ export default function Home() {
           text="Женское"
           image={femaleImage.src}
           description="Товары лучшего качества для нашей прекрасной половины"
-          param={{ name: "gender", value: "female" }}
+          param={{ name: "gender", value: '["female"]' }}
         />
         <FilterCard
           text="Мужское"
           image={maleImage.src}
           description="Только самые новые и стильные
           коллекции"
-          param={{ name: "gender", value: "male" }}
+          param={{ name: "category", value: '["male"]' }}
         />
       </section>
       <section className={styles.tags}>
@@ -123,14 +123,14 @@ export default function Home() {
           >
             Новое
           </button>
-          <Link href={'find?gender=male'}
+          <Link href={'find?category=["male"]'}
             className={`${styles.tags__button} ${selectedFilter === "male" ? styles.tags__button_active : ""
               }`}
           // onClick={() => setSelectedFilter("male")}
           >
             Он
           </Link>
-          <Link href={'find?gender=female'}
+          <Link href={'find?category=["female"]'}
             className={`${styles.tags__button} ${selectedFilter === "female" ? styles.tags__button_active : ""
               }`}
           // onClick={() => setSelectedFilter("female")}

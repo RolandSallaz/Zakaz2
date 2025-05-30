@@ -1,21 +1,22 @@
 "use client";
 import { useEffect } from "react";
-import useErrorHandler from "../hooks/useErrorHandler";
-import { ApiCheckAuth, ApiGetInfo, ApiGetItems } from "../utils/api";
-import { loadCart, loadLikes, setMainHeading } from "./slices/appSlice";
-import { setItems } from "./slices/itemSlice";
-import { login } from "./slices/userSlice";
-import { useAppDispatch, useAppSelector } from "./store";
 import AuthPopup from "../../components/AuthPopup/AuthPopup";
-import InfoPopup from "../../components/InfoPopup/InfoPopup";
-import SnackBar from "../../components/SnackBar/SnackBar";
 import BurgerMenu from "../../components/BurgerMenu/BurgerMenu";
 import ConfirmPopup from "../../components/ConfirmPopup/ConfirmPopup";
+import InfoPopup from "../../components/InfoPopup/InfoPopup";
+import SnackBar from "../../components/SnackBar/SnackBar";
+import useErrorHandler from "../hooks/useErrorHandler";
+import { ApiCheckAuth, ApiGetInfo } from "../utils/api";
+import { loadCart, loadLikes, setMainHeading } from "./slices/appSlice";
+import { login } from "./slices/userSlice";
+import { useAppDispatch, useAppSelector } from "./store";
+import TreeListMobile from "@/app/components/TreeList/TreeListMobile";
 
 export default function InitialDataLoader() {
   const { handleError } = useErrorHandler();
   const dispatch = useAppDispatch();
   const { isAuthPopupOpened } = useAppSelector((state) => state.authPopupSlice);
+  const { isPopupOpened: isSearchCategoryPopupOpened } = useAppSelector(state => state.searchCategorySlice);
   const { isOpen: isSnackBarOpened } = useAppSelector(
     (state) => state.appSlice.snackBar
   );
@@ -24,9 +25,6 @@ export default function InitialDataLoader() {
   } = useAppSelector((state) => state.appSlice);
   useEffect(() => {
     ApiCheckAuth().then((user) => dispatch(login(user))).catch(console.log);
-    // ApiGetItems()
-    //   .then((items) => dispatch(setItems(items)))
-    //   .catch(handleError);
 
     const cartItems = localStorage.getItem("cart");
     const likesItems = localStorage.getItem("likes");
@@ -42,11 +40,13 @@ export default function InitialDataLoader() {
     ).catch(console.log);
 
   }, []);
+
   return (
     <>
       {isAuthPopupOpened && <AuthPopup />}
       {isSnackBarOpened && <SnackBar />}
       {isInfoPopupOpened && <InfoPopup />}
+      {isSearchCategoryPopupOpened && <TreeListMobile />}
       <BurgerMenu />
       <ConfirmPopup />
     </>

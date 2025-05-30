@@ -4,6 +4,23 @@ export enum ROLES {
   ADMIN = 2,
 }
 
+export interface CustomTreeNode {
+  key: string;
+  label: string;
+  value: string;
+  topLevel?: boolean;
+  level: number;
+  nodes: CustomTreeNode[];
+}
+
+export type CategoryNode = {
+  label: string;
+  value: string;
+  children?: CategoryNode[];
+  topLevel?: boolean;
+};
+
+
 export interface ISystemInfo {
   cpu: string;
   disk: {
@@ -82,11 +99,12 @@ export interface IItem {
   start_sell_date: Date;
   end_sell_date: Date | null;
   is_active: boolean;
-  gender: TGender;
+  inStock: boolean;
   type: string;
   images: string[];
   creator_email?: string;
   selected?: boolean;
+  category: string[];
 }
 
 export interface ISelect {

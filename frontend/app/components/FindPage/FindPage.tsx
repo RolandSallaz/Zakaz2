@@ -1,18 +1,19 @@
 "use client";
 import useErrorHandler from "@/app/lib/hooks/useErrorHandler";
-import { ApiGetItemsBySearch, ApiGetTypeSelectors } from "@/app/lib/utils/api";
-import { IItem, ISelect } from "@/app/lib/utils/types";
+import { useAppSelector } from "@/app/lib/redux/store";
+import { ApiGetItemsBySearch } from "@/app/lib/utils/api";
+import { IItem } from "@/app/lib/utils/types";
 import { debounce } from "lodash";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Hearts } from "react-loader-spinner";
 import { useMediaQuery } from "react-responsive";
-import Select, { SingleValue } from "react-select";
 import Cards from "../Cards/Cards";
+import { CategoryTreeSelector } from "../CategoryTreeSelector/CategoryTreeSelector";
+import ColumnsCount from "../ColumnsCount/ColumnsCount";
 import Pagination from "../Pagination/Pagination";
 import "./FindPage.scss";
-import ColumnsCount from "../ColumnsCount/ColumnsCount";
 
 const selectOptions = [
   { value: "*", label: "Все" },
@@ -30,8 +31,6 @@ export const selectTypes = [
   { value: "Для дома", label: "Для дома" },
 ]
 
-const defaultTypeSelector: ISelect = { value: "*", label: "Все типы" };
-
 export default function FindPage() {
   const {
     formState: { isDirty },
@@ -45,28 +44,25 @@ export default function FindPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [filteredItems, setFilteredItems] = useState<IItem[]>([]);
   const inputValue = watch("find");
-  const [selectedGender, setSelectedGender] = useState<ISelect>(selectOptions[0]);
-  const [selectedType, setSelectedType] = useState<ISelect>(selectTypes[0]);
-  // const [selectedTypeOptions, setSelectedTypeOptions] = useState<ISelect[]>(selectTypes);
   const { handleError } = useErrorHandler();
   const isMobile = useMediaQuery({ maxWidth: 1279 });
   const [page, setPage] = useState<number>(1);
   const [results, setResults] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [columnsCount, setColumnsCount] = useState<number>(0);
+  const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+  const { selectedPath: categoryFromMobile, isPopupOpened: isMobileCategoryOpened } = useAppSelector(state => state.searchCategorySlice)
 
   // Восстановление фильтров из sessionStorage
   useEffect(() => {
     window.scrollTo(0, 0);
     const paramValue = searchParams.get("search") || "";
-    const paramGender = searchParams.get("gender") || "*";
-    const paramType = searchParams.get("type") || "*";
     const paramPage = Number(searchParams.get("page")) || 1;
+    const paramCategory = JSON.parse(searchParams.get("category") || '[]')
     if (initial) {
       setPage(paramPage);
       setValue("find", paramValue === "undefined" ? "" : paramValue);
-      setSelectedGender(selectOptions.find((item) => item.value === paramGender) || selectOptions[0]);
-      setSelectedType(selectTypes.find((item) => item.value === paramType) || selectTypes[0]);
+      setSelectedCategory(paramCategory)
     }
     setInitial(false)
 
@@ -88,29 +84,13 @@ export default function FindPage() {
   useEffect(() => {
     if (!initial) {
       updateQueryParams({
-        gender: selectedGender.value,
+        category: JSON.stringify(selectedCategory),
         search: inputValue,
-        type: selectedType.value,
         page: page.toString(),
       });
     }
 
-  }, [selectedGender, selectedType, inputValue, updateQueryParams, page]);
-
-  const handleChangeSelect = (newValue: SingleValue<ISelect>) => {
-    setSelectedGender(newValue as ISelect);
-  };
-
-  // useEffect(() => {
-  //   ApiGetTypeSelectors()
-  //     .then((options) => {
-  //       const fetchedOptions: ISelect[] = options.map(
-  //         (item) => ({ label: item.name, value: item.name } as ISelect)
-  //       );
-  //       setSelectedTypeOptions([defaultTypeSelector, ...fetchedOptions]);
-  //     })
-  //     .catch(handleError);
-  // }, [handleError]);
+  }, [selectedCategory, inputValue, updateQueryParams, page]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -119,8 +99,7 @@ export default function FindPage() {
     const debouncedSearch = debounce(() => {
       ApiGetItemsBySearch({
         find: inputValue,
-        gender: selectedGender.value === "*" ? "" : selectedGender.value,
-        type: selectedType.value === "*" ? "" : selectedType.value,
+        category: selectedCategory,
         page,
         itemsInPage: 60,
       })
@@ -138,13 +117,13 @@ export default function FindPage() {
 
     // Очищаем дебаунс, если компонента размонтируется
     return () => debouncedSearch.cancel();
-  }, [inputValue, selectedGender, selectedType, page]);
+  }, [inputValue, selectedCategory, page]);
 
-  const handleChangeTypeSelect = (selected: ISelect | null) => {
-    if (selected) {
-      setSelectedType(selected);
-    }
-  };
+  // const handleChangeTypeSelect = (selected: ISelect | null) => {
+  //   if (selected) {
+  //     setSelectedType(selected);
+  //   }
+  // };
 
   function handlePageChange(newPage: number) {
     setPage(newPage);
@@ -168,9 +147,28 @@ export default function FindPage() {
     setColumnsCount(isMobile ? 2 : 4);
   }, [isMobile]);
 
+  useEffect(() => {
+    setSelectedCategory(categoryFromMobile);
+  }, [categoryFromMobile])
+
+  useEffect(() => {
+    if (isMobileCategoryOpened) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileCategoryOpened]);
+
   return (
     <main className="main FindPage">
       <div className="FindPage__container">
+        <CategoryTreeSelector getValue={(value) => {
+          setSelectedCategory(value);
+        }} isMobile={isMobile} />
         <div className="FindPage__search-container">
           <input
             className="FindPage__input"
@@ -180,23 +178,7 @@ export default function FindPage() {
           {isMobile && (<ColumnsCount isMobile={isMobile} columnsCount={columnsCount} setColumnsCount={setColumnsCount} />)}
         </div>
 
-        <Select
-          className="FindPage__select"
-          options={selectOptions}
-          value={selectedGender}
-          onChange={handleChangeSelect}
-          isSearchable={false}
-          styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
-        />
-        <Select
-          className="FindPage__select"
-          value={selectedType}
-          options={selectTypes}
-          onChange={handleChangeTypeSelect}
-          isSearchable={false}
-          styles={{ menu: (base) => ({ ...base, zIndex: 9999 }) }}
-        />
-         {!isMobile && (<ColumnsCount isMobile={isMobile} columnsCount={columnsCount} setColumnsCount={setColumnsCount} />)}
+        {!isMobile && (<ColumnsCount isMobile={isMobile} columnsCount={columnsCount} setColumnsCount={setColumnsCount} style={{ height: '100%', paddingLeft: '14px', paddingRight: '14px' }} />)}
       </div>
 
       {isDirty && <p>Результатов: {results}</p>}

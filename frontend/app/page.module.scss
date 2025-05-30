@@ -33,7 +33,7 @@
     font-size: 16px;
     padding: 4px 10px;
     &:hover {
-      border: 1px solid rgb(116, 118, 255);
+      border: 1px solid $blueColor;
       color: rgb(116, 118, 255);
     }
     &_active {

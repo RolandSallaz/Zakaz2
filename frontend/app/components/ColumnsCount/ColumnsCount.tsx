@@ -1,13 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './ColumnsCount.scss';
 
 interface props {
     isMobile: boolean;
     columnsCount: number;
     setColumnsCount: (arg: number) => void;
+    style?: React.CSSProperties;
 }
 
-export default function ColumnsCount({ isMobile, columnsCount, setColumnsCount }: props) {
+export default function ColumnsCount({ isMobile, columnsCount, setColumnsCount, style }: props) {
+    const [hasMounted, setHasMounted] = useState(false);
+
+    useEffect(() => {
+        setHasMounted(true);
+    }, []);
+
+    if (!hasMounted) return null;
+    
     return (
         <>
             <button
@@ -16,6 +25,7 @@ export default function ColumnsCount({ isMobile, columnsCount, setColumnsCount }
                     : ""
                     }`}
                 onClick={() => setColumnsCount(isMobile ? 1 : 2)}
+                style={style}
             >
                 {isMobile ? "l" : "ll"}
             </button>
@@ -25,8 +35,10 @@ export default function ColumnsCount({ isMobile, columnsCount, setColumnsCount }
                     : ""
                     }`}
                 onClick={() => setColumnsCount(isMobile ? 2 : 4)}
+                style={style}
             >
                 {isMobile ? "ll" : "llll"}
-            </button></>
+            </button>
+        </>
     )
 }
