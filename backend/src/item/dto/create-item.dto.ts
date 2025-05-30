@@ -1,5 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import {
+  ArrayMinSize,
+  ArrayNotEmpty,
   IsArray,
   IsBoolean,
   IsNotEmpty,
@@ -26,16 +28,16 @@ export class CreateItemDto extends PartialType(Item) {
   @IsString()
   active_time: TActiveTime;
 
-  @IsBoolean()
-  is_active: boolean;
-
-  @IsString()
-  gender: TGender;
-
-  @IsString()
-  type: string;
+  @IsArray()
+  @IsString({ each: true }) // проверяет, что каждый элемент массива — строка
+  @ArrayNotEmpty()       // (опционально) проверяет, что массив не пустой
+  @ArrayMinSize(1)       // (опционально) требует минимум 1 элемент
+  category: string[];
 
   @IsArray()
   @IsString({ each: true })
   images?: string[];
+
+  @IsBoolean()
+  inStock?: boolean;
 }

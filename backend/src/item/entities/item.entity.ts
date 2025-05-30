@@ -31,11 +31,8 @@ export class Item {
   @Column({ default: true })
   is_active: boolean;
 
-  @Column({ default: 'unisex' })
-  gender: TGender;
-
-  @Column()
-  type: string;
+  @Column('text', { array: true, default: [] })
+  category: string[];
 
   @Column({
     type: 'text',
@@ -48,4 +45,7 @@ export class Item {
 
   @ManyToMany(() => Order, (order) => order.items)
   orders: Order[];
+
+  @Column({ default: true })
+  inStock: boolean;
 }

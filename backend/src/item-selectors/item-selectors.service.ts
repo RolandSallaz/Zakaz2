@@ -10,7 +10,7 @@ export class ItemSelectorsService {
   constructor(
     @InjectRepository(ItemSelector)
     private itemSelectorRepository: Repository<ItemSelector>,
-  ) {}
+  ) { }
   async findOrCreate(
     createItemSelectorDto: CreateItemSelectorDto,
   ): Promise<ItemSelector> {

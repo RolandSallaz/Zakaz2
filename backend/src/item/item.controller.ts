@@ -19,6 +19,7 @@ import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { ItemService } from './item.service';
 import { TGender } from '@/types';
+import { FindItemQueryDto } from './dto/find-item.query.dto';
 
 @Controller('items')
 export class ItemController {
@@ -53,13 +54,9 @@ export class ItemController {
 
   @Get('/search')
   search(
-    @Query('find') find: string = '',
-    @Query('gender') gender: TGender,
-    @Query('type') type: string = '',
-    @Query('page') page: number = 1,
-    @Query('itemsInPage') itemsInPage: number = 20,
+    @Query() query: FindItemQueryDto,
   ) {
-    return this.itemService.find({ find, gender, type, page, itemsInPage });
+    return this.itemService.find(query);
   }
 
   @Get(':id')

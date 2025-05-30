@@ -22,6 +22,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     let ex;
+    console.log(exception)
     if (exception.code == 23505) {
       ex = new HttpException(exception.detail, 409);
     } else if (exception instanceof PayloadTooLargeException) {

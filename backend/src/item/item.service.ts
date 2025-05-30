@@ -9,6 +9,7 @@ import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { Item } from './entities/item.entity';
 import { TGender } from '@/types';
+import { FindItemQueryDto } from './dto/find-item.query.dto';
 
 @Injectable()
 export class ItemService {
@@ -33,7 +34,7 @@ export class ItemService {
       const currentDate = new Date();
       end_sell_date = addDays(currentDate, daysToAdd);
     }
-    await this.itemsSelectorService.findOrCreate({ name: dto.type });
+    // await this.itemsSelectorService.findOrCreate({ name: dto.type });
     const item = await this.itemRepository.create({
       ...dto,
       end_sell_date,
@@ -93,68 +94,52 @@ export class ItemService {
 
   async find({
     find = '',
-    gender,
-    type,
     itemsInPage = 20,
     page = 1,
-  }: {
-    find?: string;
-    gender?: TGender;
-    type?: string;
-    itemsInPage?: number;
-    page?: number;
-  }) {
+    category: stringCategory = '',
+  }: FindItemQueryDto) {
     const queryBuilder = this.itemRepository.createQueryBuilder('item');
-  
+
+    // Поиск по тексту
     if (find) {
       const searchTerms = find
         .toLowerCase()
         .split(' ')
-        .filter(term => term.trim() !== ''); // Разбиваем строку на слова и убираем пустые строки
-  
-      // Добавляем условия для каждого слова
+        .filter(term => term.trim() !== '');
+
       searchTerms.forEach((term, index) => {
         queryBuilder.andWhere(
-          `(LOWER(item.name) LIKE :searchTerm${index} OR LOWER(item.description) LIKE :searchTerm${index} OR LOWER(item.type) LIKE :searchTerm${index})`,
+          `(LOWER(item.name) LIKE :searchTerm${index} OR LOWER(item.description) LIKE :searchTerm${index})`,
           { [`searchTerm${index}`]: `%${term}%` },
         );
       });
     }
-  
-    if (gender) {
-      queryBuilder.andWhere(
-        '(item.gender = :gender OR item.gender = :unisex)',
-        {
-          gender,
-          unisex: 'unisex',
-        },
-      );
-    } else {
-      queryBuilder.andWhere('item.gender IN (:...genders)', {
-        genders: ['unisex', 'male', 'female'],
+
+    // Фильтрация по категориям
+    const category = stringCategory
+      .split(',')
+      .map(c => c.trim())
+      .filter(Boolean);
+
+    if (category.length > 0) {
+      queryBuilder.andWhere(`item.category @> ARRAY[:...category]`, {
+        category,
       });
     }
-  
-    if (type) {
-      queryBuilder.andWhere('LOWER(item.type) = :type', {
-        type: type.toLowerCase(),
-      });
-    }
-    
+
+    // Сортировка
     queryBuilder.orderBy('item.start_sell_date', 'DESC');
-  
-    // Получаем общее количество найденных элементов
-    const totalItems = await queryBuilder.getCount();
-  
+
     // Пагинация
+    const totalItems = await queryBuilder.getCount();
+
     const items = await queryBuilder
       .skip((page - 1) * itemsInPage)
       .take(itemsInPage)
       .getMany();
-  
-    // Вычисляем общее количество страниц
+
     const totalPages = Math.ceil(totalItems / itemsInPage);
-  
+
     return {
       items,
       totalPages,
