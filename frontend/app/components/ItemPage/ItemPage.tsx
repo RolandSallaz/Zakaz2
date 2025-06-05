@@ -1,22 +1,23 @@
 "use client";
-import { useEffect, useState } from "react";
-import "swiper/css";
-import 'swiper/css/zoom';
-import SwiperCore from 'swiper';
-import { Autoplay, Zoom } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { useMediaQuery } from "react-responsive";
-import { useAppDispatch, useAppSelector } from "@/app/lib/redux/store";
-import { useRouter } from "next/navigation";
 import {
   addLikes,
   addToCart,
   removeFromCart,
   removeFromLikes,
 } from "@/app/lib/redux/slices/appSlice";
+import { useAppDispatch, useAppSelector } from "@/app/lib/redux/store";
 import { IItem, ROLES } from "@/app/lib/utils/types";
-import "./ItemPage.scss";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
+import SwiperCore from 'swiper';
+import "swiper/css";
+import 'swiper/css/zoom';
+import { Autoplay, Zoom } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import ImageSlider from "../ImageSlider/ImageSlider";
+import "./ItemPage.scss";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 
 interface ItemPageProps {
   item: IItem;
@@ -74,11 +75,30 @@ export default function ItemPage({ item }: ItemPageProps) {
     sessionStorage.setItem('lastVisited', String(item.id));
   }, [])
 
+  const handleBreadcrumbsClick = (path: string[]) => {
+    let filters = { category: "[]", search: "", page: "1" };
+    try {
+      const stored = sessionStorage.getItem("findPageFilters");
+      if (stored) {
+        filters = JSON.parse(stored);
+      }
+    } catch { }
+
+    // Обновляем категорию в фильтрах
+    filters.category = JSON.stringify(path);
+    filters.page = "1"; // Сбрасываем страницу на 1 при выборе категории
+
+    // Записываем обратно
+    sessionStorage.setItem("findPageFilters", JSON.stringify(filters));
+
+    router.push(`/find?category=${encodeURIComponent(filters.category)}&search=${encodeURIComponent(filters.search)}&page=${filters.page}`);
+  };
+
   return (
     <main className="main ItemPage">
       <div className="ItemPage__container ItemPage__container_left">
+        <Breadcrumbs selectedCategory={item.category} onChangeCategory={handleBreadcrumbsClick} />
         <h1 className="ItemPage__name">{item.name}</h1>
-
         {isMobile ? (
           <Swiper slidesPerView={1} spaceBetween={10} className="ItemPage__swiper" modules={[Autoplay]}>
             {item.images.map((image, index) => (

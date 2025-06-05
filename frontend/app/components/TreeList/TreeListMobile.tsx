@@ -52,6 +52,7 @@ export default function TreeListMobile() {
                                 if (item.children) {
                                     dispatch(goToLevel(newPath));
                                 } else {
+                                    dispatch(goToLevel(newPath));
                                     handleSelect();
                                 }
                             }}

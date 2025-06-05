@@ -88,7 +88,10 @@ export default function TreeList({
                                 return index !== -1 ? prev.slice(0, index + 1) : [];
                             });
                         }}
-                        onClick={() => onSelect?.(fullPath)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onSelect?.(fullPath);
+                        }}
                     >
                         <span >
                             {node.label} {node.nodes.length > 0 && '›'}

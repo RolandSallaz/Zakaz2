@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Hearts } from "react-loader-spinner";
 import { useMediaQuery } from "react-responsive";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Cards from "../Cards/Cards";
 import { CategoryTreeSelector } from "../CategoryTreeSelector/CategoryTreeSelector";
 import ColumnsCount from "../ColumnsCount/ColumnsCount";
@@ -58,11 +59,21 @@ export default function FindPage() {
     window.scrollTo(0, 0);
     const paramValue = searchParams.get("search") || "";
     const paramPage = Number(searchParams.get("page")) || 1;
-    const paramCategory = JSON.parse(searchParams.get("category") || '[]')
+    let paramCategory: string[] = [];
+    const categoryParam = searchParams.get("category") || [];
+    console.log(categoryParam)
+    // try {
+    //   if (categoryParam && categoryParam !== "undefined") {
+    //     paramCategory = JSON.parse(categoryParam);
+    //     if (!Array.isArray(paramCategory)) paramCategory = [];
+    //   }
+    // } catch {
+    //   paramCategory = [];
+    // }
     if (initial) {
       setPage(paramPage);
       setValue("find", paramValue === "undefined" ? "" : paramValue);
-      setSelectedCategory(paramCategory)
+      // setSelectedCategory(categoryParam)
     }
     setInitial(false)
 
@@ -71,12 +82,17 @@ export default function FindPage() {
   // Обновление URL-параметров и sessionStorage
   const updateQueryParams = useCallback(
     (params: Record<string, string>) => {
-      const searchParams = new URLSearchParams(window.location.search);
-      Object.entries(params).forEach(([key, value]) => {
-        searchParams.set(key, value);
-      });
-      router.replace(`${window.location.pathname}?${searchParams.toString()}`);
-      sessionStorage.setItem("findPageFilters", JSON.stringify(params));
+      // const searchParams = new URLSearchParams(window.location.search);
+      // Object.entries(params).forEach(([key, value]) => {
+      //   if (value) {
+      //     searchParams.set(key, value);
+      //   } else {
+      //     searchParams.delete(key);
+      //   }
+      // });
+      // router.replace(`${window.location.pathname}?${searchParams.toString()}`);
+      // sessionStorage.setItem("findPageFilters", JSON.stringify(params));
+      // Тут баг
     },
     [router]
   );
@@ -181,7 +197,10 @@ export default function FindPage() {
         {!isMobile && (<ColumnsCount isMobile={isMobile} columnsCount={columnsCount} setColumnsCount={setColumnsCount} style={{ height: '100%', paddingLeft: '14px', paddingRight: '14px' }} />)}
       </div>
 
-      {isDirty && <p>Результатов: {results}</p>}
+      {selectedCategory.length > 0 && (
+        <Breadcrumbs selectedCategory={selectedCategory} onChangeCategory={setSelectedCategory} />
+      )}
+      {isDirty && <p style={{ alignSelf: 'flex-start', marginTop: '10px' }}>Результатов: {results}</p>}
       {isLoading ? (
         <Hearts
           height="160"

@@ -162,3 +162,17 @@ export function addKeyToTree(nodes: CategoryNode[], parentPath: string[] = []): 
 }
 
 export const transformedTree = addKeyToTree(categoryTree);
+
+export function getLabelsFromPath(path: string[], tree = categoryTree): string[] {
+  const labels: string[] = [];
+  let currentLevel = tree;
+
+  for (const slug of path) {
+    const found = currentLevel.find((node) => node.value === slug);
+    if (!found) break;
+    labels.push(found.label);
+    currentLevel = found.children || [];
+  }
+
+  return labels;
+}

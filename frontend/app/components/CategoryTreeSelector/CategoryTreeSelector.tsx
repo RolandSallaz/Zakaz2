@@ -1,12 +1,11 @@
 import { useOnClickOutside } from '@/app/lib/hooks/useOnClickOutside';
-import { useRef, useState } from 'react';
+import { openPopup } from '@/app/lib/redux/slices/searchCategoryPopupSlice';
+import { useAppDispatch } from '@/app/lib/redux/store';
+import { transformedTree } from '@/app/lib/utils/utils';
+import { useEffect, useRef, useState } from 'react';
 import 'react-simple-tree-menu/dist/main.css';
 import TreeList from '../TreeList/TreeList';
-import TreeListMobile from '../TreeList/TreeListMobile';
 import './CategoryTreeSelector.scss';
-import { transformedTree } from '@/app/lib/utils/utils';
-import { useAppDispatch } from '@/app/lib/redux/store';
-import { openPopup } from '@/app/lib/redux/slices/searchCategoryPopupSlice';
 
 interface Props {
     getValue: (arg: string[]) => void;
@@ -27,10 +26,13 @@ export function CategoryTreeSelector({ getValue, isMobile = false }: Props) {
     });
 
     const handleSelect = (path: string[]) => {
-        getValue(path);
+        console.log(path)
         setSelectedPath(path);
-        setIsOpen(false);
+        getValue(path);
         setHoverPath([]);
+        setTimeout(() => {
+            setIsOpen(false)
+        }, 0);
     };
 
     function handleClick() {
@@ -39,6 +41,7 @@ export function CategoryTreeSelector({ getValue, isMobile = false }: Props) {
             dispatch(openPopup());
         }
     }
+
     return (
 
         <div
@@ -57,7 +60,7 @@ export function CategoryTreeSelector({ getValue, isMobile = false }: Props) {
                 <path d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z" />
             </svg>
 
-            {isOpen && !isMobile && (
+            {(isOpen && !isMobile) && (
                 <div className="CategoryTreeSelector__container">
                     <TreeList
                         data={transformedTree}
