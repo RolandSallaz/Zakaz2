@@ -6,10 +6,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { addDays } from 'date-fns';
 import { ILike, Repository } from 'typeorm';
 import { CreateItemDto } from './dto/create-item.dto';
+import { FindItemQueryDto } from './dto/find-item.query.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { Item } from './entities/item.entity';
-import { TGender } from '@/types';
-import { FindItemQueryDto } from './dto/find-item.query.dto';
 
 @Injectable()
 export class ItemService {
@@ -115,16 +114,30 @@ export class ItemService {
       });
     }
 
-    // Фильтрация по категориям
+    // Фильтрация по иерархии категории
     const category = stringCategory
       .split(',')
       .map(c => c.trim())
       .filter(Boolean);
 
     if (category.length > 0) {
-      queryBuilder.andWhere(`item.category @> ARRAY[:...category]`, {
-        category,
-      });
+      const categoryPathVariants: string[] = [];
+
+      if (category.length > 0 && (category[0] === 'male' || category[0] === 'female')) {
+        const unisexPath = ['unisex', ...category.slice(1)].join('/');
+        categoryPathVariants.push(unisexPath);
+      }
+
+      categoryPathVariants.push(category.join('/'));
+
+      queryBuilder.andWhere(
+        `(${categoryPathVariants
+          .map((_, i) => `array_to_string(item.category, '/') LIKE :cat${i}`)
+          .join(' OR ')})`,
+        Object.fromEntries(
+          categoryPathVariants.map((path, i) => [`cat${i}`, `${path}%`]),
+        ),
+      );
     }
 
     // Сортировка
@@ -147,6 +160,7 @@ export class ItemService {
       totalItems,
     };
   }
+
   async getByPages(
     itemsInPage: number,
     page: number = 1,
