@@ -60,20 +60,19 @@ export default function FindPage() {
     const paramValue = searchParams.get("search") || "";
     const paramPage = Number(searchParams.get("page")) || 1;
     let paramCategory: string[] = [];
-    const categoryParam = searchParams.get("category") || [];
-    console.log(categoryParam)
-    // try {
-    //   if (categoryParam && categoryParam !== "undefined") {
-    //     paramCategory = JSON.parse(categoryParam);
-    //     if (!Array.isArray(paramCategory)) paramCategory = [];
-    //   }
-    // } catch {
-    //   paramCategory = [];
-    // }
+    const categoryParam = searchParams.get("category") || '';
+    try {
+      if (categoryParam && categoryParam !== "undefined") {
+        paramCategory = JSON.parse(categoryParam);
+        if (!Array.isArray(paramCategory)) paramCategory = [];
+      }
+    } catch {
+      paramCategory = [];
+    }
     if (initial) {
       setPage(paramPage);
       setValue("find", paramValue === "undefined" ? "" : paramValue);
-      // setSelectedCategory(categoryParam)
+      setSelectedCategory(paramCategory)
     }
     setInitial(false)
 
@@ -99,6 +98,7 @@ export default function FindPage() {
 
   useEffect(() => {
     if (!initial) {
+      console.log(selectedCategory)
       updateQueryParams({
         category: JSON.stringify(selectedCategory),
         search: inputValue,
@@ -106,7 +106,7 @@ export default function FindPage() {
       });
     }
 
-  }, [selectedCategory, inputValue, updateQueryParams, page]);
+  }, [selectedCategory, inputValue, updateQueryParams, page, initial]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -164,7 +164,10 @@ export default function FindPage() {
   }, [isMobile]);
 
   useEffect(() => {
-    setSelectedCategory(categoryFromMobile);
+    if (categoryFromMobile) {
+      setSelectedCategory(categoryFromMobile);
+    }
+
   }, [categoryFromMobile])
 
   useEffect(() => {

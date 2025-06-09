@@ -11,12 +11,18 @@
         gap: 5px;
         color: $blueColor;
         user-select: none;
+
+
     }
 
     &__button {
         font-size: 16px;
         color: $blueColor;
         padding: 0;
+
+        &:hover {
+            color: $secondColor;
+        }
     }
 }
 
