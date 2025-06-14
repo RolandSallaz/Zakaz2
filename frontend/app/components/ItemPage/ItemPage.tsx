@@ -85,6 +85,7 @@ export default function ItemPage({ item }: ItemPageProps) {
     } catch { }
 
     // Обновляем категорию в фильтрах
+    filters.search = "";
     filters.category = JSON.stringify(path);
     filters.page = "1"; // Сбрасываем страницу на 1 при выборе категории
 
@@ -97,7 +98,7 @@ export default function ItemPage({ item }: ItemPageProps) {
   return (
     <main className="main ItemPage">
       <div className="ItemPage__container ItemPage__container_left">
-        {/* <Breadcrumbs selectedCategory={item.category} onChangeCategory={handleBreadcrumbsClick} /> */}
+        <Breadcrumbs selectedCategory={item.category} onChangeCategory={handleBreadcrumbsClick} />
         <h1 className="ItemPage__name">{item.name}</h1>
         {isMobile ? (
           <Swiper slidesPerView={1} spaceBetween={10} className="ItemPage__swiper" modules={[Autoplay]}>

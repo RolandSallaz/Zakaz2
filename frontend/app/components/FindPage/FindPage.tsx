@@ -1,6 +1,6 @@
 "use client";
 import useErrorHandler from "@/app/lib/hooks/useErrorHandler";
-import { useAppSelector } from "@/app/lib/redux/store";
+import { useAppDispatch, useAppSelector } from "@/app/lib/redux/store";
 import { ApiGetItemsBySearch } from "@/app/lib/utils/api";
 import { IItem } from "@/app/lib/utils/types";
 import { debounce } from "lodash";
@@ -15,6 +15,7 @@ import { CategoryTreeSelector } from "../CategoryTreeSelector/CategoryTreeSelect
 import ColumnsCount from "../ColumnsCount/ColumnsCount";
 import Pagination from "../Pagination/Pagination";
 import "./FindPage.scss";
+import { goToLevel } from "@/app/lib/redux/slices/searchCategoryPopupSlice";
 
 const selectOptions = [
   { value: "*", label: "Все" },
@@ -53,7 +54,6 @@ export default function FindPage() {
   const [columnsCount, setColumnsCount] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
   const { selectedPath: categoryFromMobile, isPopupOpened: isMobileCategoryOpened } = useAppSelector(state => state.searchCategorySlice)
-
   // Восстановление фильтров из sessionStorage
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -75,30 +75,27 @@ export default function FindPage() {
       setSelectedCategory(paramCategory)
     }
     setInitial(false)
-
-  }, [searchParams, setValue]);
+  }, [searchParams]);
 
   // Обновление URL-параметров и sessionStorage
   const updateQueryParams = useCallback(
     (params: Record<string, string>) => {
-      // const searchParams = new URLSearchParams(window.location.search);
-      // Object.entries(params).forEach(([key, value]) => {
-      //   if (value) {
-      //     searchParams.set(key, value);
-      //   } else {
-      //     searchParams.delete(key);
-      //   }
-      // });
-      // router.replace(`${window.location.pathname}?${searchParams.toString()}`);
-      // sessionStorage.setItem("findPageFilters", JSON.stringify(params));
-      // Тут баг
+      const searchParams = new URLSearchParams(window.location.search);
+      Object.entries(params).forEach(([key, value]) => {
+        if (value) {
+          searchParams.set(key, value);
+        } else {
+          searchParams.delete(key);
+        }
+      });
+      router.replace(`${window.location.pathname}?${searchParams.toString()}`);
+      sessionStorage.setItem("findPageFilters", JSON.stringify(params));
     },
     [router]
   );
 
   useEffect(() => {
     if (!initial) {
-      console.log(selectedCategory)
       updateQueryParams({
         category: JSON.stringify(selectedCategory),
         search: inputValue,
@@ -164,7 +161,7 @@ export default function FindPage() {
   }, [isMobile]);
 
   useEffect(() => {
-    if (categoryFromMobile) {
+    if (categoryFromMobile && !initial) {
       setSelectedCategory(categoryFromMobile);
     }
 
