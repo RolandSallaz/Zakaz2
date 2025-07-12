@@ -100,7 +100,7 @@ services:
     depends_on:
       - frontend
       - backend
-      # - certbot
+      - certbot
     networks:
       - net
 
@@ -129,10 +129,7 @@ services:
       - "./ssl:/etc/letsencrypt"
     environment:
       - TERM=xterm
-    depends_on:
-      - frontend
-      - backend
-      - nginx
+
 
 networks:
   net:
