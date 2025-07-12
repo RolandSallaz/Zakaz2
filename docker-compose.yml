@@ -100,7 +100,7 @@ services:
     depends_on:
       - frontend
       - backend
-      - certbot
+      - letsencrypt
     networks:
       - net
 
