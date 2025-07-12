@@ -110,11 +110,15 @@ services:
   certbot-init:
     image: certbot/certbot
     entrypoint: /bin/sh
-    command: -c 'test -d /etc/letsencrypt/live/${DOMAIN} || certbot certonly -v --standalone -v -d ${DOMAIN} -m ${EMAIL_LOGIN} --force-renewal --agree-tos'
-    ports: 
+    command: >-
+      -c 'test -d /etc/letsencrypt/live/${DOMAIN} ||
+      certbot certonly --webroot -w /usr/share/nginx/html -d ${DOMAIN}
+      -m ${EMAIL_LOGIN} --agree-tos --force-renewal --noninteractive'
+    ports:
       - 80:80
     volumes:
-      - "./ssl:/etc/letsencrypt"
+      - ./ssl:/etc/letsencrypt
+      - acme_challenge:/usr/share/nginx/html/.well-known
 
   certbot:
     image: certbot/certbot
