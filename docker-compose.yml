@@ -92,44 +92,42 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    entrypoint: /bin/sh
+    command: -c 'while :; do sleep 6h && wait $${!}; nginx -s reload; done & /docker-entrypoint.sh nginx -g "daemon off;error_log /dev/stdout debug;"'
     volumes:
       - ./ssl:/etc/ssl
+      - acme_challenge:/usr/share/nginx/html/.well-known
     environment:
    
       - DOMAIN=${DOMAIN}
     depends_on:
       - frontend
       - backend
-      - certbot
+      - certbot-init
     networks:
       - net
+      
+  certbot-init:
+    image: certbot/certbot
+    entrypoint: /bin/sh
+    command: -c 'test -d /etc/letsencrypt/live/${DOMAIN} || certbot certonly -v --standalone -v -d ${DOMAIN} -m ${EMAIL_LOGIN} --force-renewal --agree-tos'
+    ports: 
+      - 80:80
+    volumes:
+      - "./ssl:/etc/letsencrypt"
 
   certbot:
-    ports:
-      - "6000:80"
-    build:
-      context: certbot
-      dockerfile: Dockerfile              
-    restart: always
-    environment:
-      - EMAIL=${EMAIL_LOGIN}      
-      - DOMAIN=${DOMAIN}
-    volumes:
-      - ./ssl:/app/ssl                  
-      - ./certbot:/etc/cron.d
-    networks:
-      - net
-  # letsencrypt:
-  #   ports:
-  #     - "6000:80"
-  #   image: certbot/certbot:latest
-  #   command: sh -c "certbot certonly --standalone -d ${DOMAIN} --text --agree-tos --email ${EMAIL_LOGIN} --server https://acme-v02.api.letsencrypt.org/directory --rsa-key-size 4096 --verbose --keep-until-expiring --preferred-challenges=http"
-  #   entrypoint: ""
-  #   volumes:
-  #     - "./ssl:/etc/letsencrypt"
-  #   environment:
-  #     - TERM=xterm
-
+    image: certbot/certbot
+    entrypoint: /bin/sh
+    command: -c 'trap exit TERM; while :; do certbot renew; sleep 24h && wait $${!}; done;'
+    depends_on:
+      nginx:
+        condition: service_started
+        required: true
+    depends_on:
+      nginx:
+        condition: service_started
+        required: true
 
 networks:
   net:
@@ -137,3 +135,4 @@ networks:
 
 volumes:
   postgres_data:
+  acme_challenge:
