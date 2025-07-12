@@ -114,7 +114,7 @@ services:
       -c 'certbot certonly --webroot --webroot-path /usr/share/nginx/html
       -d ${DOMAIN} -m ${EMAIL_LOGIN} --agree-tos --force-renewal --noninteractive --verbose'
     ports:
-      - 80:80
+      - 6000:80
     volumes:
       - ./ssl:/etc/letsencrypt
       - acme_challenge:/usr/share/nginx/html/.well-known
